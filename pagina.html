@@ -293,4 +293,669 @@
     return "body > " + partes.join(" > ");
   }
 </script>
+```html
+<!-- EDITOR VISUAL TEMPORÁRIO - COLÉGIO SANTA TERESINHA -->
+<style>
+  #visualEditorBtn {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    z-index: 999999;
+    background: #55351f;
+    color: #f5d77e;
+    border: 2px solid #c9a44c;
+    padding: 15px 22px;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 5px 18px #0005;
+  }
+
+  #visualEditor {
+    position: fixed;
+    right: 20px;
+    bottom: 85px;
+    width: 340px;
+    max-width: calc(100vw - 40px);
+    max-height: 78vh;
+    overflow-y: auto;
+    background: #fffdf7;
+    color: #34251b;
+    border: 2px solid #c9a44c;
+    border-radius: 16px;
+    padding: 18px;
+    box-shadow: 0 8px 35px #0005;
+    z-index: 999998;
+    font-family: Arial, sans-serif;
+    display: none;
+  }
+
+  #visualEditor h2 {
+    margin: 0 0 6px;
+    color: #55351f;
+    font-size: 22px;
+  }
+
+  #visualEditor .veSubtitle {
+    font-size: 12px;
+    color: #76634d;
+    margin-bottom: 15px;
+  }
+
+  #visualEditor .veGroup {
+    border-top: 1px solid #e7d9bd;
+    padding-top: 12px;
+    margin-top: 12px;
+  }
+
+  #visualEditor .veGroup strong {
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  #visualEditor button,
+  #visualEditor select,
+  #visualEditor input,
+  #visualEditor label {
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+  }
+
+  #visualEditor button {
+    background: #55351f;
+    color: #fff5d7;
+    border: 0;
+    border-radius: 7px;
+    padding: 9px 10px;
+    margin: 3px 2px;
+    cursor: pointer;
+  }
+
+  #visualEditor button:hover {
+    background: #765033;
+  }
+
+  #visualEditor .veLight {
+    background: #e9dcc2;
+    color: #382719;
+  }
+
+  #visualEditor input,
+  #visualEditor select {
+    box-sizing: border-box;
+    max-width: 100%;
+    border: 1px solid #c9b99a;
+    border-radius: 6px;
+    padding: 7px;
+    background: white;
+    color: #30251b;
+  }
+
+  #visualEditor .veRow {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 5px;
+    margin-bottom: 7px;
+  }
+
+  #visualEditor .veRow input[type="number"] {
+    width: 75px;
+  }
+
+  #visualEditor .veRow input[type="color"] {
+    width: 42px;
+    height: 32px;
+    padding: 2px;
+  }
+
+  #visualEditor .veStatus {
+    background: #f2eadb;
+    border-radius: 7px;
+    padding: 9px;
+    font-size: 12px;
+    margin-top: 8px;
+    overflow-wrap: anywhere;
+  }
+
+  .veSelectedElement {
+    outline: 3px dashed #bd8a20 !important;
+    outline-offset: 3px !important;
+    cursor: move !important;
+  }
+
+  #visualEditor .veWarning {
+    font-size: 12px;
+    line-height: 1.5;
+    color: #784b25;
+  }
+</style>
+
+<button id="visualEditorBtn" type="button">
+  🎨 Editor visual
+</button>
+
+<div id="visualEditor">
+  <h2>Editor visual</h2>
+  <div class="veSubtitle">
+    Colégio Santa Teresinha do Menino Jesus
+  </div>
+
+  <div class="veWarning">
+    Modo temporário de edição. As alterações são feitas nesta página
+    e não são publicadas automaticamente.
+  </div>
+
+  <div class="veGroup">
+    <strong>🖱️ Seleção</strong>
+    <button type="button" id="veSelect">Selecionar elemento</button>
+    <button type="button" id="veStopSelect" class="veLight">Parar seleção</button>
+    <div class="veStatus" id="veStatus">
+      Nenhum elemento selecionado.
+    </div>
+  </div>
+
+  <div class="veGroup">
+    <strong>✏️ Texto</strong>
+    <button type="button" id="veAddText">+ Adicionar texto</button>
+    <button type="button" id="veEditText">Editar texto</button>
+    <div class="veRow">
+      <label for="veFont">Fonte:</label>
+      <select id="veFont">
+        <option value="Arial, sans-serif">Arial</option>
+        <option value="Georgia, serif">Georgia</option>
+        <option value="'Times New Roman', serif">Times New Roman</option>
+        <option value="Verdana, sans-serif">Verdana</option>
+        <option value="'Trebuchet MS', sans-serif">Trebuchet MS</option>
+        <option value="Tahoma, sans-serif">Tahoma</option>
+      </select>
+    </div>
+    <div class="veRow">
+      <label for="veFontSize">Tamanho:</label>
+      <input id="veFontSize" type="number" min="6" max="150" value="20">
+      <button type="button" id="veApplyFontSize">Aplicar</button>
+    </div>
+    <button type="button" id="veBold">Negrito</button>
+    <button type="button" id="veItalic">Itálico</button>
+  </div>
+
+  <div class="veGroup">
+    <strong>🎨 Cores</strong>
+    <div class="veRow">
+      <label for="veTextColor">Texto:</label>
+      <input id="veTextColor" type="color" value="#55351f">
+      <button type="button" id="veApplyTextColor">Aplicar</button>
+    </div>
+    <div class="veRow">
+      <label for="veBgColor">Fundo:</label>
+      <input id="veBgColor" type="color" value="#f5d77e">
+      <button type="button" id="veApplyBgColor">Aplicar</button>
+    </div>
+  </div>
+
+  <div class="veGroup">
+    <strong>↔️ Tamanho e posição</strong>
+    <div class="veRow">
+      <button type="button" id="veSmaller">− Diminuir</button>
+      <button type="button" id="veLarger">+ Aumentar</button>
+    </div>
+    <div class="veRow">
+      <button type="button" id="veMove">Mover elemento</button>
+    </div>
+    <div class="veWarning">
+      Use o botão de mover e arraste o elemento selecionado.
+      Nem todos os elementos de um layout permitem movimentação livre
+      sem afetar o restante da página.
+    </div>
+  </div>
+
+  <div class="veGroup">
+    <strong>🖼️ Imagens</strong>
+    <label>
+      Escolher imagem:
+      <input id="veImageFile" type="file" accept="image/*">
+    </label>
+    <button type="button" id="veAddImage">Adicionar imagem</button>
+    <button type="button" id="veReplaceImage">Substituir imagem selecionada</button>
+  </div>
+
+  <div class="veGroup">
+    <strong>◻️ Formas</strong>
+    <button type="button" id="veAddRect">Retângulo</button>
+    <button type="button" id="veAddCircle">Círculo</button>
+    <button type="button" id="veAddLine">Linha</button>
+  </div>
+
+  <div class="veGroup">
+    <strong>↩️ Ações</strong>
+    <button type="button" id="veUndo">Desfazer última ação</button>
+    <button type="button" id="veDelete">Excluir selecionado</button>
+    <button type="button" id="veDeselect" class="veLight">Desselecionar</button>
+  </div>
+
+  <div class="veGroup">
+    <strong>⚠️ Antes de sair</strong>
+    <div class="veWarning">
+      Este editor não altera os arquivos do GitHub e não publica as
+      alterações para outros visitantes. Tire uma cópia do HTML antes
+      de editar e não use o editor para alterar elementos estruturais
+      importantes do site.
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  const panel = document.getElementById("visualEditor");
+  const toggle = document.getElementById("visualEditorBtn");
+  const status = document.getElementById("veStatus");
+
+  let selected = null;
+  let selecting = false;
+  let moving = false;
+  let drag = null;
+  let imageData = null;
+  const history = [];
+
+  const editorIds = new Set([
+    "visualEditor", "visualEditorBtn"
+  ]);
+
+  function isEditorElement(el) {
+    return !el ||
+      el === document.body ||
+      el === document.documentElement ||
+      el.closest("#visualEditor") ||
+      el.closest("#visualEditorBtn") ||
+      el.closest("script") ||
+      el.closest("style");
+  }
+
+  function setStatus(message) {
+    status.textContent = message;
+  }
+
+  function saveSnapshot(el) {
+    if (!el || !el.isConnected) return;
+
+    history.push({
+      el: el,
+      html: el.innerHTML,
+      style: el.getAttribute("style"),
+      text: el.textContent
+    });
+
+    if (history.length > 30) history.shift();
+  }
+
+  function selectElement(el) {
+    if (isEditorElement(el)) return;
+
+    if (selected) selected.classList.remove("veSelectedElement");
+
+    selected = el;
+    selected.classList.add("veSelectedElement");
+
+    const tag = selected.tagName.toLowerCase();
+    setStatus("Selecionado: <" + tag + ">");
+
+    const computed = getComputedStyle(selected);
+    const size = parseFloat(computed.fontSize);
+
+    if (Number.isFinite(size)) {
+      document.getElementById("veFontSize").value = Math.round(size);
+    }
+
+    document.getElementById("veFont").value =
+      selected.style.fontFamily || "";
+
+    selecting = false;
+    moving = false;
+  }
+
+  function needSelection() {
+    if (!selected || !selected.isConnected) {
+      alert("Primeiro selecione um elemento na página.");
+      return false;
+    }
+    return true;
+  }
+
+  function clearSelection() {
+    if (selected) {
+      selected.classList.remove("veSelectedElement");
+    }
+
+    selected = null;
+    selecting = false;
+    moving = false;
+    setStatus("Nenhum elemento selecionado.");
+  }
+
+  function makeElement(tag, text, styles) {
+    const el = document.createElement(tag);
+    if (text) el.textContent = text;
+
+    Object.assign(el.style, {
+      boxSizing: "border-box",
+      ...styles
+    });
+
+    el.dataset.visualEditorCreated = "true";
+    return el;
+  }
+
+  toggle.addEventListener("click", function () {
+    panel.style.display =
+      panel.style.display === "block" ? "none" : "block";
+  });
+
+  document.getElementById("veSelect").addEventListener("click", function () {
+    selecting = true;
+    moving = false;
+    setStatus("Clique em um elemento da página para selecioná-lo.");
+  });
+
+  document.getElementById("veStopSelect").addEventListener("click", function () {
+    selecting = false;
+    moving = false;
+    setStatus("Seleção desativada.");
+  });
+
+  document.addEventListener("click", function (event) {
+    if (!selecting || isEditorElement(event.target)) return;
+
+    event.preventDefault();
+    event.stopPropagation();
+    selectElement(event.target);
+  }, true);
+
+  document.getElementById("veDeselect").addEventListener("click", clearSelection);
+
+  document.getElementById("veEditText").addEventListener("click", function () {
+    if (!needSelection()) return;
+
+    saveSnapshot(selected);
+    const current = selected.innerText || "";
+    const updated = prompt("Digite o novo texto:", current);
+
+    if (updated !== null) selected.textContent = updated;
+  });
+
+  document.getElementById("veAddText").addEventListener("click", function () {
+    const text = prompt("Digite o texto que deseja adicionar:");
+    if (text === null || !text.trim()) return;
+
+    const el = makeElement("p", text, {
+      fontFamily: "Arial, sans-serif",
+      fontSize: "20px",
+      color: "#55351f",
+      backgroundColor: "transparent",
+      padding: "8px",
+      margin: "8px 0",
+      cursor: "pointer"
+    });
+
+    document.body.appendChild(el);
+    selectElement(el);
+  });
+
+  document.getElementById("veFont").addEventListener("change", function () {
+    if (!needSelection()) return;
+    saveSnapshot(selected);
+    selected.style.fontFamily = this.value;
+  });
+
+  document.getElementById("veApplyFontSize").addEventListener("click", function () {
+    if (!needSelection()) return;
+
+    const size = Number(document.getElementById("veFontSize").value);
+    if (!Number.isFinite(size) || size < 6 || size > 150) {
+      alert("Escolha um tamanho entre 6 e 150.");
+      return;
+    }
+
+    saveSnapshot(selected);
+    selected.style.fontSize = size + "px";
+  });
+
+  document.getElementById("veBold").addEventListener("click", function () {
+    if (!needSelection()) return;
+    saveSnapshot(selected);
+    selected.style.fontWeight =
+      getComputedStyle(selected).fontWeight === "700" ? "400" : "700";
+  });
+
+  document.getElementById("veItalic").addEventListener("click", function () {
+    if (!needSelection()) return;
+    saveSnapshot(selected);
+    selected.style.fontStyle =
+      getComputedStyle(selected).fontStyle === "italic" ? "normal" : "italic";
+  });
+
+  document.getElementById("veApplyTextColor").addEventListener("click", function () {
+    if (!needSelection()) return;
+    saveSnapshot(selected);
+    selected.style.color = document.getElementById("veTextColor").value;
+  });
+
+  document.getElementById("veApplyBgColor").addEventListener("click", function () {
+    if (!needSelection()) return;
+    saveSnapshot(selected);
+    selected.style.backgroundColor = document.getElementById("veBgColor").value;
+  });
+
+  function resizeSelected(factor) {
+    if (!needSelection()) return;
+    saveSnapshot(selected);
+
+    const rect = selected.getBoundingClientRect();
+    const width = selected.style.width
+      ? parseFloat(selected.style.width)
+      : rect.width;
+    const height = selected.style.height
+      ? parseFloat(selected.style.height)
+      : rect.height;
+
+    selected.style.width = Math.max(10, width * factor) + "px";
+    selected.style.height = Math.max(10, height * factor) + "px";
+  }
+
+  document.getElementById("veLarger").addEventListener("click", function () {
+    resizeSelected(1.1);
+  });
+
+  document.getElementById("veSmaller").addEventListener("click", function () {
+    resizeSelected(0.9);
+  });
+
+  document.getElementById("veMove").addEventListener("click", function () {
+    if (!needSelection()) return;
+    moving = true;
+    selecting = false;
+    setStatus("Clique e arraste o elemento selecionado para movê-lo.");
+  });
+
+  document.addEventListener("mousedown", function (event) {
+    if (!moving || !selected || isEditorElement(event.target)) return;
+    if (event.target !== selected && !selected.contains(event.target)) return;
+
+    event.preventDefault();
+    saveSnapshot(selected);
+
+    const rect = selected.getBoundingClientRect();
+
+    selected.style.position = "fixed";
+    selected.style.left = rect.left + "px";
+    selected.style.top = rect.top + "px";
+    selected.style.margin = "0";
+    selected.style.zIndex = "9990";
+
+    drag = {
+      x: event.clientX,
+      y: event.clientY,
+      left: rect.left,
+      top: rect.top
+    };
+  });
+
+  document.addEventListener("mousemove", function (event) {
+    if (!drag || !selected) return;
+
+    selected.style.left = (drag.left + event.clientX - drag.x) + "px";
+    selected.style.top = (drag.top + event.clientY - drag.y) + "px";
+  });
+
+  document.addEventListener("mouseup", function () {
+    if (drag) {
+      drag = null;
+      moving = false;
+      setStatus("Movimentação concluída.");
+    }
+  });
+
+  document.getElementById("veImageFile").addEventListener("change", function () {
+    const file = this.files && this.files[0];
+    if (!file) {
+      imageData = null;
+      return;
+    }
+
+    if (!file.type.startsWith("image/")) {
+      alert("Escolha um arquivo de imagem.");
+      this.value = "";
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      alert("Escolha uma imagem menor que 5 MB.");
+      this.value = "";
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = function () {
+      imageData = reader.result;
+    };
+    reader.readAsDataURL(file);
+  });
+
+  document.getElementById("veAddImage").addEventListener("click", function () {
+    if (!imageData) {
+      alert("Escolha uma imagem primeiro.");
+      return;
+    }
+
+    const img = makeElement("img", "", {
+      display: "block",
+      maxWidth: "100%",
+      width: "300px",
+      height: "auto",
+      margin: "10px 0",
+      cursor: "pointer"
+    });
+
+    img.src = imageData;
+    document.body.appendChild(img);
+    selectElement(img);
+  });
+
+  document.getElementById("veReplaceImage").addEventListener("click", function () {
+    if (!needSelection()) return;
+
+    if (selected.tagName !== "IMG") {
+      alert("Selecione uma imagem existente primeiro.");
+      return;
+    }
+
+    if (!imageData) {
+      alert("Escolha uma imagem primeiro.");
+      return;
+    }
+
+    saveSnapshot(selected);
+    selected.src = imageData;
+  });
+
+  function addShape(type) {
+    let el;
+
+    if (type === "rect") {
+      el = makeElement("div", "", {
+        width: "180px",
+        height: "100px",
+        backgroundColor: "#c9a44c",
+        margin: "10px 0"
+      });
+    } else if (type === "circle") {
+      el = makeElement("div", "", {
+        width: "110px",
+        height: "110px",
+        borderRadius: "50%",
+        backgroundColor: "#c9a44c",
+        margin: "10px 0"
+      });
+    } else {
+      el = makeElement("div", "", {
+        width: "180px",
+        height: "3px",
+        backgroundColor: "#55351f",
+        margin: "15px 0"
+      });
+    }
+
+    document.body.appendChild(el);
+    selectElement(el);
+  }
+
+  document.getElementById("veAddRect").addEventListener("click", function () {
+    addShape("rect");
+  });
+
+  document.getElementById("veAddCircle").addEventListener("click", function () {
+    addShape("circle");
+  });
+
+  document.getElementById("veAddLine").addEventListener("click", function () {
+    addShape("line");
+  });
+
+  document.getElementById("veDelete").addEventListener("click", function () {
+    if (!needSelection()) return;
+
+    if (!confirm("Deseja excluir o elemento selecionado?")) return;
+
+    saveSnapshot(selected);
+    selected.remove();
+    selected = null;
+    setStatus("Elemento removido.");
+  });
+
+  document.getElementById("veUndo").addEventListener("click", function () {
+    const item = history.pop();
+
+    if (!item) {
+      alert("Não há alterações recentes para desfazer.");
+      return;
+    }
+
+    if (!item.el.isConnected) {
+      alert("O elemento removido não pode ser restaurado por esta ação.");
+      return;
+    }
+
+    item.el.innerHTML = item.html;
+
+    if (item.style === null) {
+      item.el.removeAttribute("style");
+    } else {
+      item.el.setAttribute("style", item.style);
+    }
+
+    setStatus("Última alteração revertida, quando possível.");
+  });
+})();
+</script>
+```
 </body></html>
