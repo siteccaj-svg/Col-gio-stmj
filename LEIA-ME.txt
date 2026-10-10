@@ -1,0 +1,10 @@
+COLÉGIO SANTA TERESINHA — SITE LOCAL
+
+1. Extraia o ZIP para uma pasta.
+2. Abra index.html para ver a página inicial.
+3. Clique nos tópicos do menu. Eles abrem pagina.html com conteúdo separado, como em um site real, em vez de apenas rolar a página inicial.
+4. Para mudar textos das páginas internas, edite js/paginas.js com o Visual Studio Code.
+5. Para mudar cores e aparência, edite css/style.css.
+6. Os espaços de imagem são provisórios. Substitua-os por fotos autorizadas do colégio.
+
+Este projeto é uma demonstração local, ainda não está publicado na internet. Confira telefone, textos e demais dados antes de publicar.

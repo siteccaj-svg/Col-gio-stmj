@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Colégio Santa Teresinha</title><link rel="stylesheet" href="css/style.css"></head><body class="inner"><header class="top"><a class="brand" href="index.html"><img class="school-logo" src="assets/imagens/logo-colegio.jpg" alt="Brasão do Colégio Santa Teresinha"><span><b>Colégio Santa Teresinha<br>do Menino Jesus</b><small>Educação Católica</small></span></a><nav><a href="pagina.html?secao=colegio">O Colégio</a><a href="pagina.html?secao=ensino">Etapas de Ensino</a><a href="pagina.html?secao=proposta">Proposta Pedagógica</a><a href="pagina.html?secao=noticias">Notícias</a><a href="pagina.html?secao=matriculas">Matrículas</a><a href="pagina.html?secao=contato">Fale Conosco</a></nav></header><main id="conteudo"></main><footer><a class="brand" href="index.html"><img class="school-logo" src="assets/imagens/logo-colegio.jpg" alt="Brasão do Colégio Santa Teresinha"><span><b>Colégio Santa Teresinha<br>do Menino Jesus</b><small>Educação Católica</small></span></a><p>Ipatinga · MG<br>© Colégio Santa Teresinha do Menino Jesus</p><a href="index.html">Voltar à página inicial ↑</a></footer><script src="js/paginas.js"></script>
+<style>
+  #editorBtn {
+    position: fixed;
+    right: 18px;
+    bottom: 18px;
+    z-index: 999999;
+    background: #55351f;
+    color: #f5d77e;
+    border: 2px solid #c9a44c;
+    border-radius: 12px;
+    padding: 13px 17px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+
+  #editorPainel {
+    display: none;
+    position: fixed;
+    right: 18px;
+    bottom: 75px;
+    z-index: 999999;
+    width: 300px;
+    max-height: 75vh;
+    overflow-y: auto;
+    padding: 17px;
+    background: #fffaf0;
+    color: #49301f;
+    border: 2px solid #c9a44c;
+    border-radius: 14px;
+    box-shadow: 0 5px 25px #0004;
+    font: 14px Arial, sans-serif;
+  }
+
+  #editorPainel h3 { margin: 0 0 12px; }
+  #editorPainel label { display:block; margin-top:12px; }
+  #editorPainel button,
+  #editorPainel input,
+  #editorPainel select {
+    box-sizing: border-box;
+    width: 100%;
+    margin: 5px 0;
+    padding: 10px;
+  }
+
+  #editorPainel button {
+    background: #55351f;
+    color: white;
+    border: 0;
+    border-radius: 7px;
+    cursor: pointer;
+  }
+
+  #editorPainel .secao {
+    border-top: 1px solid #ddcba7;
+    margin-top: 14px;
+    padding-top: 12px;
+  }
+
+  .alvoEditor {
+    outline: 3px dashed #d5a62c !important;
+    cursor: crosshair !important;
+  }
+</style>
+
+<button id="editorBtn" onclick="alternarEditor()">
+  ⚙ Editar site
+</button>
+
+<div id="editorPainel">
+  <h3>⚙ Editor do site</h3>
+  <p>Escolha o que deseja editar.</p>
+
+  <button onclick="editarTextos()">✏️ Editar textos</button>
+
+  <div class="secao">
+    <b>🖼️ Editar imagens e cores</b>
+    <p>Clique no botão e depois no elemento do site.</p>
+
+    <button onclick="selecionarElemento('imagem')">
+      Selecionar imagem
+    </button>
+
+    <button onclick="selecionarElemento('cor')">
+      Selecionar elemento para mudar cor
+    </button>
+
+    <label>Imagem escolhida</label>
+    <input type="file" id="arquivoImagem" accept="image/*">
+
+    <button onclick="aplicarImagem()">Aplicar nova imagem</button>
+
+    <label>Cor do elemento escolhido</label>
+    <input type="color" id="corEscolhida" value="#55351f"
+      onchange="aplicarCor()">
+
+    <label>Ou mudar a cor principal do site</label>
+    <input type="color" id="corSite" value="#55351f"
+      onchange="mudarCorSite(this.value)">
+  </div>
+
+  <div class="secao">
+    <button onclick="salvarEdicoes()">💾 Salvar alterações neste navegador</button>
+    <button onclick="location.reload()">↩ Recarregar página</button>
+    <button onclick="encerrarSelecao()">Cancelar seleção</button>
+    <p style="font-size:12px">
+      As mudanças são temporárias até serem salvas. O salvamento local
+      não publica as alterações para outras pessoas.
+    </p>
+  </div>
+</div>
+
+<script>
+  let elementoEscolhido = null;
+  let modoSelecao = "";
+  let estilosOriginais = new Map();
+
+  function alternarEditor() {
+    const p = document.getElementById("editorPainel");
+    p.style.display = p.style.display === "block" ? "none" : "block";
+  }
+
+  function editarTextos() {
+    alert("Agora clique no texto que deseja editar. Para terminar, clique novamente em Editar textos.");
+    document.querySelectorAll("h1,h2,h3,h4,p,a,li,button,span")
+      .forEach(el => {
+        if (el.closest("#editorPainel") || el.id === "editorBtn") return;
+        el.contentEditable = el.contentEditable !== "true" ? "true" : "false";
+      });
+  }
+
+  function selecionarElemento(modo) {
+    encerrarSelecao();
+    modoSelecao = modo;
+    document.getElementById("editorPainel").style.display = "none";
+    alert(modo === "imagem"
+      ? "Clique na imagem ou na área com fundo que deseja trocar."
+      : "Clique na área do site cuja cor deseja mudar.");
+
+    document.addEventListener("click", capturarClique, true);
+  }
+
+  function capturarClique(evento) {
+    const el = evento.target;
+
+    if (el.closest("#editorPainel") || el.id === "editorBtn") return;
+
+    evento.preventDefault();
+    evento.stopPropagation();
+
+    elementoEscolhido = el;
+
+    if (!estilosOriginais.has(el)) {
+      estilosOriginais.set(el, {
+        backgroundColor: el.style.backgroundColor,
+        backgroundImage: el.style.backgroundImage,
+        src: el.tagName === "IMG" ? el.src : null
+      });
+    }
+
+    el.classList.add("alvoEditor");
+    document.getElementById("editorPainel").style.display = "block";
+
+    if (modoSelecao === "imagem") {
+      const imagem = el.tagName === "IMG" ||
+        getComputedStyle(el).backgroundImage !== "none";
+
+      if (!imagem) {
+        alert("Esse elemento não parece ter imagem. Tente clicar na foto ou no banner.");
+      }
+    } else {
+      document.getElementById("corEscolhida").value =
+        rgbParaHex(getComputedStyle(el).backgroundColor) || "#55351f";
+    }
+
+    document.removeEventListener("click", capturarClique, true);
+    modoSelecao = "";
+  }
+
+  function aplicarImagem() {
+    if (!elementoEscolhido) {
+      alert("Primeiro clique em Selecionar imagem e escolha uma área do site.");
+      return;
+    }
+
+    const arquivo = document.getElementById("arquivoImagem").files[0];
+
+    if (!arquivo) {
+      alert("Escolha uma imagem do seu computador primeiro.");
+      return;
+    }
+
+    const leitor = new FileReader();
+
+    leitor.onload = function(e) {
+      const el = elementoEscolhido;
+
+      if (el.tagName === "IMG") {
+        el.src = e.target.result;
+      } else {
+        el.style.backgroundImage = "url('" + e.target.result + "')";
+        el.style.backgroundSize = "cover";
+        el.style.backgroundPosition = "center";
+      }
+
+      el.classList.remove("alvoEditor");
+      elementoEscolhido = el;
+    };
+
+    leitor.readAsDataURL(arquivo);
+  }
+
+  function aplicarCor() {
+    if (!elementoEscolhido) {
+      alert("Primeiro selecione um elemento para mudar a cor.");
+      return;
+    }
+
+    elementoEscolhido.style.backgroundColor =
+      document.getElementById("corEscolhida").value;
+
+    elementoEscolhido.classList.remove("alvoEditor");
+  }
+
+  function mudarCorSite(cor) {
+    document.documentElement.style.setProperty("--cor-principal", cor);
+    document.body.style.setProperty("--cor-principal", cor);
+    document.querySelectorAll("header, footer, nav").forEach(el => {
+      el.style.backgroundColor = cor;
+    });
+  }
+
+  function rgbParaHex(rgb) {
+    const nums = rgb.match(/\d+/g);
+    if (!nums || nums.length < 3) return "#55351f";
+    return "#" + nums.slice(0,3).map(n =>
+      Number(n).toString(16).padStart(2, "0")
+    ).join("");
+  }
+
+  function encerrarSelecao() {
+    document.removeEventListener("click", capturarClique, true);
+    document.querySelectorAll(".alvoEditor").forEach(el =>
+      el.classList.remove("alvoEditor")
+    );
+    modoSelecao = "";
+  }
+
+  function salvarEdicoes() {
+    const dados = [];
+
+    document.querySelectorAll("body *").forEach((el, i) => {
+      if (el.closest("#editorPainel") || el.id === "editorBtn") return;
+
+      if (el.isContentEditable || el.style.backgroundImage ||
+          el.style.backgroundColor || el.tagName === "IMG") {
+        dados.push({
+          caminho: caminhoElemento(el),
+          texto: el.isContentEditable ? el.innerHTML : null,
+          imagem: el.tagName === "IMG" ? el.getAttribute("src") : null,
+          fundo: el.style.backgroundImage || null,
+          cor: el.style.backgroundColor || null
+        });
+      }
+    });
+
+    try {
+      localStorage.setItem("edicoesSiteDados", JSON.stringify(dados));
+      alert("Alterações guardadas neste navegador. Para publicar para todos, ainda é necessário ligar o editor ao sistema de publicação do site.");
+    } catch (e) {
+      alert("Algumas imagens podem ser grandes demais para guardar no navegador. Para salvar permanentemente, as imagens precisam ser carregadas para o site.");
+    }
+  }
+
+  function caminhoElemento(el) {
+    const partes = [];
+    while (el && el !== document.body) {
+      let n = el.tagName.toLowerCase();
+      if (el.id) {
+        n += "#" + el.id;
+        partes.unshift(n);
+        break;
+      }
+      const pai = el.parentElement;
+      if (pai) {
+        const iguais = [...pai.children].filter(x => x.tagName === el.tagName);
+        if (iguais.length > 1) n += ":nth-of-type(" + (iguais.indexOf(el) + 1) + ")";
+      }
+      partes.unshift(n);
+      el = pai;
+    }
+    return "body > " + partes.join(" > ");
+  }
+</script>
+</body></html>
