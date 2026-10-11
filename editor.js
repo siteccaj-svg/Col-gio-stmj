@@ -1,50 +1,26 @@
-/* EDITOR UNIVERSAL — COLÉGIO SANTA TERESINHA */
-
+/* EDITOR UNIVERSAL — COLÉGIO SANTA TERESINHA
+   Mantém o painel atual e acrescenta edição direta, imagens locais,
+   desfazer/refazer, cancelar, baixar HTML e salvamento no Supabase. */
 (async function () {
   "use strict";
-
   if (window.__editorColegioIniciado) return;
   window.__editorColegioIniciado = true;
 
-  const SUPABASE_URL =
-    "https://qmqmnbdwrbilrzmqghfk.supabase.co";
-
-  const SUPABASE_KEY =
-    "sb_publishable_zr1KBIxXRPeMZXiOF81Zaw_Jcj_IS0V";
-
+  const SUPABASE_URL = "https://qmqmnbdwrbilrzmqghfk.supabase.co";
+  const SUPABASE_KEY = "sb_publishable_zr1KBIxXRPeMZXiOF81Zaw_Jcj_IS0V";
   const PAGE_ID = location.pathname.endsWith("pagina.html")
-    ? "pagina-" +
-      (new URLSearchParams(location.search).get("secao") || "colegio")
+    ? "pagina-" + (new URLSearchParams(location.search).get("secao") || "colegio")
     : "home";
 
-  if (!window.supabase) {
-    console.error("Biblioteca Supabase não carregada.");
-    window.__editorColegioIniciado = false;
-    return;
-  }
-
-  const db = window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_KEY
-  );
-
-  let editando = false;
-  let selecionado = null;
-  let menuOriginal = [];
-  let alteracoesMenu = false;
-
-  const $ = (seletor, raiz = document) =>
-    raiz.querySelector(seletor);
-
-  const areas = () => ({
-    header: $("header.top"),
-    main: $("main"),
-    footer: $("footer")
-  });
+  const $ = (s, root = document) => root.querySelector(s);
+  const areas = () => ({ header: $("header.top"), main: $("main"), footer: $("footer") });
+  let db = null, editando = false, selecionado = null, modoSelecao = "";
+  let historico = [], indiceHistorico = -1, estadoSalvo = "";
+  let timerHistorico = null, menuOriginal = [];
 
   function aviso(texto) {
-    const elemento = $("#editorStatus");
-    if (elemento) elemento.textContent = texto;
+    const el = $("#editorUniversalStatus");
+    if (el) el.textContent = texto;
   }
 
   function botao(texto, acao) {
@@ -58,149 +34,70 @@
   function campo(rotulo, tipo, valor = "") {
     const grupo = document.createElement("label");
     grupo.className = "editorGrupo";
-
     const titulo = document.createElement("span");
     titulo.textContent = rotulo;
-
     const entrada = document.createElement("input");
     entrada.type = tipo;
     entrada.value = valor;
-
     grupo.append(titulo, entrada);
-
     return { grupo, entrada };
+  }
+
+  async function prepararSupabase() {
+    if (!window.supabase) {
+      await new Promise((resolve, reject) => {
+        const script = document.createElement("script");
+        script.src = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";
+        script.onload = resolve;
+        script.onerror = reject;
+        document.head.appendChild(script);
+      });
+    }
+    db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
   }
 
   function criarPainel() {
     if ($("#editorUniversal")) return;
 
     const estilo = document.createElement("style");
-
     estilo.textContent = `
-      #editorUniversal {
-        position:fixed;
-        right:16px;
-        bottom:16px;
-        width:320px;
-        max-width:calc(100vw - 32px);
-        max-height:82vh;
-        overflow:auto;
-        z-index:999999;
-        background:#fffaf0;
-        color:#49301f;
-        border:2px solid #c9a44c;
-        border-radius:14px;
-        box-shadow:0 5px 25px #0005;
-        font:14px Arial,sans-serif;
-      }
-
-      #editorUniversal * { box-sizing:border-box; }
-
-      #editorUniversal .editorTopo {
-        padding:14px;
-        background:#55351f;
-        color:#f5d77e;
-        font-weight:bold;
-        font-size:16px;
-      }
-
-      #editorUniversal .editorCorpo { padding:12px; }
-
-      #editorUniversal .editorAbas {
-        display:grid;
-        grid-template-columns:1fr 1fr;
-        gap:6px;
-        margin-bottom:12px;
-      }
-
-      #editorUniversal button,
-      #editorUniversal input,
-      #editorUniversal select {
-        font:inherit;
-      }
-
-      #editorUniversal button {
-        width:100%;
-        padding:10px;
-        margin:4px 0;
-        border:1px solid #d7bd7a;
-        border-radius:7px;
-        background:#f5d77e;
-        color:#382719;
-        cursor:pointer;
-      }
-
-      #editorUniversal button:hover {
-        filter:brightness(.96);
-      }
-
-      #editorUniversal .editorAbaAtiva {
-        background:#55351f;
-        color:#fff5d7;
-      }
-
-      #editorUniversal .editorGrupo {
-        display:block;
-        margin:12px 0;
-      }
-
-      #editorUniversal .editorGrupo span {
-        display:block;
-        margin-bottom:5px;
-        font-weight:bold;
-      }
-
-      #editorUniversal input,
-      #editorUniversal select {
-        width:100%;
-        min-width:0;
-        padding:9px;
-        border:1px solid #c9b68c;
-        border-radius:6px;
-        background:white;
-      }
-
-      #editorUniversal input[type=color] {
-        height:42px;
-        padding:3px;
-      }
-
-      #editorUniversal .editorSecao {
-        border-top:1px solid #ddcba7;
-        padding-top:10px;
-        margin-top:10px;
-      }
-
-      #editorUniversalStatus {
-        line-height:1.5;
-        margin-top:10px;
-        overflow-wrap:anywhere;
-      }
-
-      .editorSelecionado {
-        outline:3px dashed #d5a62c !important;
-        outline-offset:2px;
-      }
-
-      @media(max-width:480px) {
-        #editorUniversal {
-          right:8px;
-          bottom:8px;
-          max-width:calc(100vw - 16px);
-        }
-      }
+      #editorUniversal{position:fixed;right:16px;bottom:16px;width:320px;max-width:calc(100vw - 32px);max-height:82vh;overflow:auto;z-index:999999;background:#fffaf0;color:#49301f;border:2px solid #c9a44c;border-radius:14px;box-shadow:0 5px 25px #0005;font:14px Arial,sans-serif}
+      #editorUniversal *{box-sizing:border-box}
+      #editorUniversal .editorTopo{padding:14px;background:#55351f;color:#f5d77e;font-weight:bold;font-size:16px;display:flex;justify-content:space-between;align-items:center;gap:8px}
+      #editorUniversal .editorCorpo{padding:12px}
+      #editorUniversal .editorAbas{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:12px}
+      #editorUniversal button,#editorUniversal input,#editorUniversal select{font:inherit}
+      #editorUniversal button{width:100%;padding:10px;margin:4px 0;border:1px solid #d7bd7a;border-radius:7px;background:#f5d77e;color:#382719;cursor:pointer}
+      #editorUniversal button:hover{filter:brightness(.96)}
+      #editorUniversal .editorAbaAtiva{background:#55351f;color:#fff5d7}
+      #editorUniversal .editorGrupo{display:block;margin:12px 0}
+      #editorUniversal .editorGrupo span{display:block;margin-bottom:5px;font-weight:bold}
+      #editorUniversal input,#editorUniversal select{width:100%;min-width:0;padding:9px;border:1px solid #c9b68c;border-radius:6px;background:white}
+      #editorUniversal input[type=color]{height:42px;padding:3px}
+      #editorUniversal .editorSecao{border-top:1px solid #ddcba7;padding-top:10px;margin-top:10px}
+      #editorUniversalStatus{line-height:1.5;margin-top:10px;overflow-wrap:anywhere}
+      .editorSelecionado{outline:3px dashed #d5a62c!important;outline-offset:2px}
+      #editorAbrir{position:fixed;right:16px;bottom:16px;z-index:999998;background:#55351f;color:#f5d77e;border:2px solid #c9a44c;border-radius:12px;padding:13px 17px;font-weight:bold;cursor:pointer}
+      @media(max-width:480px){#editorUniversal{right:8px;bottom:8px;max-width:calc(100vw - 16px)}#editorAbrir{right:8px;bottom:8px}}
     `;
-
     document.head.appendChild(estilo);
+
+    const abrir = document.createElement("button");
+    abrir.id = "editorAbrir";
+    abrir.type = "button";
+    abrir.textContent = "⚙ Editar site";
+    abrir.addEventListener("click", () => {
+      const p = $("#editorUniversal");
+      p.style.display = p.style.display === "block" ? "none" : "block";
+      abrir.style.display = p.style.display === "block" ? "none" : "block";
+    });
+    document.body.appendChild(abrir);
 
     const painel = document.createElement("div");
     painel.id = "editorUniversal";
-
+    painel.style.display = "none";
     painel.innerHTML = `
-      <div class="editorTopo">
-        ⚙ Editor do Colégio
-      </div>
-
+      <div class="editorTopo"><span>⚙ Editor do Colégio</span><button type="button" id="editorFechar" style="width:auto;margin:0;padding:5px 9px">✕</button></div>
       <div class="editorCorpo">
         <div class="editorAbas">
           <button data-aba="textos">✏️ Textos</button>
@@ -210,686 +107,616 @@
           <button data-aba="menu">🧭 Menu</button>
           <button data-aba="pagina">📄 Página</button>
         </div>
-
         <div id="editorFerramentas"></div>
-
         <div class="editorSecao">
+          <button id="editorDesfazer">↶ Desfazer</button>
+          <button id="editorRefazer">↷ Refazer</button>
+          <button id="editorCancelar">✖ Cancelar alterações não salvas</button>
           <button id="editorSalvar">☁️ Salvar na nuvem</button>
+          <button id="editorBaixar">📥 Baixar cópia HTML</button>
           <button id="editorConcluir">Concluir edição</button>
-          <div id="editorStatus" role="status">
-            Preparando editor...
-          </div>
+          <div id="editorUniversalStatus" role="status">Preparando editor…</div>
         </div>
-      </div>
-    `;
+      </div>`;
 
     document.body.appendChild(painel);
 
-    painel.querySelectorAll("[data-aba]").forEach(b => {
-      b.addEventListener("click", () => abrirAba(b.dataset.aba));
+    $("#editorFechar").addEventListener("click", () => {
+      painel.style.display = "none";
+      abrir.style.display = "block";
     });
 
+    painel.querySelectorAll("[data-aba]").forEach(b =>
+      b.addEventListener("click", () => abrirAba(b.dataset.aba))
+    );
+
+    $("#editorDesfazer").addEventListener("click", desfazer);
+    $("#editorRefazer").addEventListener("click", refazer);
+    $("#editorCancelar").addEventListener("click", cancelar);
     $("#editorSalvar").addEventListener("click", salvar);
+    $("#editorBaixar").addEventListener("click", baixarHTML);
     $("#editorConcluir").addEventListener("click", concluir);
 
     abrirAba("textos");
   }
 
-  function escolherElemento(elemento) {
-    if (!editando || !elemento) return;
-
-    if (elemento.closest("#editorUniversal")) return;
-
-    if (selecionado) {
-      selecionado.classList.remove("editorSelecionado");
+  function capturarEstado() {
+    const resultado = {};
+    for (const [nome, el] of Object.entries(areas())) {
+      if (el) resultado[nome] = { html: limparHTML(el), style: el.getAttribute("style") };
     }
-
-    selecionado = elemento;
-    selecionado.classList.add("editorSelecionado");
-
-    aviso("Elemento selecionado. Agora escolha uma ferramenta.");
+    return JSON.stringify(resultado);
   }
 
-  function ativarSelecao() {
-    editando = true;
-
-    document.body.classList.add("modoEditor");
-
-    document.addEventListener("click", selecionarClique, true);
-
-    aviso("Edição ativada. Clique no elemento que deseja alterar.");
-  }
-
-  function selecionarClique(evento) {
-    if (!editando) return;
-
-    const elemento = evento.target;
-
-    if (elemento.closest("#editorUniversal")) return;
-
-    evento.preventDefault();
-    evento.stopPropagation();
-
-    escolherElemento(elemento);
-  }
-
-  function concluir() {
-    editando = false;
-
-    document.removeEventListener("click", selecionarClique, true);
-
-    document.body.classList.remove("modoEditor");
-
-    document.querySelectorAll(".editorSelecionado").forEach(el => {
-      el.classList.remove("editorSelecionado");
-    });
-
-    document.querySelectorAll("[contenteditable]").forEach(el => {
-      el.removeAttribute("contenteditable");
-    });
-
+  function aplicarEstado(serializado) {
+    const dados = JSON.parse(serializado);
+    for (const [nome, dado] of Object.entries(dados)) {
+      const el = areas()[nome];
+      if (!el) continue;
+      el.innerHTML = dado.html;
+      if (dado.style === null) el.removeAttribute("style");
+      else if (typeof dado.style === "string") el.setAttribute("style", dado.style);
+    }
     selecionado = null;
-
-    aviso("Edição concluída. Clique em salvar para publicar as alterações.");
+    limparSelecaoVisual();
   }
 
-  function abrirAba(nome) {
-    const ferramentas = $("#editorFerramentas");
-    ferramentas.replaceChildren();
-
-    document.querySelectorAll("#editorUniversal [data-aba]").forEach(b => {
-      b.classList.toggle("editorAbaAtiva", b.dataset.aba === nome);
-    });
-
-    if (nome === "textos") abaTextos(ferramentas);
-    if (nome === "conteudo") abaConteudo(ferramentas);
-    if (nome === "imagens") abaImagens(ferramentas);
-    if (nome === "aparencia") abaAparencia(ferramentas);
-    if (nome === "menu") abaMenu(ferramentas);
-    if (nome === "pagina") abaPagina(ferramentas);
+  function registrarHistorico() {
+    clearTimeout(timerHistorico);
+    const atual = capturarEstado();
+    if (historico[indiceHistorico] === atual) return;
+    historico = historico.slice(0, indiceHistorico + 1);
+    historico.push(atual);
+    if (historico.length > 80) historico.shift();
+    indiceHistorico = historico.length - 1;
+    atualizarBotoesHistorico();
   }
 
-  // 1. EDIÇÃO DE TEXTOS
-
-  function abaTextos(painel) {
-    painel.append(
-      botao("✏️ Ativar seleção de textos e elementos", ativarSelecao),
-      botao("Editar texto do elemento selecionado", editarSelecionado)
-    );
-
-    const dica = document.createElement("p");
-    dica.textContent =
-      "Ative a seleção, clique no texto da página e depois escolha editar.";
-    painel.appendChild(dica);
+  function agendarHistorico() {
+    clearTimeout(timerHistorico);
+    timerHistorico = setTimeout(registrarHistorico, 250);
   }
 
-  function editarSelecionado() {
-    if (!selecionado) {
-      aviso("Primeiro ative a seleção e clique em um elemento.");
-      return;
-    }
-
-    if (selecionado.matches("img, input, textarea, select")) {
-      aviso("Este elemento não é um texto editável.");
-      return;
-    }
-
-    const novoTexto = prompt(
-      "Digite o novo texto:",
-      selecionado.innerText
-    );
-
-    if (novoTexto !== null) {
-      selecionado.textContent = novoTexto;
-      aviso("Texto alterado. Clique em salvar na nuvem.");
-    }
+  function atualizarBotoesHistorico() {
+    const u = $("#editorDesfazer"), r = $("#editorRefazer");
+    if (u) u.disabled = indiceHistorico <= 0;
+    if (r) r.disabled = indiceHistorico >= historico.length - 1;
   }
 
-  // 2. ADICIONAR CONTEÚDO
-
-  function abaConteudo(painel) {
-    painel.append(
-      botao("➕ Adicionar título", () => adicionarBloco("h2")),
-      botao("➕ Adicionar subtítulo", () => adicionarBloco("h3")),
-      botao("➕ Adicionar parágrafo", () => adicionarBloco("p")),
-      botao("➕ Adicionar seção completa", adicionarSecao)
-    );
-
-    const dica = document.createElement("p");
-    dica.textContent =
-      "O novo conteúdo será acrescentado ao final da área principal da página.";
-    painel.appendChild(dica);
+  function desfazer() {
+    clearTimeout(timerHistorico);
+    if (indiceHistorico <= 0) return aviso("Não há mais alterações para desfazer.");
+    indiceHistorico--;
+    aplicarEstado(historico[indiceHistorico]);
+    atualizarBotoesHistorico();
+    aviso("Alteração desfeita. Ainda não foi publicada.");
   }
 
-  function adicionarBloco(tipo) {
-    const texto = prompt("Digite o conteúdo:");
-
-    if (texto === null || !texto.trim()) return;
-
-    const principal = $("main");
-    if (!principal) return;
-
-    const elemento = document.createElement(tipo);
-    elemento.textContent = texto;
-
-    principal.appendChild(elemento);
-
-    aviso("Conteúdo adicionado. Salve na nuvem.");
+  function refazer() {
+    clearTimeout(timerHistorico);
+    if (indiceHistorico >= historico.length - 1) return aviso("Não há alterações para refazer.");
+    indiceHistorico++;
+    aplicarEstado(historico[indiceHistorico]);
+    atualizarBotoesHistorico();
+    aviso("Alteração refeita. Ainda não foi publicada.");
   }
 
-  function adicionarSecao() {
-    const titulo = prompt("Título da nova seção:");
-    if (titulo === null || !titulo.trim()) return;
-
-    const texto = prompt("Texto da seção:");
-    if (texto === null) return;
-
-    const secao = document.createElement("section");
-    secao.style.cssText =
-      "padding:35px 20px;max-width:1100px;margin:auto;";
-
-    const h2 = document.createElement("h2");
-    h2.textContent = titulo;
-
-    const p = document.createElement("p");
-    p.textContent = texto;
-
-    secao.append(h2, p);
-
-    const principal = $("main");
-    if (!principal) return;
-
-    principal.appendChild(secao);
-
-    aviso("Nova seção adicionada. Salve na nuvem.");
+  function cancelar() {
+    if (!estadoSalvo) return aviso("Ainda não existe uma versão salva carregada.");
+    if (!confirm("Descartar todas as alterações desde o último salvamento?")) return;
+    aplicarEstado(estadoSalvo);
+    historico = [estadoSalvo];
+    indiceHistorico = 0;
+    atualizarBotoesHistorico();
+    aviso("Alterações não salvas canceladas.");
   }
-
-  // 3. IMAGENS
-
-  function abaImagens(painel) {
-    painel.append(
-      botao("🖼️ Selecionar imagem da página", ativarSelecao)
-    );
-
-    const url = campo("Endereço da nova imagem", "url");
-    url.entrada.placeholder = "https://...";
-
-    painel.appendChild(url.grupo);
-
-    painel.appendChild(
-      botao("Aplicar imagem ao elemento selecionado", () => {
-        if (!selecionado) {
-          aviso("Selecione uma imagem primeiro.");
-          return;
-        }
-
-        if (!selecionado.matches("img")) {
-          aviso("O elemento selecionado não é uma imagem.");
-          return;
-        }
-
-        if (!url.entrada.value.trim()) {
-          aviso("Digite o endereço da imagem.");
-          return;
-        }
-
-        selecionado.src = url.entrada.value.trim();
-        aviso("Imagem alterada. Salve na nuvem.");
-      })
-    );
-
-    painel.appendChild(
-      botao("Adicionar imagem à página", () => {
-        const endereco = prompt("Cole o endereço da imagem:");
-        if (!endereco) return;
-
-        const img = document.createElement("img");
-        img.src = endereco;
-        img.alt = prompt("Descrição da imagem:") || "";
-        img.loading = "lazy";
-        img.style.cssText =
-          "display:block;max-width:100%;height:auto;margin:20px auto;";
-
-        const principal = $("main");
-        if (!principal) return;
-
-        principal.appendChild(img);
-        aviso("Imagem adicionada. Salve na nuvem.");
-      })
-    );
-  }
-
-  // 4. APARÊNCIA
-
-  function abaAparencia(painel) {
-    painel.appendChild(
-      botao("Selecionar elemento para personalizar", ativarSelecao)
-    );
-
-    const corFundo = campo("Cor de fundo", "color", "#ffffff");
-    const corTexto = campo("Cor do texto", "color", "#49301f");
-
-    painel.append(corFundo.grupo, corTexto.grupo);
-
-    painel.appendChild(
-      botao("Aplicar cores ao elemento selecionado", () => {
-        if (!selecionado) {
-          aviso("Selecione um elemento primeiro.");
-          return;
-        }
-
-        selecionado.style.backgroundColor = corFundo.entrada.value;
-        selecionado.style.color = corTexto.entrada.value;
-
-        aviso("Cores aplicadas. Salve na nuvem.");
-      })
-    );
-
-    const fonte = document.createElement("label");
-    fonte.className = "editorGrupo";
-
-    const tituloFonte = document.createElement("span");
-    tituloFonte.textContent = "Tipo de letra";
-
-    const lista = document.createElement("select");
-
-    [
-      ["Arial", "Arial"],
-      ["Georgia", "Georgia"],
-      ["Times New Roman", "Times New Roman"],
-      ["Verdana", "Verdana"],
-      ["Trebuchet MS", "Trebuchet MS"]
-    ].forEach(([valor, nome]) => {
-      const opcao = document.createElement("option");
-      opcao.value = valor;
-      opcao.textContent = nome;
-      lista.appendChild(opcao);
-    });
-
-    fonte.append(tituloFonte, lista);
-    painel.appendChild(fonte);
-
-    const tamanho = campo("Tamanho da letra (px)", "number", "18");
-    tamanho.entrada.min = "8";
-    tamanho.entrada.max = "100";
-
-    painel.appendChild(tamanho.grupo);
-
-    painel.appendChild(
-      botao("Aplicar fonte e tamanho", () => {
-        if (!selecionado) {
-          aviso("Selecione um elemento primeiro.");
-          return;
-        }
-
-        const px = Number(tamanho.entrada.value);
-
-        if (px < 8 || px > 100) {
-          aviso("Escolha um tamanho entre 8 e 100.");
-          return;
-        }
-
-        selecionado.style.fontFamily = lista.value;
-        selecionado.style.fontSize = px + "px";
-
-        aviso("Aparência alterada. Salve na nuvem.");
-      })
-    );
-  }
-
-  // 5. MENU DE NAVEGAÇÃO
-
-  function abaMenu(painel) {
-    painel.appendChild(
-      botao("Ativar seleção do menu", ativarSelecao)
-    );
-
-    const nav = $("header.top nav");
-
-    if (!nav) {
-      painel.append("Não encontrei o menu superior nesta página.");
-      return;
-    }
-
-    const links = [...nav.querySelectorAll("a")];
-
-    painel.appendChild(document.createElement("hr"));
-
-    links.forEach((link, indice) => {
-      const grupo = document.createElement("div");
-      grupo.className = "editorSecao";
-
-      const nome = campo(
-        "Nome da opção " + (indice + 1),
-        "text",
-        link.textContent.trim()
-      );
-
-      const destino = campo(
-        "Endereço da opção " + (indice + 1),
-        "text",
-        link.getAttribute("href") || ""
-      );
-
-      grupo.append(nome.grupo, destino.grupo);
-
-      grupo.appendChild(
-        botao("Aplicar esta opção", () => {
-          if (!nome.entrada.value.trim() || !destino.entrada.value.trim()) {
-            aviso("Preencha o nome e o destino.");
-            return;
-          }
-
-          link.textContent = nome.entrada.value.trim();
-          link.setAttribute("href", destino.entrada.value.trim());
-
-          alteracoesMenu = true;
-          aviso("Opção alterada. Salve na nuvem.");
-        })
-      );
-
-      grupo.appendChild(
-        botao("↑ Mover para cima", () => {
-          if (link.previousElementSibling) {
-            nav.insertBefore(link, link.previousElementSibling);
-            alteracoesMenu = true;
-            aviso("Ordem alterada. Salve na nuvem.");
-            abrirAba("menu");
-          }
-        })
-      );
-
-      grupo.appendChild(
-        botao("↓ Mover para baixo", () => {
-          if (link.nextElementSibling) {
-            nav.insertBefore(link.nextElementSibling, link);
-            alteracoesMenu = true;
-            aviso("Ordem alterada. Salve na nuvem.");
-            abrirAba("menu");
-          }
-        })
-      );
-
-      grupo.appendChild(
-        botao("Excluir opção", () => {
-          if (!confirm("Deseja excluir esta opção do menu?")) return;
-
-          link.remove();
-          alteracoesMenu = true;
-          aviso("Opção removida. Salve na nuvem.");
-          abrirAba("menu");
-        })
-      );
-
-      painel.appendChild(grupo);
-    });
-
-    painel.appendChild(
-      botao("➕ Adicionar opção ao menu", () => {
-        const nome = prompt("Nome da nova opção:");
-        if (!nome || !nome.trim()) return;
-
-        const destino = prompt(
-          "Destino da opção, por exemplo: pagina.html?secao=colegio"
-        );
-
-        if (!destino || !destino.trim()) return;
-
-        const link = document.createElement("a");
-        link.textContent = nome.trim();
-        link.href = destino.trim();
-
-        nav.appendChild(link);
-
-        alteracoesMenu = true;
-        aviso("Opção adicionada. Salve na nuvem.");
-        abrirAba("menu");
-      })
-    );
-
-    painel.appendChild(
-      botao("Restaurar menu padrão", restaurarMenu)
-    );
-
-    painel.appendChild(
-      botao("Adicionar submenu simples", () => {
-        const nome = prompt("Nome da opção principal:");
-        if (!nome || !nome.trim()) return;
-
-        const nomeSub = prompt("Nome da subopção:");
-        if (!nomeSub || !nomeSub.trim()) return;
-
-        const destino = prompt("Destino da subopção:");
-        if (!destino || !destino.trim()) return;
-
-        const grupo = document.createElement("details");
-        grupo.style.cssText =
-          "display:inline-block;position:relative;padding:8px;";
-
-        const resumo = document.createElement("summary");
-        resumo.textContent = nome.trim();
-        resumo.style.cursor = "pointer";
-
-        const sub = document.createElement("a");
-        sub.textContent = nomeSub.trim();
-        sub.href = destino.trim();
-        sub.style.cssText =
-          "display:block;padding:10px;background:#fffaf0;";
-
-        grupo.append(resumo, sub);
-        nav.appendChild(grupo);
-
-        alteracoesMenu = true;
-        aviso("Submenu adicionado. Salve na nuvem.");
-        abrirAba("menu");
-      })
-    );
-  }
-
-  function restaurarMenu() {
-    if (!confirm("Restaurar os links padrão desta página?")) return;
-
-    const nav = $("header.top nav");
-    if (!nav) return;
-
-    const padrao = [
-      ["O Colégio", "pagina.html?secao=colegio"],
-      ["Etapas de Ensino", "pagina.html?secao=ensino"],
-      ["Proposta Pedagógica", "pagina.html?secao=proposta"],
-      ["Notícias", "pagina.html?secao=noticias"],
-      ["Matrículas", "pagina.html?secao=matriculas"],
-      ["Fale Conosco", "pagina.html?secao=contato"]
-    ];
-
-    nav.replaceChildren();
-
-    padrao.forEach(([nome, destino]) => {
-      const a = document.createElement("a");
-      a.textContent = nome;
-      a.href = destino;
-      nav.appendChild(a);
-    });
-
-    alteracoesMenu = true;
-    aviso("Menu padrão restaurado. Salve na nuvem.");
-    abrirAba("menu");
-  }
-
-  // 6. PÁGINA
-
-  function abaPagina(painel) {
-    painel.appendChild(
-      botao("➕ Adicionar seção", adicionarSecao)
-    );
-
-    painel.appendChild(
-      botao("➕ Adicionar parágrafo", () => adicionarBloco("p"))
-    );
-
-    const altura = campo(
-      "Altura mínima do conteúdo (px)",
-      "number",
-      String($("main")?.offsetHeight || 600)
-    );
-
-    altura.entrada.min = "200";
-    altura.entrada.max = "10000";
-
-    painel.appendChild(altura.grupo);
-
-    painel.appendChild(
-      botao("Aplicar altura mínima", () => {
-        const px = Number(altura.entrada.value);
-        const principal = $("main");
-
-        if (!principal || px < 200 || px > 10000) {
-          aviso("Escolha uma altura entre 200 e 10000 pixels.");
-          return;
-        }
-
-        principal.style.minHeight = px + "px";
-        aviso("Altura alterada. Salve na nuvem.");
-      })
-    );
-
-    painel.appendChild(
-      botao("Criar página nova", () => {
-        alert(
-          "Para publicar uma nova página permanente, também será necessário " +
-          "configurar o conteúdo da página e sua rota. Este botão não cria " +
-          "arquivos novos no GitHub automaticamente."
-        );
-      })
-    );
-
-    const dica = document.createElement("p");
-    dica.textContent =
-      "Você pode aumentar o conteúdo adicionando seções. A altura cresce automaticamente quando o conteúdo aumenta.";
-    painel.appendChild(dica);
-  }
-
-  // LIMPEZA DO HTML ANTES DE SALVAR
 
   function limparHTML(elemento) {
     const copia = elemento.cloneNode(true);
-
-    copia.querySelectorAll(
-      "#editorUniversal, .editorSelecionado"
-    ).forEach(el => el.remove());
-
-    copia.querySelectorAll("[contenteditable]").forEach(el => {
-      el.removeAttribute("contenteditable");
+    copia.querySelectorAll("#editorUniversal,#editorAbrir,.editorSelecionado").forEach(el => el.remove());
+    copia.querySelectorAll("[contenteditable]").forEach(el => el.removeAttribute("contenteditable"));
+    copia.querySelectorAll("[class]").forEach(el => {
+      el.classList.remove("editorSelecionado");
+      if (!el.className.trim()) el.removeAttribute("class");
     });
-
-    copia.querySelectorAll("[style]").forEach(el => {
-      if (el.style.outline) el.style.removeProperty("outline");
-      if (!el.getAttribute("style")?.trim()) {
-        el.removeAttribute("style");
-      }
-    });
-
     return copia.innerHTML;
   }
 
-  // SALVAR NA NUVEM
+  function escolherElemento(elemento) {
+    if (!elemento || elemento.closest("#editorUniversal") || elemento.id === "editorAbrir") return;
+    limparSelecaoVisual();
+    selecionado = elemento;
+    selecionado.classList.add("editorSelecionado");
+    aviso("Elemento selecionado. Agora use a ferramenta desejada.");
+  }
 
-  async function salvar() {
-    const atuais = areas();
-    const conteudo = {};
+  function limparSelecaoVisual() {
+    document.querySelectorAll(".editorSelecionado").forEach(el => el.classList.remove("editorSelecionado"));
+  }
 
-    for (const nome of ["header", "main", "footer"]) {
-      const elemento = atuais[nome];
-      if (!elemento) continue;
+  function ativarSelecao(modo = "geral") {
+    concluirSelecao();
+    editando = true;
+    modoSelecao = modo;
+    document.addEventListener("click", selecionarClique, true);
+    aviso("Clique no elemento que deseja selecionar na página.");
+  }
 
-      conteudo[nome + "Html"] = limparHTML(elemento);
-      conteudo[nome + "Style"] = elemento.getAttribute("style") || "";
+  function selecionarClique(evento) {
+    const elemento = evento.target;
+    if (!editando || elemento.closest("#editorUniversal") || elemento.id === "editorAbrir") return;
+    evento.preventDefault();
+    evento.stopPropagation();
+    evento.stopImmediatePropagation();
+    escolherElemento(elemento);
+    document.removeEventListener("click", selecionarClique, true);
+    editando = false;
+
+    if (modoSelecao === "texto") editarDireto();
+    else if (modoSelecao === "imagem" && selecionado?.tagName !== "IMG") aviso("Área selecionada. Você pode aplicar uma imagem como fundo.");
+    else if (modoSelecao === "imagem") aviso("Imagem selecionada. Escolha um arquivo e clique em Aplicar imagem.");
+    else if (modoSelecao === "cor") aviso("Elemento selecionado. Escolha as cores na aba Aparência.");
+    modoSelecao = "";
+  }
+
+  function concluirSelecao() {
+    editando = false;
+    modoSelecao = "";
+    document.removeEventListener("click", selecionarClique, true);
+    limparSelecaoVisual();
+  }
+
+  function concluir() {
+    concluirSelecao();
+    document.querySelectorAll("[contenteditable]").forEach(el => el.removeAttribute("contenteditable"));
+    selecionado = null;
+    aviso("Edição concluída. Clique em salvar na nuvem para publicar.");
+  }
+
+  function editarDireto() {
+    if (!selecionado) return aviso("Primeiro selecione um elemento.");
+    if (selecionado.matches("img,input,textarea,select,button,svg,video,iframe")) return aviso("Esse elemento não é um texto editável. Escolha um título, parágrafo ou texto.");
+    selecionado.contentEditable = "true";
+    selecionado.focus();
+    aviso("Agora edite o texto diretamente na página. Clique em Concluir edição quando terminar.");
+    selecionado.addEventListener("input", agendarHistorico);
+  }
+    function abrirAba(aba) {
+    const ferramentas = $("#editorFerramentas");
+    if (!ferramentas) return;
+    ferramentas.innerHTML = "";
+
+    document.querySelectorAll("#editorUniversal [data-aba]").forEach(b => {
+      b.classList.toggle("editorAbaAtiva", b.dataset.aba === aba);
+    });
+
+    if (aba === "textos") {
+      ferramentas.append(
+        botao("✏️ Selecionar texto para editar diretamente", () => ativarSelecao("texto")),
+        botao("🖱️ Selecionar elemento da página", () => ativarSelecao("geral")),
+        botao("Concluir seleção", concluirSelecao)
+      );
+      const info = document.createElement("p");
+      info.textContent = "Clique no botão e depois no texto da página para editá-lo diretamente.";
+      ferramentas.append(info);
     }
 
-    aviso("Salvando alterações na nuvem...");
+    if (aba === "conteudo") {
+      ferramentas.append(
+        botao("➕ Adicionar título", () => adicionarConteudo("h2", "Novo título")),
+        botao("➕ Adicionar parágrafo", () => adicionarConteudo("p", "Escreva seu texto aqui.")),
+        botao("➕ Adicionar lista", () => adicionarLista()),
+        botao("🗑️ Remover elemento selecionado", removerSelecionado)
+      );
+    }
 
-    const { error } = await db
-      .from("site_edits")
-      .upsert({
-        id: PAGE_ID,
-        content: conteudo,
-        updated_at: new Date().toISOString()
-      });
+    if (aba === "imagens") {
+      const info = document.createElement("p");
+      info.textContent = "Selecione uma imagem da página ou adicione uma nova do seu computador.";
+      ferramentas.append(info);
 
-    if (error) {
-      console.error("Erro ao salvar:", error);
-
-      aviso("Não foi possível salvar. Verifique as permissões do Supabase.");
-
-      alert(
-        "Erro ao salvar as alterações. Verifique se a tabela site_edits " +
-        "permite gravações para este site."
+      ferramentas.append(
+        botao("🖼️ Selecionar imagem existente", () => ativarSelecao("imagem")),
+        botao("📁 Escolher imagem do computador", escolherArquivoImagem),
+        botao("Aplicar imagem escolhida", aplicarImagem),
+        botao("➕ Adicionar nova imagem", adicionarImagem)
       );
 
-      return;
+      const largura = campo("Largura da imagem (ex.: 300px ou 100%)", "text", "100%");
+      largura.entrada.id = "editorLarguraImagem";
+      ferramentas.append(largura.grupo);
+
+      const alt = campo("Descrição da imagem", "text", "");
+      alt.entrada.id = "editorAltImagem";
+      ferramentas.append(alt.grupo);
     }
 
-    alteracoesMenu = false;
+    if (aba === "aparencia") {
+      ferramentas.append(
+        botao("🎨 Selecionar elemento para mudar aparência", () => ativarSelecao("cor"))
+      );
 
-    aviso(
-      "Alterações salvas na nuvem. Atualize a página para conferir."
-    );
+      const fundo = campo("Cor de fundo", "color", "#ffffff");
+      fundo.entrada.id = "editorCorFundo";
+      ferramentas.append(fundo.grupo);
 
-    alert(
-      "Alterações salvas! Elas estarão disponíveis para os visitantes " +
-      "quando a página carregar os dados atualizados."
-    );
+      const texto = campo("Cor do texto", "color", "#222222");
+      texto.entrada.id = "editorCorTexto";
+      ferramentas.append(texto.grupo);
+
+      const tamanho = campo("Tamanho da letra (px)", "number", "18");
+      tamanho.entrada.id = "editorTamanhoTexto";
+      tamanho.entrada.min = "8";
+      tamanho.entrada.max = "100";
+      ferramentas.append(tamanho.grupo);
+
+      const fonte = document.createElement("label");
+      fonte.className = "editorGrupo";
+      fonte.innerHTML = "<span>Fonte</span>";
+      const selectFonte = document.createElement("select");
+      selectFonte.id = "editorFonte";
+      [
+        ["Arial, sans-serif", "Arial"],
+        ["Georgia, serif", "Georgia"],
+        ["Verdana, sans-serif", "Verdana"],
+        ["'Times New Roman', serif", "Times New Roman"],
+        ["'Trebuchet MS', sans-serif", "Trebuchet MS"]
+      ].forEach(([valor, nome]) => {
+        const op = document.createElement("option");
+        op.value = valor;
+        op.textContent = nome;
+        selectFonte.append(op);
+      });
+      fonte.append(selectFonte);
+      ferramentas.append(fonte);
+
+      ferramentas.append(
+        botao("Aplicar aparência", aplicarAparencia),
+        botao("Mudar cor do fundo da página", mudarFundoPagina)
+      );
+    }
+
+    if (aba === "menu") {
+      ferramentas.append(
+        botao("🧭 Selecionar menu para editar", () => ativarSelecao("geral")),
+        botao("➕ Adicionar link ao menu", adicionarLinkMenu),
+        botao("🗑️ Remover link selecionado", removerSelecionado)
+      );
+
+      const texto = campo("Texto do novo link", "text", "Nova página");
+      texto.entrada.id = "editorTextoLink";
+      ferramentas.append(texto.grupo);
+
+      const destino = campo("Destino do link (ex.: pagina.html?secao=contato)", "text", "pagina.html");
+      destino.entrada.id = "editorDestinoLink";
+      ferramentas.append(destino.grupo);
+
+      const info = document.createElement("p");
+      info.textContent = "Você também pode selecionar um link existente e alterar seu texto diretamente na página.";
+      ferramentas.append(info);
+    }
+
+    if (aba === "pagina") {
+      ferramentas.append(
+        botao("📄 Selecionar conteúdo principal", () => ativarSelecao("geral")),
+        botao("🗑️ Remover elemento selecionado", removerSelecionado),
+        botao("↻ Recarregar a página", () => {
+          if (confirm("Recarregar a página? Alterações não salvas podem ser perdidas.")) location.reload();
+        })
+      );
+
+      const info = document.createElement("p");
+      info.textContent = "Use Salvar na nuvem para publicar as alterações. O botão Baixar cópia HTML gera uma cópia local da página.";
+      ferramentas.append(info);
+    }
   }
 
-  // CARREGAR AS ALTERAÇÕES SALVAS
+  function adicionarConteudo(tipo, texto) {
+    const principal = $("main");
+    if (!principal) return aviso("Não encontrei a área principal da página.");
 
-  async function carregar() {
-    aviso("Carregando alterações salvas...");
-
-    const { data, error } = await db
-      .from("site_edits")
-      .select("content, updated_at")
-      .eq("id", PAGE_ID)
-      .maybeSingle();
-
-    if (error) {
-      console.error("Erro ao carregar:", error);
-      aviso("Não foi possível carregar os dados salvos.");
-      return;
-    }
-
-    if (!data?.content) {
-      aviso("Editor pronto. Nenhuma alteração anterior encontrada.");
-      return;
-    }
-
-    const conteudo = data.content;
-    const atuais = areas();
-
-    for (const nome of ["header", "main", "footer"]) {
-      const elemento = atuais[nome];
-
-      if (!elemento) continue;
-
-      const html = conteudo[nome + "Html"];
-      const estilo = conteudo[nome + "Style"];
-
-      if (typeof html === "string") {
-        elemento.innerHTML = html;
-      }
-
-      if (typeof estilo === "string") {
-        if (estilo) elemento.setAttribute("style", estilo);
-        else elemento.removeAttribute("style");
-      }
-    }
-
-    aviso(
-      "Alterações carregadas. Última atualização: " +
-      new Date(data.updated_at).toLocaleString("pt-BR")
-    );
+    const elemento = document.createElement(tipo);
+    elemento.textContent = texto;
+    elemento.contentEditable = "true";
+    principal.append(elemento);
+    escolherElemento(elemento);
+    elemento.focus();
+    registrarHistorico();
+    aviso("Conteúdo adicionado. Edite o texto diretamente na página.");
   }
 
+  function adicionarLista() {
+    const principal = $("main");
+    if (!principal) return aviso("Não encontrei a área principal da página.");
+
+    const lista = document.createElement("ul");
+    ["Primeiro item", "Segundo item", "Terceiro item"].forEach(texto => {
+      const item = document.createElement("li");
+      item.textContent = texto;
+      lista.append(item);
+    });
+    lista.contentEditable = "true";
+    principal.append(lista);
+    escolherElemento(lista);
+    registrarHistorico();
+    aviso("Lista adicionada. Você pode editar os itens diretamente.");
+  }
+
+  function removerSelecionado() {
+    if (!selecionado) return aviso("Primeiro selecione um elemento da página.");
+    if (selecionado.matches("header, main, footer, body")) {
+      return aviso("Por segurança, não é permitido remover toda uma área da página.");
+    }
+    if (!confirm("Tem certeza de que deseja remover o elemento selecionado?")) return;
+
+    selecionado.remove();
+    selecionado = null;
+    registrarHistorico();
+    aviso("Elemento removido. Salve na nuvem para publicar.");
+  }
+
+  let arquivoImagemEscolhido = null;
+
+  function escolherArquivoImagem() {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = "image/*";
+
+    input.addEventListener("change", () => {
+      const arquivo = input.files && input.files[0];
+      if (!arquivo) return;
+
+      if (!arquivo.type.startsWith("image/")) {
+        return aviso("Escolha um arquivo de imagem.");
+      }
+
+      if (arquivo.size > 1024 * 1024) {
+        return aviso("A imagem deve ter menos de 1 MB.");
+      }
+
+      arquivoImagemEscolhido = arquivo;
+      aviso("Imagem escolhida: " + arquivo.name + ". Agora clique em Aplicar imagem.");
+    });
+
+    input.click();
+  }
+
+  function aplicarImagem() {
+    if (!arquivoImagemEscolhido) {
+      return aviso("Primeiro clique em Escolher imagem do computador.");
+    }
+
+    const leitor = new FileReader();
+
+    leitor.onload = () => {
+      const dadosImagem = leitor.result;
+
+      if (selecionado && selecionado.tagName === "IMG") {
+        selecionado.src = dadosImagem;
+        const alt = $("#editorAltImagem");
+        if (alt && alt.value.trim()) selecionado.alt = alt.value.trim();
+
+        const largura = $("#editorLarguraImagem");
+        if (largura && largura.value.trim()) selecionado.style.width = largura.value.trim();
+
+        registrarHistorico();
+        aviso("Imagem alterada. Salve na nuvem para publicar.");
+      } else {
+        adicionarImagemComDados(dadosImagem, arquivoImagemEscolhido.name);
+      }
+
+      arquivoImagemEscolhido = null;
+    };
+
+    leitor.onerror = () => aviso("Não foi possível ler essa imagem.");
+    leitor.readAsDataURL(arquivoImagemEscolhido);
+  }
+
+  function adicionarImagem() {
+    escolherArquivoImagem();
+    aviso("Escolha uma imagem no computador. Depois ela será adicionada à página.");
+  }
+
+  function adicionarImagemComDados(dadosImagem, nome) {
+    const principal = $("main");
+    if (!principal) return aviso("Não encontrei a área principal da página.");
+
+    const img = document.createElement("img");
+    img.src = dadosImagem;
+    img.alt = nome || "Imagem do site";
+    img.style.maxWidth = "100%";
+    img.style.height = "auto";
+    img.style.display = "block";
+    img.style.margin = "12px auto";
+
+    principal.append(img);
+    escolherElemento(img);
+    registrarHistorico();
+    aviso("Imagem adicionada. Salve na nuvem para publicar.");
+  }
+
+  function aplicarAparencia() {
+    if (!selecionado) return aviso("Primeiro selecione um elemento na página.");
+
+    const fundo = $("#editorCorFundo");
+    const texto = $("#editorCorTexto");
+    const tamanho = $("#editorTamanhoTexto");
+    const fonte = $("#editorFonte");
+
+    if (fundo && fundo.value) selecionado.style.backgroundColor = fundo.value;
+    if (texto && texto.value) selecionado.style.color = texto.value;
+    if (tamanho && tamanho.value) selecionado.style.fontSize = tamanho.value + "px";
+    if (fonte && fonte.value) selecionado.style.fontFamily = fonte.value;
+
+    registrarHistorico();
+    aviso("Aparência aplicada. Salve na nuvem para publicar.");
+  }
+
+  function mudarFundoPagina() {
+    const fundo = $("#editorCorFundo");
+    if (!fundo) return;
+
+    document.body.style.backgroundColor = fundo.value;
+    registrarHistorico();
+    aviso("Cor de fundo alterada. Salve na nuvem para publicar.");
+  }
+
+  function adicionarLinkMenu() {
+    const menu = $("header nav") || $("nav");
+    if (!menu) return aviso("Não encontrei o menu da página.");
+
+    const texto = $("#editorTextoLink")?.value.trim() || "Nova página";
+    const destino = $("#editorDestinoLink")?.value.trim() || "pagina.html";
+
+    const link = document.createElement("a");
+    link.href = destino;
+    link.textContent = texto;
+    link.style.margin = "4px";
+    menu.append(link);
+
+    escolherElemento(link);
+    registrarHistorico();
+    aviso("Link adicionado. Salve na nuvem para publicar.");
+  }
+    async function carregar() {
+    try {
+      await prepararSupabase();
+
+      const { data, error } = await db
+        .from("site_edits")
+        .select("content")
+        .eq("id", PAGE_ID)
+        .maybeSingle();
+
+      if (error) throw error;
+
+      if (data && data.content) {
+        const conteudo = data.content;
+
+        // Compatibilidade com versões anteriores do editor.
+        const pares = [
+          ["header", conteudo.headerHtml ?? conteudo.header?.html],
+          ["main", conteudo.mainHtml ?? conteudo.main?.html],
+          ["footer", conteudo.footerHtml ?? conteudo.footer?.html]
+        ];
+
+        for (const [nome, html] of pares) {
+          const elemento = areas()[nome];
+          if (elemento && typeof html === "string") {
+            elemento.innerHTML = html;
+          }
+        }
+
+        const estilos = [
+          ["header", conteudo.headerStyle ?? conteudo.header?.style],
+          ["main", conteudo.mainStyle ?? conteudo.main?.style],
+          ["footer", conteudo.footerStyle ?? conteudo.footer?.style]
+        ];
+
+        for (const [nome, estilo] of estilos) {
+          const elemento = areas()[nome];
+          if (!elemento) continue;
+
+          if (typeof estilo === "string" && estilo) {
+            elemento.setAttribute("style", estilo);
+          }
+        }
+      }
+
+      estadoSalvo = capturarEstado();
+      historico = [estadoSalvo];
+      indiceHistorico = 0;
+      atualizarBotoesHistorico();
+      aviso("Editor pronto. As alterações podem ser salvas na nuvem.");
+    } catch (erro) {
+      console.error("Erro ao carregar o editor:", erro);
+      estadoSalvo = capturarEstado();
+      historico = [estadoSalvo];
+      indiceHistorico = 0;
+      atualizarBotoesHistorico();
+      aviso("Editor aberto, mas não foi possível carregar a nuvem. Verifique a conexão e as permissões do Supabase.");
+    }
+  }
+
+  async function salvar() {
+    try {
+      if (!db) await prepararSupabase();
+
+      const dados = {};
+
+      for (const [nome, elemento] of Object.entries(areas())) {
+        if (!elemento) continue;
+        dados[nome + "Html"] = limparHTML(elemento);
+        dados[nome + "Style"] = elemento.getAttribute("style");
+      }
+
+      const { error } = await db
+        .from("site_edits")
+        .upsert({
+          id: PAGE_ID,
+          content: dados,
+          updated_at: new Date().toISOString()
+        }, { onConflict: "id" });
+
+      if (error) throw error;
+
+      estadoSalvo = capturarEstado();
+      historico = [estadoSalvo];
+      indiceHistorico = 0;
+      atualizarBotoesHistorico();
+
+      aviso("Alterações salvas na nuvem! Recarregue a página para conferir.");
+    } catch (erro) {
+      console.error("Erro ao salvar:", erro);
+      aviso("Não foi possível salvar. Verifique as permissões de leitura e gravação da tabela site_edits no Supabase.");
+    }
+  }
+
+  function baixarHTML() {
+    try {
+      const copia = document.documentElement.cloneNode(true);
+
+      copia.querySelectorAll("#editorUniversal, #editorAbrir").forEach(el => el.remove());
+
+      copia.querySelectorAll("[contenteditable]").forEach(el => {
+        el.removeAttribute("contenteditable");
+      });
+
+      copia.querySelectorAll(".editorSelecionado").forEach(el => {
+        el.classList.remove("editorSelecionado");
+      });
+
+      const html = "<!doctype html>\n" + copia.outerHTML;
+      const arquivo = new Blob([html], { type: "text/html;charset=utf-8" });
+      const endereco = URL.createObjectURL(arquivo);
+      const link = document.createElement("a");
+
+      link.href = endereco;
+      link.download = PAGE_ID === "home" ? "index.html" : "pagina.html";
+
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+
+      setTimeout(() => URL.revokeObjectURL(endereco), 1000);
+      aviso("Download da cópia HTML iniciado.");
+    } catch (erro) {
+      console.error("Erro ao baixar HTML:", erro);
+      aviso("Não foi possível gerar o arquivo HTML.");
+    }
+  }
+
+  // Registra alterações feitas diretamente nos textos da página.
+  document.addEventListener("input", evento => {
+    if (
+      evento.target.isContentEditable &&
+      !evento.target.closest("#editorUniversal")
+    ) {
+      agendarHistorico();
+    }
+  });
+
+  // Inicia o painel e carrega os dados salvos.
   criarPainel();
   await carregar();
-
 })();
