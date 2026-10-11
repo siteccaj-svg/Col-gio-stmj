@@ -141,9 +141,842 @@ Telefone: (31) 3825-0451<br>
 </div>
 </footer>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="editor.js"></script>
+<!-- EDITOR UNIFICADO - COLÉGIO SANTA TERESINHA -->
+<style>
+  #editorBtn {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    z-index: 999999;
+    background: #55351f;
+    color: #f5d77e;
+    border: 2px solid #c9a44c;
+    padding: 14px 20px;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 5px 18px #0005;
+  }
 
-</body>
-</html>
+  #editorPainel {
+    display: none;
+    position: fixed;
+    right: 20px;
+    bottom: 82px;
+    z-index: 999998;
+    width: 340px;
+    max-width: calc(100vw - 40px);
+    max-height: 78vh;
+    overflow-y: auto;
+    box-sizing: border-box;
+    padding: 18px;
+    background: #fffdf7;
+    color: #34251b;
+    border: 2px solid #c9a44c;
+    border-radius: 16px;
+    box-shadow: 0 8px 35px #0005;
+    font: 14px Arial, sans-serif;
+  }
+
+  #editorPainel h2 {
+    margin: 0 0 6px;
+    color: #55351f;
+    font-size: 22px;
+  }
+
+  #editorPainel h3 {
+    margin: 0 0 10px;
+  }
+
+  #editorPainel p {
+    font-size: 12px;
+    line-height: 1.5;
+  }
+
+  #editorPainel .subtitulo {
+    font-size: 12px;
+    color: #76634d;
+    margin-bottom: 15px;
+  }
+
+  #editorPainel .secao {
+    border-top: 1px solid #e7d9bd;
+    padding-top: 12px;
+    margin-top: 12px;
+  }
+
+  #editorPainel .linha {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 5px;
+    margin-bottom: 7px;
+  }
+
+  #editorPainel button,
+  #editorPainel select,
+  #editorPainel input {
+    box-sizing: border-box;
+    max-width: 100%;
+    font: 13px Arial, sans-serif;
+    border-radius: 7px;
+    margin: 4px 0;
+    padding: 9px;
+  }
+
+  #editorPainel button {
+    background: #55351f;
+    color: #fff5d7;
+    border: 0;
+    cursor: pointer;
+  }
+
+  #editorPainel button:hover {
+    background: #765033;
+  }
+
+  #editorPainel .botaoClaro {
+    background: #e9dcc2;
+    color: #382719;
+  }
+
+  #editorPainel input,
+  #editorPainel select {
+    border: 1px solid #c9b99a;
+    background: white;
+    color: #30251b;
+  }
+
+  #editorPainel input[type="color"] {
+    width: 42px;
+    height: 32px;
+    padding: 2px;
+  }
+
+  #editorPainel input[type="number"] {
+    width: 75px;
+  }
+
+  #editorPainel input[type="file"] {
+    width: 100%;
+  }
+
+  #editorPainel .status {
+    background: #f2eadb;
+    border-radius: 7px;
+    padding: 9px;
+    font-size: 12px;
+    margin-top: 8px;
+    overflow-wrap: anywhere;
+  }
+
+  #editorPainel .aviso {
+    font-size: 12px;
+    line-height: 1.5;
+    color: #784b25;
+  }
+
+  .alvoEditor {
+    outline: 3px dashed #bd8a20 !important;
+    outline-offset: 3px !important;
+    cursor: crosshair !important;
+  }
+</style>
+
+<button id="editorBtn" type="button">
+  🎨 Editar site
+</button>
+
+<div id="editorPainel">
+  <h2>⚙ Editor do site</h2>
+  <div class="subtitulo">
+    Colégio Santa Teresinha do Menino Jesus
+  </div>
+
+  <p class="aviso">
+    As alterações são temporárias e feitas nesta página.
+    Elas não são publicadas automaticamente no GitHub.
+  </p>
+
+  <div class="secao">
+    <strong>🖱️ Seleção de elementos</strong><br>
+    <button type="button" id="edSelecionar">Selecionar elemento</button>
+    <button type="button" id="edParar" class="botaoClaro">Parar seleção</button>
+    <button type="button" id="edDesselecionar" class="botaoClaro">Desselecionar</button>
+
+    <div class="status" id="edStatus">
+      Nenhum elemento selecionado.
+    </div>
+  </div>
+
+  <div class="secao">
+    <strong>✏️ Textos</strong><br>
+
+    <button type="button" id="edEditarTexto">Editar texto selecionado</button>
+    <button type="button" id="edAdicionarTexto">+ Adicionar texto</button>
+    <button type="button" id="edAlternarEdicao">Ativar edição de textos</button>
+
+    <div class="linha">
+      <label for="edFonte">Fonte:</label>
+      <select id="edFonte">
+        <option value="Arial, sans-serif">Arial</option>
+        <option value="Georgia, serif">Georgia</option>
+        <option value="'Times New Roman', serif">Times New Roman</option>
+        <option value="Verdana, sans-serif">Verdana</option>
+        <option value="'Trebuchet MS', sans-serif">Trebuchet MS</option>
+        <option value="Tahoma, sans-serif">Tahoma</option>
+      </select>
+    </div>
+
+    <div class="linha">
+      <label for="edTamanhoFonte">Tamanho:</label>
+      <input id="edTamanhoFonte" type="number" min="6" max="150" value="20">
+      <button type="button" id="edAplicarTamanhoFonte">Aplicar</button>
+    </div>
+
+    <button type="button" id="edNegrito">Negrito</button>
+    <button type="button" id="edItalico">Itálico</button>
+  </div>
+
+  <div class="secao">
+    <strong>🎨 Cores</strong>
+
+    <div class="linha">
+      <label for="edCorTexto">Cor do texto:</label>
+      <input type="color" id="edCorTexto" value="#55351f">
+      <button type="button" id="edAplicarCorTexto">Aplicar</button>
+    </div>
+
+    <div class="linha">
+      <label for="edCorFundo">Cor de fundo:</label>
+      <input type="color" id="edCorFundo" value="#f5d77e">
+      <button type="button" id="edAplicarCorFundo">Aplicar</button>
+    </div>
+
+    <label for="edCorPrincipal">Cor principal do site:</label>
+    <input type="color" id="edCorPrincipal" value="#55351f">
+    <button type="button" id="edAplicarCorPrincipal">Alterar cor principal</button>
+  </div>
+
+  <div class="secao">
+    <strong>🖼️ Imagens</strong>
+
+    <label for="edImagem">Escolher imagem:</label>
+    <input type="file" id="edImagem" accept="image/*">
+
+    <button type="button" id="edAdicionarImagem">Adicionar imagem</button>
+    <button type="button" id="edSubstituirImagem">Substituir imagem selecionada</button>
+    <button type="button" id="edSelecionarImagem">Selecionar imagem ou banner</button>
+  </div>
+
+  <div class="secao">
+    <strong>↔️ Tamanho e posição</strong><br>
+
+    <button type="button" id="edDiminuir">− Diminuir</button>
+    <button type="button" id="edAumentar">+ Aumentar</button>
+    <button type="button" id="edMover">Mover elemento</button>
+
+    <p class="aviso">
+      Para mover, clique em “Mover elemento” e arraste o elemento selecionado.
+    </p>
+  </div>
+
+  <div class="secao">
+    <strong>◻️ Formas</strong><br>
+    <button type="button" id="edRetangulo">Retângulo</button>
+    <button type="button" id="edCirculo">Círculo</button>
+    <button type="button" id="edLinha">Linha</button>
+  </div>
+
+  <div class="secao">
+    <strong>↩️ Ações</strong><br>
+    <button type="button" id="edDesfazer">Desfazer última ação</button>
+    <button type="button" id="edExcluir">Excluir selecionado</button>
+    <button type="button" id="edCancelar">Cancelar seleção</button>
+  </div>
+
+  <div class="secao">
+    <strong>💾 Salvar alterações</strong><br>
+    <button type="button" id="edSalvar">Salvar neste navegador</button>
+    <button type="button" id="edRecarregar">Recarregar página</button>
+
+    <p class="aviso">
+      O salvamento local não publica as alterações para outros visitantes.
+      Para publicar permanentemente, é necessário alterar os arquivos do site
+      e enviá-los ao GitHub.
+    </p>
+  </div>
+</div>
+
+<script>
+(function () {
+  const painel = document.getElementById("editorPainel");
+  const botaoEditor = document.getElementById("editorBtn");
+  const status = document.getElementById("edStatus");
+
+  let selecionado = null;
+  let modoSelecao = "";
+  let movendo = false;
+  let arraste = null;
+  let imagemData = null;
+  let edicaoTextosAtiva = false;
+
+  const historico = [];
+
+  function elementoDoEditor(el) {
+    return !el ||
+      el === document.body ||
+      el === document.documentElement ||
+      !!el.closest("#editorPainel") ||
+      !!el.closest("#editorBtn") ||
+      !!el.closest("script") ||
+      !!el.closest("style");
+  }
+
+  function atualizarStatus(mensagem) {
+    status.textContent = mensagem;
+  }
+
+  function salvarHistorico(el) {
+    if (!el || !el.isConnected) return;
+
+    historico.push({
+      elemento: el,
+      html: el.innerHTML,
+      estilo: el.getAttribute("style"),
+      src: el.tagName === "IMG" ? el.getAttribute("src") : null,
+      pai: el.parentElement,
+      proximo: el.nextSibling
+    });
+
+    if (historico.length > 30) historico.shift();
+  }
+
+  function precisaSelecionar() {
+    if (!selecionado || !selecionado.isConnected) {
+      alert("Primeiro selecione um elemento na página.");
+      return false;
+    }
+    return true;
+  }
+
+  function selecionarElemento(el) {
+    if (elementoDoEditor(el)) return;
+
+    if (selecionado) {
+      selecionado.classList.remove("alvoEditor");
+    }
+
+    selecionado = el;
+    selecionado.classList.add("alvoEditor");
+
+    atualizarStatus("Selecionado: <" + el.tagName.toLowerCase() + ">");
+
+    const tamanho = parseFloat(getComputedStyle(el).fontSize);
+
+    if (Number.isFinite(tamanho)) {
+      document.getElementById("edTamanhoFonte").value = Math.round(tamanho);
+    }
+
+    selecionarModoFinalizado();
+  }
+
+  function selecionarModoFinalizado() {
+    modoSelecao = "";
+    movendo = false;
+  }
+
+  function limparSelecao() {
+    if (selecionado) {
+      selecionado.classList.remove("alvoEditor");
+    }
+
+    selecionado = null;
+    modoSelecao = "";
+    movendo = false;
+    arraste = null;
+
+    atualizarStatus("Nenhum elemento selecionado.");
+  }
+
+  function criarElemento(tag, texto, estilos) {
+    const el = document.createElement(tag);
+
+    if (texto) el.textContent = texto;
+
+    Object.assign(el.style, {
+      boxSizing: "border-box",
+      ...estilos
+    });
+
+    el.dataset.editorCriado = "true";
+    return el;
+  }
+
+  botaoEditor.addEventListener("click", function () {
+    painel.style.display =
+      painel.style.display === "block" ? "none" : "block";
+  });
+
+  document.getElementById("edSelecionar").addEventListener("click", function () {
+    modoSelecao = "elemento";
+    movendo = false;
+    painel.style.display = "none";
+    atualizarStatus("Clique em um elemento da página para selecioná-lo.");
+  });
+
+  document.getElementById("edSelecionarImagem").addEventListener("click", function () {
+    modoSelecao = "imagem";
+    movendo = false;
+    painel.style.display = "none";
+    atualizarStatus("Clique na imagem ou no banner que deseja selecionar.");
+  });
+
+  document.getElementById("edParar").addEventListener("click", function () {
+    modoSelecao = "";
+    movendo = false;
+    atualizarStatus("Seleção desativada.");
+  });
+
+  document.addEventListener("click", function (evento) {
+    if (!modoSelecao || elementoDoEditor(evento.target)) return;
+
+    evento.preventDefault();
+    evento.stopPropagation();
+
+    selecionarElemento(evento.target);
+
+    painel.style.display = "block";
+  }, true);
+
+  document.getElementById("edDesselecionar").addEventListener("click", limparSelecao);
+  document.getElementById("edCancelar").addEventListener("click", limparSelecao);
+
+  document.getElementById("edEditarTexto").addEventListener("click", function () {
+    if (!precisaSelecionar()) return;
+
+    salvarHistorico(selecionado);
+
+    const textoAtual = selecionado.innerText || "";
+    const novoTexto = prompt("Digite o novo texto:", textoAtual);
+
+    if (novoTexto !== null) {
+      selecionado.textContent = novoTexto;
+    }
+  });
+
+  document.getElementById("edAlternarEdicao").addEventListener("click", function () {
+    edicaoTextosAtiva = !edicaoTextosAtiva;
+
+    document.querySelectorAll("h1,h2,h3,h4,h5,p,a,li,span,small,b,strong,blockquote")
+      .forEach(function (el) {
+        if (elementoDoEditor(el)) return;
+
+        if (edicaoTextosAtiva) {
+          el.contentEditable = "true";
+        } else {
+          el.contentEditable = "false";
+        }
+      });
+
+    this.textContent = edicaoTextosAtiva
+      ? "Finalizar edição de textos"
+      : "Ativar edição de textos";
+  });
+
+  document.getElementById("edAdicionarTexto").addEventListener("click", function () {
+    const texto = prompt("Digite o texto que deseja adicionar:");
+
+    if (texto === null || !texto.trim()) return;
+
+    const el = criarElemento("p", texto, {
+      fontFamily: "Arial, sans-serif",
+      fontSize: "20px",
+      color: "#55351f",
+      padding: "8px",
+      margin: "8px 0"
+    });
+
+    document.querySelector("main").appendChild(el);
+    selecionarElemento(el);
+  });
+
+  document.getElementById("edFonte").addEventListener("change", function () {
+    if (!precisaSelecionar()) return;
+
+    salvarHistorico(selecionado);
+    selecionado.style.fontFamily = this.value;
+  });
+
+  document.getElementById("edAplicarTamanhoFonte").addEventListener("click", function () {
+    if (!precisaSelecionar()) return;
+
+    const tamanho = Number(document.getElementById("edTamanhoFonte").value);
+
+    if (!Number.isFinite(tamanho) || tamanho < 6 || tamanho > 150) {
+      alert("Escolha um tamanho entre 6 e 150.");
+      return;
+    }
+
+    salvarHistorico(selecionado);
+    selecionado.style.fontSize = tamanho + "px";
+  });
+
+  document.getElementById("edNegrito").addEventListener("click", function () {
+    if (!precisaSelecionar()) return;
+
+    salvarHistorico(selecionado);
+
+    selecionado.style.fontWeight =
+      getComputedStyle(selecionado).fontWeight === "700" ? "400" : "700";
+  });
+
+  document.getElementById("edItalico").addEventListener("click", function () {
+    if (!precisaSelecionar()) return;
+
+    salvarHistorico(selecionado);
+
+    selecionado.style.fontStyle =
+      getComputedStyle(selecionado).fontStyle === "italic" ? "normal" : "italic";
+  });
+
+  document.getElementById("edAplicarCorTexto").addEventListener("click", function () {
+    if (!precisaSelecionar()) return;
+
+    salvarHistorico(selecionado);
+    selecionado.style.color = document.getElementById("edCorTexto").value;
+  });
+
+  document.getElementById("edAplicarCorFundo").addEventListener("click", function () {
+    if (!precisaSelecionar()) return;
+
+    salvarHistorico(selecionado);
+    selecionado.style.backgroundColor = document.getElementById("edCorFundo").value;
+  });
+
+  document.getElementById("edAplicarCorPrincipal").addEventListener("click", function () {
+    const cor = document.getElementById("edCorPrincipal").value;
+
+    document.documentElement.style.setProperty("--cor-principal", cor);
+    document.body.style.setProperty("--cor-principal", cor);
+
+    document.querySelectorAll("header, footer, nav").forEach(function (el) {
+      salvarHistorico(el);
+      el.style.backgroundColor = cor;
+    });
+  });
+
+  document.getElementById("edImagem").addEventListener("change", function () {
+    const arquivo = this.files && this.files[0];
+
+    if (!arquivo) {
+      imagemData = null;
+      return;
+    }
+
+    if (!arquivo.type.startsWith("image/")) {
+      alert("Escolha um arquivo de imagem.");
+      this.value = "";
+      return;
+    }
+
+    if (arquivo.size > 5 * 1024 * 1024) {
+      alert("Escolha uma imagem menor que 5 MB.");
+      this.value = "";
+      return;
+    }
+
+    const leitor = new FileReader();
+
+    leitor.onload = function () {
+      imagemData = leitor.result;
+    };
+
+    leitor.readAsDataURL(arquivo);
+  });
+
+  document.getElementById("edAdicionarImagem").addEventListener("click", function () {
+    if (!imagemData) {
+      alert("Escolha uma imagem primeiro.");
+      return;
+    }
+
+    const img = criarElemento("img", "", {
+      display: "block",
+      maxWidth: "100%",
+      width: "300px",
+      height: "auto",
+      margin: "10px 0"
+    });
+
+    img.src = imagemData;
+    document.querySelector("main").appendChild(img);
+    selecionarElemento(img);
+  });
+
+  document.getElementById("edSubstituirImagem").addEventListener("click", function () {
+    if (!precisaSelecionar()) return;
+
+    if (!imagemData) {
+      alert("Escolha uma imagem primeiro.");
+      return;
+    }
+
+    salvarHistorico(selecionado);
+
+    if (selecionado.tagName === "IMG") {
+      selecionado.src = imagemData;
+    } else {
+      selecionado.style.backgroundImage = "url('" + imagemData + "')";
+      selecionado.style.backgroundSize = "cover";
+      selecionado.style.backgroundPosition = "center";
+    }
+  });
+
+  function redimensionar(fator) {
+    if (!precisaSelecionar()) return;
+
+    salvarHistorico(selecionado);
+
+    const retangulo = selecionado.getBoundingClientRect();
+    const largura = parseFloat(selecionado.style.width) || retangulo.width;
+    const altura = parseFloat(selecionado.style.height) || retangulo.height;
+
+    selecionado.style.width = Math.max(10, largura * fator) + "px";
+
+    if (selecionado.tagName !== "IMG") {
+      selecionado.style.height = Math.max(10, altura * fator) + "px";
+    }
+  }
+
+  document.getElementById("edAumentar").addEventListener("click", function () {
+    redimensionar(1.1);
+  });
+
+  document.getElementById("edDiminuir").addEventListener("click", function () {
+    redimensionar(0.9);
+  });
+
+  document.getElementById("edMover").addEventListener("click", function () {
+    if (!precisaSelecionar()) return;
+
+    movendo = true;
+    modoSelecao = "";
+    atualizarStatus("Arraste o elemento selecionado para movê-lo.");
+  });
+
+  document.addEventListener("mousedown", function (evento) {
+    if (!movendo || !selecionado || elementoDoEditor(evento.target)) return;
+
+    if (evento.target !== selecionado && !selecionado.contains(evento.target)) return;
+
+    evento.preventDefault();
+    salvarHistorico(selecionado);
+
+    const retangulo = selecionado.getBoundingClientRect();
+
+    selecionado.style.position = "fixed";
+    selecionado.style.left = retangulo.left + "px";
+    selecionado.style.top = retangulo.top + "px";
+    selecionado.style.margin = "0";
+    selecionado.style.zIndex = "9990";
+
+    arraste = {
+      x: evento.clientX,
+      y: evento.clientY,
+      esquerda: retangulo.left,
+      topo: retangulo.top
+    };
+  });
+
+  document.addEventListener("mousemove", function (evento) {
+    if (!arraste || !selecionado) return;
+
+    selecionado.style.left =
+      (arraste.esquerda + evento.clientX - arraste.x) + "px";
+
+    selecionado.style.top =
+      (arraste.topo + evento.clientY - arraste.y) + "px";
+  });
+
+  document.addEventListener("mouseup", function () {
+    if (arraste) {
+      arraste = null;
+      movendo = false;
+      atualizarStatus("Movimentação concluída.");
+    }
+  });
+
+  function adicionarForma(tipo) {
+    let el;
+
+    if (tipo === "retangulo") {
+      el = criarElemento("div", "", {
+        width: "180px",
+        height: "100px",
+        backgroundColor: "#c9a44c",
+        margin: "10px 0"
+      });
+    } else if (tipo === "circulo") {
+      el = criarElemento("div", "", {
+        width: "110px",
+        height: "110px",
+        borderRadius: "50%",
+        backgroundColor: "#c9a44c",
+        margin: "10px 0"
+      });
+    } else {
+      el = criarElemento("div", "", {
+        width: "180px",
+        height: "3px",
+        backgroundColor: "#55351f",
+        margin: "15px 0"
+      });
+    }
+
+    document.querySelector("main").appendChild(el);
+    selecionarElemento(el);
+  }
+
+  document.getElementById("edRetangulo").addEventListener("click", function () {
+    adicionarForma("retangulo");
+  });
+
+  document.getElementById("edCirculo").addEventListener("click", function () {
+    adicionarForma("circulo");
+  });
+
+  document.getElementById("edLinha").addEventListener("click", function () {
+    adicionarForma("linha");
+  });
+
+  document.getElementById("edExcluir").addEventListener("click", function () {
+    if (!precisaSelecionar()) return;
+
+    if (!confirm("Deseja excluir o elemento selecionado?")) return;
+
+    salvarHistorico(selecionado);
+    selecionado.remove();
+    selecionado = null;
+
+    atualizarStatus("Elemento removido.");
+  });
+
+  document.getElementById("edDesfazer").addEventListener("click", function () {
+    const item = historico.pop();
+
+    if (!item) {
+      alert("Não há alterações recentes para desfazer.");
+      return;
+    }
+
+    if (!item.elemento.isConnected) {
+      if (item.pai) {
+        item.pai.insertBefore(item.elemento, item.proximo);
+      } else {
+        alert("Não foi possível restaurar este elemento.");
+        return;
+      }
+    }
+
+    item.elemento.innerHTML = item.html;
+
+    if (item.estilo === null) {
+      item.elemento.removeAttribute("style");
+    } else {
+      item.elemento.setAttribute("style", item.estilo);
+    }
+
+    if (item.src !== null && item.elemento.tagName === "IMG") {
+      item.elemento.setAttribute("src", item.src);
+    }
+
+    atualizarStatus("Última alteração desfeita, quando possível.");
+  });
+
+  document.getElementById("edSalvar").addEventListener("click", function () {
+    const dados = [];
+
+    document.querySelectorAll("body *").forEach(function (el) {
+      if (el.closest("#editorPainel") || el.id === "editorBtn") return;
+
+      if (
+        el.isContentEditable ||
+        el.dataset.editorCriado === "true" ||
+        el.style.backgroundImage ||
+        el.style.backgroundColor ||
+        el.style.fontSize ||
+        el.style.fontFamily ||
+        el.tagName === "IMG"
+      ) {
+        dados.push({
+          caminho: caminhoElemento(el),
+          html: el.isContentEditable ? el.innerHTML : null,
+          imagem: el.tagName === "IMG" ? el.getAttribute("src") : null,
+          fundo: el.style.backgroundImage || null,
+          cor: el.style.backgroundColor || null,
+          textoCor: el.style.color || null,
+          fonte: el.style.fontFamily || null,
+          tamanhoFonte: el.style.fontSize || null,
+          largura: el.style.width || null,
+          altura: el.style.height || null
+        });
+      }
+    });
+
+    try {
+      localStorage.setItem("edicoesSiteDados", JSON.stringify(dados));
+      alert(
+        "Alterações guardadas neste navegador. " +
+        "Isso não publica as mudanças para outras pessoas."
+      );
+    } catch (erro) {
+      alert(
+        "Não foi possível guardar todas as alterações. " +
+        "Imagens grandes podem ultrapassar o limite do navegador."
+      );
+    }
+  });
+
+  function caminhoElemento(el) {
+    const partes = [];
+
+    while (el && el !== document.body) {
+      let nome = el.tagName.toLowerCase();
+
+      if (el.id) {
+        nome += "#" + el.id;
+        partes.unshift(nome);
+        break;
+      }
+
+      const pai = el.parentElement;
+
+      if (pai) {
+        const iguais = Array.from(pai.children).filter(function (item) {
+          return item.tagName === el.tagName;
+        });
+
+        if (iguais.length > 1) {
+          nome += ":nth-of-type(" + (iguais.indexOf(el) + 1) + ")";
+        }
+      }
+
+      partes.unshift(nome);
+      el = pai;
+    }
+
+    return "body > " + partes.join(" > ");
+  }
+
+  document.getElementById("edRecarregar").addEventListener("click", function () {
+    if (confirm("Deseja recarregar a página e perder as alterações temporárias?")) {
+      location.reload();
+    }
+  });
+})();
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="editor.js"></script></body></html>
 ```
