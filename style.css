@@ -1,3 +1,4 @@
+```css
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap');
 
 :root {
@@ -706,7 +707,7 @@ body.home footer {
   border-top: 1px solid #69472c;
 }
 
-/* BRASÃO ORIGINAL: NÃO CORTAR A IMAGEM */
+/* BRASÃO ORIGINAL */
 .school-logo {
   display: block;
   object-fit: contain !important;
@@ -823,7 +824,7 @@ body.inner footer {
   padding: 30px 5.5%;
 }
 
-/* TABLETS E CELULARES */
+/* TABLETS */
 @media (max-width: 850px) {
   .top {
     height: auto;
@@ -907,6 +908,7 @@ body.inner footer {
   }
 }
 
+/* CELULARES */
 @media (max-width: 760px) {
   body.home .top {
     height: auto;
@@ -927,15 +929,18 @@ body.inner footer {
     flex-basis: 42px;
   }
 
+  /* Menu original sem rolagem horizontal */
   body.home nav {
     width: 100%;
-    overflow-x: auto;
-    padding: 3px 0 6px;
-    flex-wrap: nowrap;
+    overflow: visible;
+    padding: 0;
+    flex-wrap: wrap;
+    gap: 10px 14px;
   }
 
+  /* Apenas aumenta o tamanho das letras */
   body.home nav a {
-    font-size: 10px;
+    font-size: 12px;
   }
 
   body.home .hero {
@@ -1067,3 +1072,4 @@ body.inner footer {
   outline: none !important;
   box-shadow: none !important;
 }
+```
