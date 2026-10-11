@@ -5,6 +5,261 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Colégio Santa Teresinha do Menino Jesus</title>
 <link rel="stylesheet" href="style.css">
+
+<style>
+/* MAPA E LOCALIZAÇÃO */
+.localizacao {
+  max-width: 1100px;
+  margin: 75px auto;
+  padding: 0 24px;
+  box-sizing: border-box;
+}
+
+.localizacao-cabecalho {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.localizacao-cabecalho .eyebrow {
+  font-size: 12px;
+  letter-spacing: 2px;
+}
+
+.localizacao-cabecalho h2 {
+  color: #4b2918;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 36px;
+  margin: 10px 0;
+}
+
+.localizacao-cabecalho h2 em {
+  color: #a77a35;
+}
+
+.localizacao-descricao {
+  color: #6b5545;
+  line-height: 1.7;
+}
+
+.localizacao-mapa {
+  overflow: hidden;
+  border: 2px solid #c79c54;
+  border-radius: 12px;
+  box-shadow: 0 8px 25px rgba(46, 26, 18, 0.12);
+  background: #f6efdf;
+}
+
+.localizacao-mapa iframe {
+  display: block;
+  width: 100%;
+  height: 420px;
+  border: 0;
+}
+
+.localizacao-rodape {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 18px;
+  margin-top: 20px;
+}
+
+.localizacao-rodape p {
+  color: #6b5545;
+  line-height: 1.8;
+  margin: 0;
+}
+
+.localizacao-rodape strong {
+  color: #4b2918;
+}
+
+.localizacao-botao {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 13px 22px;
+  background: #4b2918;
+  color: #fff !important;
+  border: 1px solid #c79c54;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 13px;
+  transition: background 0.2s ease;
+}
+
+.localizacao-botao:hover {
+  background: #6b4028;
+}
+
+@media (max-width: 600px) {
+  .localizacao {
+    margin: 45px auto;
+    padding: 0 16px;
+  }
+
+  .localizacao-cabecalho h2 {
+    font-size: 30px;
+  }
+
+  .localizacao-mapa iframe {
+    height: 320px;
+  }
+
+  .localizacao-rodape {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .localizacao-botao {
+    width: 100%;
+    box-sizing: border-box;
+    text-align: center;
+  }
+}
+
+/* EDITOR */
+#editorBtn {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 999999;
+  background: #55351f;
+  color: #f5d77e;
+  border: 2px solid #c9a44c;
+  padding: 14px 20px;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 5px 18px #0005;
+}
+
+#editorPainel {
+  display: none;
+  position: fixed;
+  right: 20px;
+  bottom: 82px;
+  z-index: 999998;
+  width: 340px;
+  max-width: calc(100vw - 40px);
+  max-height: 78vh;
+  overflow-y: auto;
+  box-sizing: border-box;
+  padding: 18px;
+  background: #fffdf7;
+  color: #34251b;
+  border: 2px solid #c9a44c;
+  border-radius: 16px;
+  box-shadow: 0 8px 35px #0005;
+  font: 14px Arial, sans-serif;
+}
+
+#editorPainel h2 {
+  margin: 0 0 6px;
+  color: #55351f;
+  font-size: 22px;
+}
+
+#editorPainel h3 {
+  margin: 0 0 10px;
+}
+
+#editorPainel p {
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+#editorPainel .subtitulo {
+  font-size: 12px;
+  color: #76634d;
+  margin-bottom: 15px;
+}
+
+#editorPainel .secao {
+  border-top: 1px solid #e7d9bd;
+  padding-top: 12px;
+  margin-top: 12px;
+}
+
+#editorPainel .linha {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 7px;
+}
+
+#editorPainel button,
+#editorPainel select,
+#editorPainel input {
+  box-sizing: border-box;
+  max-width: 100%;
+  font: 13px Arial, sans-serif;
+  border-radius: 7px;
+  margin: 4px 0;
+  padding: 9px;
+}
+
+#editorPainel button {
+  background: #55351f;
+  color: #fff5d7;
+  border: 0;
+  cursor: pointer;
+}
+
+#editorPainel button:hover {
+  background: #765033;
+}
+
+#editorPainel .botaoClaro {
+  background: #e9dcc2;
+  color: #382719;
+}
+
+#editorPainel input,
+#editorPainel select {
+  border: 1px solid #c9b99a;
+  background: white;
+  color: #30251b;
+}
+
+#editorPainel input[type="color"] {
+  width: 42px;
+  height: 32px;
+  padding: 2px;
+}
+
+#editorPainel input[type="number"] {
+  width: 75px;
+}
+
+#editorPainel input[type="file"] {
+  width: 100%;
+}
+
+#editorPainel .status {
+  background: #f2eadb;
+  border-radius: 7px;
+  padding: 9px;
+  font-size: 12px;
+  margin-top: 8px;
+  overflow-wrap: anywhere;
+}
+
+#editorPainel .aviso {
+  font-size: 12px;
+  line-height: 1.5;
+  color: #784b25;
+}
+
+.alvoEditor {
+  outline: 3px dashed #bd8a20 !important;
+  outline-offset: 3px !important;
+  cursor: crosshair !important;
+}
+</style>
 </head>
 
 <body class="home">
@@ -117,6 +372,44 @@
 </blockquote>
 </section>
 
+<!-- LOCALIZAÇÃO DO COLÉGIO -->
+<section class="localizacao" id="localizacao">
+
+<div class="localizacao-cabecalho">
+<p class="eyebrow">VENHA NOS VISITAR</p>
+<h2>Onde <em>estamos</em></h2>
+<p class="localizacao-descricao">
+Será um prazer receber você e sua família no Colégio Santa Teresinha.
+</p>
+</div>
+
+<div class="localizacao-mapa">
+<iframe
+src="https://maps.google.com/maps?q=Col%C3%A9gio%20Santa%20Teresinha%20do%20Menino%20Jesus%2C%20Ipatinga%2C%20MG&t=&z=16&ie=UTF8&iwloc=&output=embed"
+title="Mapa interativo do Colégio Santa Teresinha em Ipatinga"
+loading="lazy"
+allowfullscreen
+referrerpolicy="no-referrer-when-downgrade">
+</iframe>
+</div>
+
+<div class="localizacao-rodape">
+<p>
+<strong>Colégio Santa Teresinha do Menino Jesus</strong><br>
+Ipatinga — MG
+</p>
+
+<a
+class="localizacao-botao"
+href="https://www.google.com/maps/search/?api=1&query=Col%C3%A9gio+Santa+Teresinha+do+Menino+Jesus%2C+Ipatinga%2C+MG"
+target="_blank"
+rel="noopener noreferrer">
+Ver rota no Google Maps →
+</a>
+</div>
+
+</section>
+
 </main>
 
 <footer>
@@ -141,272 +434,118 @@ Telefone: (31) 3825-0451<br>
 </div>
 </footer>
 
-<!-- EDITOR UNIFICADO - COLÉGIO SANTA TERESINHA -->
-<style>
-  #editorBtn {
-    position: fixed;
-    right: 20px;
-    bottom: 20px;
-    z-index: 999999;
-    background: #55351f;
-    color: #f5d77e;
-    border: 2px solid #c9a44c;
-    padding: 14px 20px;
-    border-radius: 12px;
-    font-size: 15px;
-    font-weight: bold;
-    cursor: pointer;
-    box-shadow: 0 5px 18px #0005;
-  }
-
-  #editorPainel {
-    display: none;
-    position: fixed;
-    right: 20px;
-    bottom: 82px;
-    z-index: 999998;
-    width: 340px;
-    max-width: calc(100vw - 40px);
-    max-height: 78vh;
-    overflow-y: auto;
-    box-sizing: border-box;
-    padding: 18px;
-    background: #fffdf7;
-    color: #34251b;
-    border: 2px solid #c9a44c;
-    border-radius: 16px;
-    box-shadow: 0 8px 35px #0005;
-    font: 14px Arial, sans-serif;
-  }
-
-  #editorPainel h2 {
-    margin: 0 0 6px;
-    color: #55351f;
-    font-size: 22px;
-  }
-
-  #editorPainel h3 {
-    margin: 0 0 10px;
-  }
-
-  #editorPainel p {
-    font-size: 12px;
-    line-height: 1.5;
-  }
-
-  #editorPainel .subtitulo {
-    font-size: 12px;
-    color: #76634d;
-    margin-bottom: 15px;
-  }
-
-  #editorPainel .secao {
-    border-top: 1px solid #e7d9bd;
-    padding-top: 12px;
-    margin-top: 12px;
-  }
-
-  #editorPainel .linha {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 5px;
-    margin-bottom: 7px;
-  }
-
-  #editorPainel button,
-  #editorPainel select,
-  #editorPainel input {
-    box-sizing: border-box;
-    max-width: 100%;
-    font: 13px Arial, sans-serif;
-    border-radius: 7px;
-    margin: 4px 0;
-    padding: 9px;
-  }
-
-  #editorPainel button {
-    background: #55351f;
-    color: #fff5d7;
-    border: 0;
-    cursor: pointer;
-  }
-
-  #editorPainel button:hover {
-    background: #765033;
-  }
-
-  #editorPainel .botaoClaro {
-    background: #e9dcc2;
-    color: #382719;
-  }
-
-  #editorPainel input,
-  #editorPainel select {
-    border: 1px solid #c9b99a;
-    background: white;
-    color: #30251b;
-  }
-
-  #editorPainel input[type="color"] {
-    width: 42px;
-    height: 32px;
-    padding: 2px;
-  }
-
-  #editorPainel input[type="number"] {
-    width: 75px;
-  }
-
-  #editorPainel input[type="file"] {
-    width: 100%;
-  }
-
-  #editorPainel .status {
-    background: #f2eadb;
-    border-radius: 7px;
-    padding: 9px;
-    font-size: 12px;
-    margin-top: 8px;
-    overflow-wrap: anywhere;
-  }
-
-  #editorPainel .aviso {
-    font-size: 12px;
-    line-height: 1.5;
-    color: #784b25;
-  }
-
-  .alvoEditor {
-    outline: 3px dashed #bd8a20 !important;
-    outline-offset: 3px !important;
-    cursor: crosshair !important;
-  }
-</style>
-
-<button id="editorBtn" type="button">
-  🎨 Editar site
-</button>
+<!-- BOTÃO DO EDITOR -->
+<button id="editorBtn" type="button">🎨 Editar site</button>
 
 <div id="editorPainel">
-  <h2>⚙ Editor do site</h2>
-  <div class="subtitulo">
-    Colégio Santa Teresinha do Menino Jesus
-  </div>
+<h2>⚙ Editor do site</h2>
 
-  <p class="aviso">
-    As alterações são temporárias e feitas nesta página.
-    Elas não são publicadas automaticamente no GitHub.
-  </p>
+<div class="subtitulo">
+Colégio Santa Teresinha do Menino Jesus
+</div>
 
-  <div class="secao">
-    <strong>🖱️ Seleção de elementos</strong><br>
-    <button type="button" id="edSelecionar">Selecionar elemento</button>
-    <button type="button" id="edParar" class="botaoClaro">Parar seleção</button>
-    <button type="button" id="edDesselecionar" class="botaoClaro">Desselecionar</button>
+<p class="aviso">
+As alterações são temporárias e feitas nesta página.
+Elas não são publicadas automaticamente no GitHub.
+</p>
 
-    <div class="status" id="edStatus">
-      Nenhum elemento selecionado.
-    </div>
-  </div>
+<div class="secao">
+<strong>🖱️ Seleção de elementos</strong><br>
+<button type="button" id="edSelecionar">Selecionar elemento</button>
+<button type="button" id="edParar" class="botaoClaro">Parar seleção</button>
+<button type="button" id="edDesselecionar" class="botaoClaro">Desselecionar</button>
+<div class="status" id="edStatus">Nenhum elemento selecionado.</div>
+</div>
 
-  <div class="secao">
-    <strong>✏️ Textos</strong><br>
+<div class="secao">
+<strong>✏️ Textos</strong><br>
+<button type="button" id="edEditarTexto">Editar texto selecionado</button>
+<button type="button" id="edAdicionarTexto">+ Adicionar texto</button>
+<button type="button" id="edAlternarEdicao">Ativar edição de textos</button>
 
-    <button type="button" id="edEditarTexto">Editar texto selecionado</button>
-    <button type="button" id="edAdicionarTexto">+ Adicionar texto</button>
-    <button type="button" id="edAlternarEdicao">Ativar edição de textos</button>
+<div class="linha">
+<label for="edFonte">Fonte:</label>
+<select id="edFonte">
+<option value="Arial, sans-serif">Arial</option>
+<option value="Georgia, serif">Georgia</option>
+<option value="'Times New Roman', serif">Times New Roman</option>
+<option value="Verdana, sans-serif">Verdana</option>
+<option value="'Trebuchet MS', sans-serif">Trebuchet MS</option>
+<option value="Tahoma, sans-serif">Tahoma</option>
+</select>
+</div>
 
-    <div class="linha">
-      <label for="edFonte">Fonte:</label>
-      <select id="edFonte">
-        <option value="Arial, sans-serif">Arial</option>
-        <option value="Georgia, serif">Georgia</option>
-        <option value="'Times New Roman', serif">Times New Roman</option>
-        <option value="Verdana, sans-serif">Verdana</option>
-        <option value="'Trebuchet MS', sans-serif">Trebuchet MS</option>
-        <option value="Tahoma, sans-serif">Tahoma</option>
-      </select>
-    </div>
+<div class="linha">
+<label for="edTamanhoFonte">Tamanho:</label>
+<input id="edTamanhoFonte" type="number" min="6" max="150" value="20">
+<button type="button" id="edAplicarTamanhoFonte">Aplicar</button>
+</div>
 
-    <div class="linha">
-      <label for="edTamanhoFonte">Tamanho:</label>
-      <input id="edTamanhoFonte" type="number" min="6" max="150" value="20">
-      <button type="button" id="edAplicarTamanhoFonte">Aplicar</button>
-    </div>
+<button type="button" id="edNegrito">Negrito</button>
+<button type="button" id="edItalico">Itálico</button>
+</div>
 
-    <button type="button" id="edNegrito">Negrito</button>
-    <button type="button" id="edItalico">Itálico</button>
-  </div>
+<div class="secao">
+<strong>🎨 Cores</strong>
 
-  <div class="secao">
-    <strong>🎨 Cores</strong>
+<div class="linha">
+<label for="edCorTexto">Cor do texto:</label>
+<input type="color" id="edCorTexto" value="#55351f">
+<button type="button" id="edAplicarCorTexto">Aplicar</button>
+</div>
 
-    <div class="linha">
-      <label for="edCorTexto">Cor do texto:</label>
-      <input type="color" id="edCorTexto" value="#55351f">
-      <button type="button" id="edAplicarCorTexto">Aplicar</button>
-    </div>
+<div class="linha">
+<label for="edCorFundo">Cor de fundo:</label>
+<input type="color" id="edCorFundo" value="#f5d77e">
+<button type="button" id="edAplicarCorFundo">Aplicar</button>
+</div>
 
-    <div class="linha">
-      <label for="edCorFundo">Cor de fundo:</label>
-      <input type="color" id="edCorFundo" value="#f5d77e">
-      <button type="button" id="edAplicarCorFundo">Aplicar</button>
-    </div>
+<label for="edCorPrincipal">Cor principal do site:</label>
+<input type="color" id="edCorPrincipal" value="#55351f">
+<button type="button" id="edAplicarCorPrincipal">Alterar cor principal</button>
+</div>
 
-    <label for="edCorPrincipal">Cor principal do site:</label>
-    <input type="color" id="edCorPrincipal" value="#55351f">
-    <button type="button" id="edAplicarCorPrincipal">Alterar cor principal</button>
-  </div>
+<div class="secao">
+<strong>🖼️ Imagens</strong>
+<label for="edImagem">Escolher imagem:</label>
+<input type="file" id="edImagem" accept="image/*">
+<button type="button" id="edAdicionarImagem">Adicionar imagem</button>
+<button type="button" id="edSubstituirImagem">Substituir imagem selecionada</button>
+<button type="button" id="edSelecionarImagem">Selecionar imagem ou banner</button>
+</div>
 
-  <div class="secao">
-    <strong>🖼️ Imagens</strong>
+<div class="secao">
+<strong>↔️ Tamanho e posição</strong><br>
+<button type="button" id="edDiminuir">− Diminuir</button>
+<button type="button" id="edAumentar">+ Aumentar</button>
+<button type="button" id="edMover">Mover elemento</button>
+<p class="aviso">Para mover, clique em “Mover elemento” e arraste o elemento selecionado.</p>
+</div>
 
-    <label for="edImagem">Escolher imagem:</label>
-    <input type="file" id="edImagem" accept="image/*">
+<div class="secao">
+<strong>◻️ Formas</strong><br>
+<button type="button" id="edRetangulo">Retângulo</button>
+<button type="button" id="edCirculo">Círculo</button>
+<button type="button" id="edLinha">Linha</button>
+</div>
 
-    <button type="button" id="edAdicionarImagem">Adicionar imagem</button>
-    <button type="button" id="edSubstituirImagem">Substituir imagem selecionada</button>
-    <button type="button" id="edSelecionarImagem">Selecionar imagem ou banner</button>
-  </div>
+<div class="secao">
+<strong>↩️ Ações</strong><br>
+<button type="button" id="edDesfazer">Desfazer última ação</button>
+<button type="button" id="edExcluir">Excluir selecionado</button>
+<button type="button" id="edCancelar">Cancelar seleção</button>
+</div>
 
-  <div class="secao">
-    <strong>↔️ Tamanho e posição</strong><br>
-
-    <button type="button" id="edDiminuir">− Diminuir</button>
-    <button type="button" id="edAumentar">+ Aumentar</button>
-    <button type="button" id="edMover">Mover elemento</button>
-
-    <p class="aviso">
-      Para mover, clique em “Mover elemento” e arraste o elemento selecionado.
-    </p>
-  </div>
-
-  <div class="secao">
-    <strong>◻️ Formas</strong><br>
-    <button type="button" id="edRetangulo">Retângulo</button>
-    <button type="button" id="edCirculo">Círculo</button>
-    <button type="button" id="edLinha">Linha</button>
-  </div>
-
-  <div class="secao">
-    <strong>↩️ Ações</strong><br>
-    <button type="button" id="edDesfazer">Desfazer última ação</button>
-    <button type="button" id="edExcluir">Excluir selecionado</button>
-    <button type="button" id="edCancelar">Cancelar seleção</button>
-  </div>
-
-  <div class="secao">
-    <strong>💾 Salvar alterações</strong><br>
-    <button type="button" id="edSalvar">Salvar neste navegador</button>
-    <button type="button" id="edRecarregar">Recarregar página</button>
-
-    <p class="aviso">
-      O salvamento local não publica as alterações para outros visitantes.
-      Para publicar permanentemente, é necessário alterar os arquivos do site
-      e enviá-los ao GitHub.
-    </p>
-  </div>
+<div class="secao">
+<strong>💾 Salvar alterações</strong><br>
+<button type="button" id="edSalvar">Salvar neste navegador</button>
+<button type="button" id="edRecarregar">Recarregar página</button>
+<p class="aviso">
+O salvamento local não publica as alterações para outros visitantes.
+Para publicar permanentemente, é necessário alterar os arquivos do site
+e enviá-los ao GitHub.
+</p>
+</div>
 </div>
 
 <script>
@@ -546,7 +685,6 @@ Telefone: (31) 3825-0451<br>
     evento.stopPropagation();
 
     selecionarElemento(evento.target);
-
     painel.style.display = "block";
   }, true);
 
@@ -572,12 +710,7 @@ Telefone: (31) 3825-0451<br>
     document.querySelectorAll("h1,h2,h3,h4,h5,p,a,li,span,small,b,strong,blockquote")
       .forEach(function (el) {
         if (elementoDoEditor(el)) return;
-
-        if (edicaoTextosAtiva) {
-          el.contentEditable = "true";
-        } else {
-          el.contentEditable = "false";
-        }
+        el.contentEditable = edicaoTextosAtiva ? "true" : "false";
       });
 
     this.textContent = edicaoTextosAtiva
@@ -604,7 +737,6 @@ Telefone: (31) 3825-0451<br>
 
   document.getElementById("edFonte").addEventListener("change", function () {
     if (!precisaSelecionar()) return;
-
     salvarHistorico(selecionado);
     selecionado.style.fontFamily = this.value;
   });
@@ -627,7 +759,6 @@ Telefone: (31) 3825-0451<br>
     if (!precisaSelecionar()) return;
 
     salvarHistorico(selecionado);
-
     selecionado.style.fontWeight =
       getComputedStyle(selecionado).fontWeight === "700" ? "400" : "700";
   });
@@ -636,21 +767,18 @@ Telefone: (31) 3825-0451<br>
     if (!precisaSelecionar()) return;
 
     salvarHistorico(selecionado);
-
     selecionado.style.fontStyle =
       getComputedStyle(selecionado).fontStyle === "italic" ? "normal" : "italic";
   });
 
   document.getElementById("edAplicarCorTexto").addEventListener("click", function () {
     if (!precisaSelecionar()) return;
-
     salvarHistorico(selecionado);
     selecionado.style.color = document.getElementById("edCorTexto").value;
   });
 
   document.getElementById("edAplicarCorFundo").addEventListener("click", function () {
     if (!precisaSelecionar()) return;
-
     salvarHistorico(selecionado);
     selecionado.style.backgroundColor = document.getElementById("edCorFundo").value;
   });
@@ -768,7 +896,6 @@ Telefone: (31) 3825-0451<br>
 
   document.addEventListener("mousedown", function (evento) {
     if (!movendo || !selecionado || elementoDoEditor(evento.target)) return;
-
     if (evento.target !== selecionado && !selecionado.contains(evento.target)) return;
 
     evento.preventDefault();
@@ -853,7 +980,6 @@ Telefone: (31) 3825-0451<br>
 
   document.getElementById("edExcluir").addEventListener("click", function () {
     if (!precisaSelecionar()) return;
-
     if (!confirm("Deseja excluir o elemento selecionado?")) return;
 
     salvarHistorico(selecionado);
@@ -894,6 +1020,37 @@ Telefone: (31) 3825-0451<br>
 
     atualizarStatus("Última alteração desfeita, quando possível.");
   });
+
+  function caminhoElemento(el) {
+    const partes = [];
+
+    while (el && el !== document.body) {
+      let nome = el.tagName.toLowerCase();
+
+      if (el.id) {
+        nome += "#" + el.id;
+        partes.unshift(nome);
+        break;
+      }
+
+      const pai = el.parentElement;
+
+      if (pai) {
+        const iguais = Array.from(pai.children).filter(function (item) {
+          return item.tagName === el.tagName;
+        });
+
+        if (iguais.length > 1) {
+          nome += ":nth-of-type(" + (iguais.indexOf(el) + 1) + ")";
+        }
+      }
+
+      partes.unshift(nome);
+      el = pai;
+    }
+
+    return "body > " + partes.join(" > ");
+  }
 
   document.getElementById("edSalvar").addEventListener("click", function () {
     const dados = [];
@@ -939,37 +1096,6 @@ Telefone: (31) 3825-0451<br>
     }
   });
 
-  function caminhoElemento(el) {
-    const partes = [];
-
-    while (el && el !== document.body) {
-      let nome = el.tagName.toLowerCase();
-
-      if (el.id) {
-        nome += "#" + el.id;
-        partes.unshift(nome);
-        break;
-      }
-
-      const pai = el.parentElement;
-
-      if (pai) {
-        const iguais = Array.from(pai.children).filter(function (item) {
-          return item.tagName === el.tagName;
-        });
-
-        if (iguais.length > 1) {
-          nome += ":nth-of-type(" + (iguais.indexOf(el) + 1) + ")";
-        }
-      }
-
-      partes.unshift(nome);
-      el = pai;
-    }
-
-    return "body > " + partes.join(" > ");
-  }
-
   document.getElementById("edRecarregar").addEventListener("click", function () {
     if (confirm("Deseja recarregar a página e perder as alterações temporárias?")) {
       location.reload();
@@ -977,6 +1103,9 @@ Telefone: (31) 3825-0451<br>
   });
 })();
 </script>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="editor.js"></script></body></html>
-```
+<script src="editor.js"></script>
+
+</body>
+</html>
