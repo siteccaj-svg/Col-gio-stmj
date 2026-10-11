@@ -1039,8 +1039,10 @@ body.inner footer {
     font-size: 36px;
   }
 
+  /* TÍTULO DO CELULAR COM A MESMA FONTE DO PC */
   body.home .hero h1 {
     font-family: 'Playfair Display', serif !important;
+    font-weight: 500 !important;
     font-size: 36px !important;
     line-height: 1.08 !important;
     max-width: 100% !important;
