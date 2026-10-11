@@ -550,3 +550,20 @@ body.inner footer{min-height:130px;padding:30px 5.5%}
   overflow-wrap:break-word;
  }
 }
+/* Brasão mais nítido no computador e no celular */
+.school-logo {
+  display: block;
+  object-fit: contain !important;
+  image-rendering: auto;
+  flex-shrink: 0;
+}
+
+/* Brasão da página inicial */
+body.home .school-logo {
+  object-fit: contain !important;
+}
+
+/* Brasão das subpáginas */
+body.inner .school-logo {
+  object-fit: contain !important;
+}
