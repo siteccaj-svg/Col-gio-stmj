@@ -347,6 +347,7 @@
         overflow-wrap: anywhere;
       }
 
+      /* Contorno temporário enquanto o editor está selecionando um elemento. */
       .editorSelecionado {
         outline: 3px dashed #d5a62c !important;
         outline-offset: 2px;
@@ -591,18 +592,22 @@
   function limparHTML(elemento) {
     const copia = elemento.cloneNode(true);
 
+    // Remove somente os controles do editor, nunca o título selecionado.
     copia.querySelectorAll(
-      "#editorUniversal, #editorAbrir, #editorAcoesNuvem, .editorSelecionado"
+      "#editorUniversal, #editorAbrir, #editorAcoesNuvem, #editorPainel, #editorUniversalStatus"
     ).forEach(el => el.remove());
+
+    // Remove os sinais visuais de edição sem apagar o conteúdo selecionado.
+    copia.querySelectorAll(".editorSelecionado").forEach(el => {
+      el.classList.remove("editorSelecionado");
+    });
 
     copia.querySelectorAll("[contenteditable]").forEach(el => {
       el.removeAttribute("contenteditable");
     });
 
     copia.querySelectorAll("[class]").forEach(el => {
-      el.classList.remove("editorSelecionado");
-
-      if (!el.className.trim()) {
+      if (!el.getAttribute("class")?.trim()) {
         el.removeAttribute("class");
       }
     });
@@ -1367,6 +1372,9 @@
 
   async function salvar() {
     try {
+      // A marcação de seleção é temporária e nunca deve ser publicada.
+      limparSelecaoVisual();
+
       if (!db) {
         await prepararSupabase();
       }
