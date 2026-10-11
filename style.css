@@ -1074,4 +1074,35 @@ body.inner footer {
   outline: none !important;
   box-shadow: none !important;
 }
-```
+```/* MENU COM CAIXINHAS NO PC E NO CELULAR */
+body.home .top nav {
+  gap: 8px;
+}
+
+body.home .top nav a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 12px;
+  font-size: 12px;
+  border: 1px solid rgba(215, 184, 78, 0.45);
+  border-radius: 5px;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+body.home .top nav a:hover {
+  background: rgba(215, 184, 78, 0.12);
+  border-color: #d7b84e;
+}
+
+/* AJUSTE PARA CELULARES */
+@media (max-width: 760px) {
+  body.home .top nav {
+    gap: 8px;
+  }
+
+  body.home .top nav a {
+    padding: 8px 10px;
+    font-size: 12px;
+  }
+}
