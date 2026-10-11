@@ -631,7 +631,9 @@
     selecionado = elemento;
     selecionado.classList.add("editorSelecionado");
 
-    aviso("Elemento selecionado. Agora use a ferramenta desejada.");
+    const rotulo = selecionado.tagName.toLowerCase();
+    const textoVisivel = (selecionado.innerText || selecionado.alt || "").trim().replace(/\s+/g, " ").slice(0, 45);
+    aviso("Selecionado: <" + rotulo + ">" + (textoVisivel ? " — “" + textoVisivel + (textoVisivel.length >= 45 ? "…" : "") + "”" : "") + ". A borda mostra o elemento selecionado.");
   }
 
   function limparSelecaoVisual() {
@@ -652,7 +654,7 @@
   }
 
   function selecionarClique(evento) {
-    const elemento = evento.target;
+    let elemento = evento.target;
 
     if (
       !editando ||
@@ -667,6 +669,15 @@
     evento.preventDefault();
     evento.stopPropagation();
     evento.stopImmediatePropagation();
+
+    // Escolhe o bloco útil mais próximo, evitando selecionar só uma palavra/span.
+    if (modoSelecao === "texto") {
+      elemento = elemento.closest("h1, h2, h3, h4, p, li, a, button, label") || elemento;
+    } else if (modoSelecao === "imagem") {
+      elemento = elemento.closest("img") || elemento;
+    } else if (modoSelecao === "cor") {
+      elemento = elemento.closest("h1, h2, h3, h4, p, li, a, button, section, article, div, nav, header, footer") || elemento;
+    }
 
     escolherElemento(elemento);
 
@@ -774,10 +785,6 @@
           "✏️ Selecionar texto para editar diretamente",
           () => ativarSelecao("texto")
         ),
-        botao(
-          "🖱️ Selecionar elemento da página",
-          () => ativarSelecao("geral")
-        ),
         botao("Concluir seleção", concluirSelecao)
       );
 
@@ -791,6 +798,10 @@
 
     if (aba === "conteudo") {
       ferramentas.append(
+        botao(
+          "🎯 Selecionar elemento para remover ou editar",
+          () => ativarSelecao("geral")
+        ),
         botao(
           "➕ Adicionar título",
           () => adicionarConteudo("h2", "Novo título")
@@ -925,6 +936,11 @@
 
       ferramentas.append(
         botao("Aplicar aparência", aplicarAparencia),
+        botao("A− Diminuir texto selecionado", () => ajustarTextoSelecionado(-2)),
+        botao("A+ Aumentar texto selecionado", () => ajustarTextoSelecionado(2)),
+        botao("－ Diminuir zoom da página", () => ajustarZoomPagina(-0.1)),
+        botao("＋ Aumentar zoom da página", () => ajustarZoomPagina(0.1)),
+        botao("↺ Restaurar zoom da página", () => restaurarZoomPagina()),
         botao("Mudar cor do fundo da página", mudarFundoPagina)
       );
     }
@@ -973,10 +989,6 @@
 
     if (aba === "pagina") {
       ferramentas.append(
-        botao(
-          "📄 Selecionar conteúdo principal",
-          () => ativarSelecao("geral")
-        ),
         botao(
           "🗑️ Remover elemento selecionado",
           removerSelecionado
@@ -1238,6 +1250,36 @@
     aviso(
       "Aparência alterada. Salve na nuvem para publicar."
     );
+  }
+
+  function ajustarTextoSelecionado(delta) {
+    if (!selecionado || !document.body.contains(selecionado)) {
+      return aviso("Primeiro use Selecionar nesta aba e escolha um elemento.");
+    }
+
+    const atual = parseFloat(getComputedStyle(selecionado).fontSize) || 18;
+    const novo = Math.max(8, Math.min(100, atual + delta));
+    selecionado.style.fontSize = novo + "px";
+
+    const campoTamanho = $("#editorTamanhoTexto");
+    if (campoTamanho) campoTamanho.value = String(novo);
+
+    registrarHistorico();
+    aviso("Tamanho do texto ajustado para " + novo + " px.");
+  }
+
+  function ajustarZoomPagina(delta) {
+    const atual = parseFloat(document.documentElement.dataset.editorZoom || "1");
+    const novo = Math.max(0.6, Math.min(1.5, Math.round((atual + delta) * 10) / 10));
+    document.documentElement.dataset.editorZoom = String(novo);
+    document.body.style.zoom = String(novo);
+    aviso("Zoom de visualização: " + Math.round(novo * 100) + "%. Isso altera a visualização deste navegador, não o conteúdo publicado.");
+  }
+
+  function restaurarZoomPagina() {
+    document.documentElement.dataset.editorZoom = "1";
+    document.body.style.zoom = "1";
+    aviso("Zoom restaurado para 100%.");
   }
 
   function mudarFundoPagina() {
