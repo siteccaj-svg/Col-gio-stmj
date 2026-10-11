@@ -1,4 +1,3 @@
-```css
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap');
 
 :root{--brown:#4b2918;--deep:#2e1a12;--gold:#c79c54;--pale:#f6efdf;--cream:#fbf8f1;--ink:#39271c}
@@ -18,7 +17,6 @@ nav a:hover,.foot-links a:hover{color:#a7782b}
 .hero{min-height:360px;display:grid;grid-template-columns:1.15fr .85fr;background:linear-gradient(90deg,#f7efdf 0%,#f7efdf 52%,#ead7b7 100%);padding:48px 7% 42px;position:relative;overflow:hidden}
 .hero-copy{align-self:center;max-width:560px;z-index:1}
 .eyebrow{font-size:10px;letter-spacing:1.5px;color:#a47a36;font-weight:700;margin:0 0 14px}
-
 .hero h1,.inner-hero h1{font:500 clamp(35px,4.2vw,56px)/1.1 'Playfair Display',serif;margin:0 0 18px;color:#432718;max-width:590px}
 .hero h1 em,.intro h2 em{color:#a9772c;font-style:normal}
 .hero-copy>p:not(.eyebrow){font-size:14px;line-height:1.7;max-width:390px;color:#715842}
@@ -143,10 +141,7 @@ body.home .gold-band p{color:#ead8bb}
 body.home .gold-band blockquote{color:#f3d98e}
 body.home .gold-band blockquote small{color:#ead8bb}
 body.home footer{background:#2e1a12;border-top:1px solid #69472c}
-
-@media(max-width:850px){
- body.home .top{background:#2e1a12}
-}
+@media(max-width:850px){body.home .top{background:#2e1a12}}
 
 /* Ajustes visuais da página inicial */
 body.home .top{height:66px;background:#321d12;border-bottom:1px solid rgba(244,211,130,.55);padding:0 3%;gap:16px}
@@ -183,44 +178,13 @@ body.home .quicklinks span{width:25px;height:25px;border:0;border-radius:0;font-
 }
 
 /* Correção do hero: imagem inteira */
-body.home .hero{
- position:relative;
- display:block;
- min-height:247px;
- padding:28px 4.8% 25px;
- overflow:hidden;
- background:#321d12;
-}
-body.home .hero-copy{
- position:relative;
- z-index:2;
- width:49%;
- max-width:440px;
-}
-body.home .hero-art{
- position:absolute;
- z-index:1;
- top:0;
- right:0;
- bottom:0;
- width:53%;
- min-height:0;
- margin:0;
- background-image:linear-gradient(90deg,#321d12 0%,rgba(50,29,18,.25) 14%,rgba(50,29,18,0) 34%),url('hero-referencia.jpg');
- background-size:100% 100%;
- background-position:center;
- background-repeat:no-repeat;
-}
+body.home .hero{position:relative;display:block;min-height:247px;padding:28px 4.8% 25px;overflow:hidden;background:#321d12}
+body.home .hero-copy{position:relative;z-index:2;width:49%;max-width:440px}
+body.home .hero-art{position:absolute;z-index:1;top:0;right:0;bottom:0;width:53%;min-height:0;margin:0;background-image:linear-gradient(90deg,#321d12 0%,rgba(50,29,18,.25) 14%,rgba(50,29,18,0) 34%),url('hero-referencia.jpg');background-size:100% 100%;background-position:center;background-repeat:no-repeat}
 @media(max-width:760px){
  body.home .hero{display:flex;flex-direction:column;padding:27px 6% 0;gap:20px}
  body.home .hero-copy{width:100%}
- body.home .hero-art{
-  position:relative;top:auto;right:auto;bottom:auto;
-  width:calc(100% + 12vw);margin:0 -6vw;
-  min-height:0;aspect-ratio:256 / 247;
-  background-image:url('hero-referencia.jpg');
-  background-size:100% 100%;
- }
+ body.home .hero-art{position:relative;top:auto;right:auto;bottom:auto;width:calc(100% + 12vw);margin:0 -6vw;min-height:0;aspect-ratio:256 / 247;background-image:url('hero-referencia.jpg');background-size:100% 100%}
 }
 
 /* Cabeçalho e hero da página inicial */
@@ -292,39 +256,21 @@ body.inner footer{min-height:130px;padding:30px 5.5%}
 }
 
 /* Remove contornos pontilhados dos títulos */
-.hero h1,
-.hero-title,
-.hero h1 span,
-.hero-title span{
- border:none!important;
- outline:none!important;
- box-shadow:none!important;
-}
+.hero h1,.hero-title,.hero h1 span,.hero-title span{border:none!important;outline:none!important;box-shadow:none!important}
 
-/* Ajustes finais da letra no celular */
+/* Ajuste suave: mantém a fonte original e reduz um pouco o título no celular */
 @media(max-width:480px){
  body.home .hero h1{
-  font-size:clamp(28px,7vw,36px)!important;
-  line-height:1.15;
-  max-width:100%;
+  font-family:'Playfair Display',serif!important;
+  font-size:40px!important;
+  line-height:1.08!important;
+  max-width:100%!important;
   overflow-wrap:break-word;
  }
-
  body.inner .inner-hero h1{
-  font-size:30px!important;
-  line-height:1.2;
-  max-width:100%;
+  font-size:34px!important;
+  line-height:1.2!important;
+  max-width:100%!important;
   overflow-wrap:break-word;
- }
-
- .hero h1,
- .hero-title,
- .hero h1 span,
- .hero-title span{
-  border:none!important;
-  outline:none!important;
-  box-shadow:none!important;
-  box-sizing:border-box;
  }
 }
-```
