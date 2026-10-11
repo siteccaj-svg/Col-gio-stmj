@@ -183,3 +183,27 @@ body.inner footer{min-height:130px;padding:30px 5.5%;}
  body.inner .inner-content{padding-bottom:80px;}
  body.inner .inner-panel h3{font-size:23px;}
 }
+/* Correção do título principal */
+.hero h1,
+.hero-title,
+.hero h1 span,
+.hero-title span {
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+/* Impede que a borda pontilhada apareça no celular */
+@media (max-width: 768px) {
+    .hero h1,
+    .hero-title,
+    .hero h1 span,
+    .hero-title span {
+        border: none !important;
+        outline: none !important;
+        box-shadow: none !important;
+        max-width: 100%;
+        box-sizing: border-box;
+        overflow-wrap: break-word;
+    }
+}
