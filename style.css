@@ -1106,3 +1106,51 @@ body.home .top nav a:hover {
     font-size: 12px;
   }
 }
+/* PEQUENO AJUSTE NO CABEÇALHO */
+body.home .top {
+  min-height: 94px;
+  height: auto;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+/* Nome do colégio */
+body.home .brand {
+  font-size: 16px;
+  gap: 13px;
+}
+
+/* Subtítulo */
+body.home .brand small {
+  font-size: 10.5px;
+}
+
+/* Brasão ligeiramente maior */
+body.home .school-logo {
+  width: 52px;
+  height: 52px;
+  flex: 0 0 52px;
+}
+
+/* CELULAR */
+@media (max-width: 760px) {
+  body.home .top {
+    min-height: 82px;
+    padding: 10px 4%;
+  }
+
+  body.home .brand {
+    font-size: 13.5px;
+    gap: 11px;
+  }
+
+  body.home .brand small {
+    font-size: 10px;
+  }
+
+  body.home .school-logo {
+    width: 45px;
+    height: 45px;
+    flex: 0 0 45px;
+  }
+}
