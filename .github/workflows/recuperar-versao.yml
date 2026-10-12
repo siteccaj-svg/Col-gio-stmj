@@ -1,0 +1,94 @@
+name: Recuperar versão anterior do site
+
+on:
+  workflow_dispatch:
+    inputs:
+      commit_sha:
+        description: "SHA completo do commit para recuperar (40 caracteres)"
+        required: true
+        type: string
+      confirmar:
+        description: "Confirma que deseja preparar a recuperação em um Pull Request"
+        required: true
+        type: choice
+        options:
+          - nao
+          - sim
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: recuperar-site
+  cancel-in-progress: false
+
+jobs:
+  preparar-recuperacao:
+    name: Preparar recuperação segura
+    runs-on: ubuntu-latest
+    steps:
+      - name: Conferir confirmação
+        if: inputs.confirmar != 'sim'
+        run: |
+          echo "Recuperação cancelada: não foi marcada a confirmação 'sim'."
+          exit 1
+
+      - name: Baixar histórico completo
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Validar commit solicitado
+        id: validar
+        env:
+          TARGET_SHA: ${{ inputs.commit_sha }}
+        run: |
+          if ! printf '%s' "$TARGET_SHA" | grep -Eq '^[0-9a-fA-F]{40}$'; then
+            echo "Informe o SHA completo de 40 caracteres."
+            exit 1
+          fi
+          git cat-file -e "$TARGET_SHA^{commit}" || {
+            echo "O commit não existe neste histórico."
+            exit 1
+          }
+          git merge-base --is-ancestor "$TARGET_SHA" origin/main || {
+            echo "Por segurança, só é permitido recuperar um commit que faça parte do histórico atual da main."
+            exit 1
+          }
+          echo "target=$TARGET_SHA" >> "$GITHUB_OUTPUT"
+
+      - name: Montar a versão anterior em uma nova branch
+        id: montar
+        env:
+          TARGET_SHA: ${{ steps.validar.outputs.target }}
+        run: |
+          SHORT="${TARGET_SHA:0:7}"
+          BRANCH="recuperacao/site-$SHORT-$GITHUB_RUN_ID"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$BRANCH"
+          git rm -r --ignore-unmatch .
+          git checkout "$TARGET_SHA" -- .
+          git add -A
+          if git diff --cached --quiet; then
+            echo "A versão atual já corresponde ao commit solicitado. Nenhuma alteração necessária."
+            exit 1
+          fi
+          git commit -m "Preparar recuperação do site para $SHORT"
+          git push origin "$BRANCH"
+          echo "branch=$BRANCH" >> "$GITHUB_OUTPUT"
+
+      - name: Abrir Pull Request para revisar a recuperação
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TARGET_SHA: ${{ steps.validar.outputs.target }}
+          BRANCH: ${{ steps.montar.outputs.branch }}
+        run: |
+          gh pr create \
+            --repo "$GITHUB_REPOSITORY" \
+            --base main \
+            --head "$BRANCH" \
+            --title "Recuperar versão do site (${TARGET_SHA:0:7})" \
+            --body "Esta recuperação foi solicitada manualmente. Ela restaura os arquivos rastreados para o estado do commit $TARGET_SHA. Revise as diferenças neste Pull Request antes de mesclar. A recuperação não é aplicada diretamente à main."
