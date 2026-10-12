@@ -14,16 +14,33 @@
   padding: 0 24px;
   box-sizing: border-box;
 }
-.localizacao-cabecalho { text-align: center; margin-bottom: 28px; }
-.localizacao-cabecalho .eyebrow { font-size: 12px; letter-spacing: 2px; }
+
+.localizacao-cabecalho {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.localizacao-cabecalho .eyebrow {
+  font-size: 12px;
+  letter-spacing: 2px;
+}
+
 .localizacao-cabecalho h2 {
   color: #4b2918;
   font-family: 'Playfair Display', Georgia, serif;
   font-size: 36px;
   margin: 10px 0;
 }
-.localizacao-cabecalho h2 em { color: #a77a35; }
-.localizacao-descricao { color: #6b5545; line-height: 1.7; }
+
+.localizacao-cabecalho h2 em {
+  color: #a77a35;
+}
+
+.localizacao-descricao {
+  color: #6b5545;
+  line-height: 1.7;
+}
+
 .localizacao-mapa {
   overflow: hidden;
   border: 2px solid #c79c54;
@@ -31,12 +48,14 @@
   box-shadow: 0 8px 25px rgba(46, 26, 18, 0.12);
   background: #f6efdf;
 }
+
 .localizacao-mapa iframe {
   display: block;
   width: 100%;
   height: 420px;
   border: 0;
 }
+
 .localizacao-rodape {
   display: flex;
   align-items: center;
@@ -45,8 +64,17 @@
   gap: 18px;
   margin-top: 20px;
 }
-.localizacao-rodape p { color: #6b5545; line-height: 1.8; margin: 0; }
-.localizacao-rodape strong { color: #4b2918; }
+
+.localizacao-rodape p {
+  color: #6b5545;
+  line-height: 1.8;
+  margin: 0;
+}
+
+.localizacao-rodape strong {
+  color: #4b2918;
+}
+
 .localizacao-botao {
   display: inline-flex;
   align-items: center;
@@ -60,103 +88,35 @@
   font-size: 13px;
   transition: background 0.2s ease;
 }
-.localizacao-botao:hover { background: #6b4028; }
 
-/* GALERIA GIRATÓRIA */
-.hero-slider {
-  position: relative;
-  overflow: hidden;
-  isolation: isolate;
-}
-.hero-slider .hero-slide {
-  position: absolute;
-  inset: 0;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity .8s ease, visibility .8s ease;
-  z-index: 0;
-}
-.hero-slider .hero-slide.ativo {
-  opacity: 1;
-  visibility: visible;
-  z-index: 1;
-}
-.hero-slider .hero-slide img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
-}
-.hero-slider .slider-seta {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 3;
-  width: 42px;
-  height: 42px;
-  border: 1px solid rgba(255,255,255,.4);
-  border-radius: 50%;
-  background: rgba(46,26,18,.8);
-  color: white;
-  font-size: 20px;
-  cursor: pointer;
-  transition: background .2s ease;
-}
-.hero-slider .slider-seta:hover {
-  background: #c79c54;
-  color: #2e1a12;
-}
-.hero-slider .slider-anterior { left: 15px; }
-.hero-slider .slider-proxima { right: 15px; }
-.hero-slider .slider-indicadores {
-  position: absolute;
-  bottom: 18px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  z-index: 4;
-}
-.hero-slider .slider-ponto {
-  width: 10px;
-  height: 10px;
-  padding: 0;
-  border: 0;
-  border-radius: 50%;
-  background: rgba(255,255,255,.55);
-  cursor: pointer;
-  transition: background .2s ease, transform .2s ease;
-}
-.hero-slider .slider-ponto.ativo {
-  background: #c79c54;
-  transform: scale(1.2);
+.localizacao-botao:hover {
+  background: #6b4028;
 }
 
 @media (max-width: 600px) {
-  .localizacao { margin: 45px auto; padding: 0 16px; }
-  .localizacao-cabecalho h2 { font-size: 30px; }
-  .localizacao-mapa iframe { height: 320px; }
+  .localizacao {
+    margin: 45px auto;
+    padding: 0 16px;
+  }
+
+  .localizacao-cabecalho h2 {
+    font-size: 30px;
+  }
+
+  .localizacao-mapa iframe {
+    height: 320px;
+  }
+
   .localizacao-rodape {
     align-items: stretch;
     flex-direction: column;
   }
+
   .localizacao-botao {
     width: 100%;
     box-sizing: border-box;
     text-align: center;
   }
-  .hero-slider .slider-seta {
-    width: 34px;
-    height: 34px;
-    font-size: 16px;
-  }
-  .hero-slider .slider-anterior { left: 8px; }
-  .hero-slider .slider-proxima { right: 8px; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .hero-slider .hero-slide { transition: none; }
 }
 
 /* EDITOR */
@@ -175,6 +135,7 @@
   cursor: pointer;
   box-shadow: 0 5px 18px #0005;
 }
+
 #editorPainel {
   display: none;
   position: fixed;
@@ -194,19 +155,34 @@
   box-shadow: 0 8px 35px #0005;
   font: 14px Arial, sans-serif;
 }
-#editorPainel h2 { margin: 0 0 6px; color: #55351f; font-size: 22px; }
-#editorPainel h3 { margin: 0 0 10px; }
-#editorPainel p { font-size: 12px; line-height: 1.5; }
+
+#editorPainel h2 {
+  margin: 0 0 6px;
+  color: #55351f;
+  font-size: 22px;
+}
+
+#editorPainel h3 {
+  margin: 0 0 10px;
+}
+
+#editorPainel p {
+  font-size: 12px;
+  line-height: 1.5;
+}
+
 #editorPainel .subtitulo {
   font-size: 12px;
   color: #76634d;
   margin-bottom: 15px;
 }
+
 #editorPainel .secao {
   border-top: 1px solid #e7d9bd;
   padding-top: 12px;
   margin-top: 12px;
 }
+
 #editorPainel .linha {
   display: flex;
   flex-wrap: wrap;
@@ -214,6 +190,7 @@
   gap: 5px;
   margin-bottom: 7px;
 }
+
 #editorPainel button,
 #editorPainel select,
 #editorPainel input {
@@ -224,27 +201,44 @@
   margin: 4px 0;
   padding: 9px;
 }
+
 #editorPainel button {
   background: #55351f;
   color: #fff5d7;
   border: 0;
   cursor: pointer;
 }
-#editorPainel button:hover { background: #765033; }
-#editorPainel .botaoClaro { background: #e9dcc2; color: #382719; }
+
+#editorPainel button:hover {
+  background: #765033;
+}
+
+#editorPainel .botaoClaro {
+  background: #e9dcc2;
+  color: #382719;
+}
+
 #editorPainel input,
 #editorPainel select {
   border: 1px solid #c9b99a;
   background: white;
   color: #30251b;
 }
+
 #editorPainel input[type="color"] {
   width: 42px;
   height: 32px;
   padding: 2px;
 }
-#editorPainel input[type="number"] { width: 75px; }
-#editorPainel input[type="file"] { width: 100%; }
+
+#editorPainel input[type="number"] {
+  width: 75px;
+}
+
+#editorPainel input[type="file"] {
+  width: 100%;
+}
+
 #editorPainel .status {
   background: #f2eadb;
   border-radius: 7px;
@@ -253,11 +247,13 @@
   margin-top: 8px;
   overflow-wrap: anywhere;
 }
+
 #editorPainel .aviso {
   font-size: 12px;
   line-height: 1.5;
   color: #784b25;
 }
+
 .alvoEditor {
   outline: 3px dashed #bd8a20 !important;
   outline-offset: 3px !important;
@@ -299,27 +295,7 @@
 <a class="btn outline" href="pagina.html?secao=colegio">Conheça o Colégio</a>
 </div>
 </div>
-
-<div class="hero-art hero-slider" aria-label="Galeria de imagens do colégio">
-  <div class="hero-slide ativo">
-    <img src="alunos-1.jpg" 
-  </div>
-  <div class="hero-slide">
-    <img src="alunos-2.jpg"
-  </div>
-  <div class="hero-slide">
-    <img src="alunos-3.jpg" 
-  </div>
-
-  <button class="slider-seta slider-anterior" type="button" aria-label="Imagem anterior">&#10094;</button>
-  <button class="slider-seta slider-proxima" type="button" aria-label="Próxima imagem">&#10095;</button>
-
-  <div class="slider-indicadores">
-    <button class="slider-ponto ativo" type="button" aria-label="Mostrar imagem 1"></button>
-    <button class="slider-ponto" type="button" aria-label="Mostrar imagem 2"></button>
-    <button class="slider-ponto" type="button" aria-label="Mostrar imagem 3"></button>
-  </div>
-</div>
+<div class="hero-art" role="img" aria-label="Alunos do colégio em sala de aula"></div>
 </section>
 
 <div class="quicklinks">
@@ -396,27 +372,61 @@
 </blockquote>
 </section>
 
+<!-- LOCALIZAÇÃO DO COLÉGIO -->
 <section class="localizacao" id="localizacao">
-  <div class="localizacao-cabecalho">
-<p class="eyebrow">VENHA NOS VISITAR</p><h2>Onde <em>estamos</em></h2>
-<p class="localizacao-descricao">Será um prazer receber você e sua família no Colégio Santa Teresinha.</p>
+
+<div class="localizacao-cabecalho">
+<p class="eyebrow">VENHA NOS VISITAR</p>
+<h2>Onde <em>estamos</em></h2>
+<p class="localizacao-descricao">
+Será um prazer receber você e sua família no Colégio Santa Teresinha.
+</p>
 </div>
+
 <div class="localizacao-mapa">
-<iframe src="https://maps.google.com/maps?q=Col%C3%A9gio%20Santa%20Teresinha%20do%20Menino%20Jesus%2C%20Ipatinga%2C%20MG&t=&z=16&ie=UTF8&iwloc=&output=embed" title="Mapa interativo do Colégio Santa Teresinha em Ipatinga" loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade"></iframe>
+<iframe
+src="https://maps.google.com/maps?q=Col%C3%A9gio%20Santa%20Teresinha%20do%20Menino%20Jesus%2C%20Ipatinga%2C%20MG&t=&z=16&ie=UTF8&iwloc=&output=embed"
+title="Mapa interativo do Colégio Santa Teresinha em Ipatinga"
+loading="lazy"
+allowfullscreen
+referrerpolicy="no-referrer-when-downgrade">
+</iframe>
 </div>
+
 <div class="localizacao-rodape">
-<p><strong>Colégio Santa Teresinha do Menino Jesus</strong><br>Ipatinga — MG</p>
-<a class="localizacao-botao" href="https://www.google.com/maps/search/?api=1&query=Col%C3%A9gio+Santa+Teresinha+do+Menino+Jesus%2C+Ipatinga%2C+MG" target="_blank" rel="noopener noreferrer">Ver rota no Google Maps →</a>
+<p>
+<strong>Colégio Santa Teresinha do Menino Jesus</strong><br>
+Ipatinga — MG
+</p>
+
+<a
+class="localizacao-botao"
+href="https://www.google.com/maps/search/?api=1&query=Col%C3%A9gio+Santa+Teresinha+do+Menino+Jesus%2C+Ipatinga%2C+MG"
+target="_blank"
+rel="noopener noreferrer">
+Ver rota no Google Maps →
+</a>
 </div>
+
 </section>
+
 </main>
 
 <footer>
 <a class="brand" href="index.html">
 <img class="school-logo" src="logo-colegio.jpg" alt="Brasão do Colégio Santa Teresinha">
-<span><b>Colégio Santa Teresinha<br>do Menino Jesus</b><small>Educação Clássica e Católica</small></span>
+<span>
+<b>Colégio Santa Teresinha<br>do Menino Jesus</b>
+<small>Educação Clássica e Católica</small>
+</span>
 </a>
-<p>Ipatinga · MG<br>Telefone: (31) 3825-0451<br>© Colégio Santa Teresinha do Menino Jesus</p>
+
+<p>
+Ipatinga · MG<br>
+Telefone: (31) 3825-0451<br>
+© Colégio Santa Teresinha do Menino Jesus
+</p>
+
 <div class="foot-links">
 <a href="pagina.html?secao=colegio">O Colégio</a>
 <a href="pagina.html?secao=ensino">Etapas de Ensino</a>
@@ -424,35 +434,118 @@
 </div>
 </footer>
 
+<!-- BOTÃO DO EDITOR -->
 <button id="editorBtn" type="button">🎨 Editar site</button>
+
 <div id="editorPainel">
-<h2>⚙ Editor do site</h2><div class="subtitulo">Colégio Santa Teresinha do Menino Jesus</div>
-<p class="aviso">As alterações são temporárias e feitas nesta página. Elas não são publicadas automaticamente no GitHub.</p>
+<h2>⚙ Editor do site</h2>
 
-<div class="secao"><strong>🖱️ Seleção de elementos</strong><br>
-<button type="button" id="edSelecionar">Selecionar elemento</button><button type="button" id="edParar" class="botaoClaro">Parar seleção</button><button type="button" id="edDesselecionar" class="botaoClaro">Desselecionar</button><div class="status" id="edStatus">Nenhum elemento selecionado.</div></div>
+<div class="subtitulo">
+Colégio Santa Teresinha do Menino Jesus
+</div>
 
-<div class="secao"><strong>✏️ Textos</strong><br>
-<button type="button" id="edEditarTexto">Editar texto selecionado</button><button type="button" id="edAdicionarTexto">+ Adicionar texto</button><button type="button" id="edAlternarEdicao">Ativar edição de textos</button>
-<div class="linha"><label for="edFonte">Fonte:</label><select id="edFonte">
-<option value="Arial, sans-serif">Arial</option><option value="Georgia, serif">Georgia</option><option value="'Times New Roman', serif">Times New Roman</option><option value="Verdana, sans-serif">Verdana</option><option value="'Trebuchet MS', sans-serif">Trebuchet MS</option><option value="Tahoma, sans-serif">Tahoma</option></select></div>
-<div class="linha"><label for="edTamanhoFonte">Tamanho:</label><input id="edTamanhoFonte" type="number" min="6" max="150" value="20"><button type="button" id="edAplicarTamanhoFonte">Aplicar</button></div>
-<button type="button" id="edNegrito">Negrito</button><button type="button" id="edItalico">Itálico</button></div>
+<p class="aviso">
+As alterações são temporárias e feitas nesta página.
+Elas não são publicadas automaticamente no GitHub.
+</p>
 
-<div class="secao"><strong>🎨 Cores</strong>
-<div class="linha"><label for="edCorTexto">Cor do texto:</label><input type="color" id="edCorTexto" value="#55351f"><button type="button" id="edAplicarCorTexto">Aplicar</button></div>
-<div class="linha"><label for="edCorFundo">Cor de fundo:</label><input type="color" id="edCorFundo" value="#f5d77e"><button type="button" id="edAplicarCorFundo">Aplicar</button></div>
-<label for="edCorPrincipal">Cor principal do site:</label><input type="color" id="edCorPrincipal" value="#55351f"><button type="button" id="edAplicarCorPrincipal">Alterar cor principal</button></div>
+<div class="secao">
+<strong>🖱️ Seleção de elementos</strong><br>
+<button type="button" id="edSelecionar">Selecionar elemento</button>
+<button type="button" id="edParar" class="botaoClaro">Parar seleção</button>
+<button type="button" id="edDesselecionar" class="botaoClaro">Desselecionar</button>
+<div class="status" id="edStatus">Nenhum elemento selecionado.</div>
+</div>
 
-<div class="secao"><strong>🖼️ Imagens</strong><label for="edImagem">Escolher imagem:</label><input type="file" id="edImagem" accept="image/*"><button type="button" id="edAdicionarImagem">Adicionar imagem</button><button type="button" id="edSubstituirImagem">Substituir imagem selecionada</button><button type="button" id="edSelecionarImagem">Selecionar imagem ou banner</button></div>
+<div class="secao">
+<strong>✏️ Textos</strong><br>
+<button type="button" id="edEditarTexto">Editar texto selecionado</button>
+<button type="button" id="edAdicionarTexto">+ Adicionar texto</button>
+<button type="button" id="edAlternarEdicao">Ativar edição de textos</button>
 
-<div class="secao"><strong>↔️ Tamanho e posição</strong><br><button type="button" id="edDiminuir">− Diminuir</button><button type="button" id="edAumentar">+ Aumentar</button><button type="button" id="edMover">Mover elemento</button><p class="aviso">Para mover, clique em “Mover elemento” e arraste o elemento selecionado.</p></div>
+<div class="linha">
+<label for="edFonte">Fonte:</label>
+<select id="edFonte">
+<option value="Arial, sans-serif">Arial</option>
+<option value="Georgia, serif">Georgia</option>
+<option value="'Times New Roman', serif">Times New Roman</option>
+<option value="Verdana, sans-serif">Verdana</option>
+<option value="'Trebuchet MS', sans-serif">Trebuchet MS</option>
+<option value="Tahoma, sans-serif">Tahoma</option>
+</select>
+</div>
 
-<div class="secao"><strong>◻️ Formas</strong><br><button type="button" id="edRetangulo">Retângulo</button><button type="button" id="edCirculo">Círculo</button><button type="button" id="edLinha">Linha</button></div>
+<div class="linha">
+<label for="edTamanhoFonte">Tamanho:</label>
+<input id="edTamanhoFonte" type="number" min="6" max="150" value="20">
+<button type="button" id="edAplicarTamanhoFonte">Aplicar</button>
+</div>
 
-<div class="secao"><strong>↩️ Ações</strong><br><button type="button" id="edDesfazer">Desfazer última ação</button><button type="button" id="edExcluir">Excluir selecionado</button><button type="button" id="edCancelar">Cancelar seleção</button></div>
+<button type="button" id="edNegrito">Negrito</button>
+<button type="button" id="edItalico">Itálico</button>
+</div>
 
-<div class="secao"><strong>💾 Salvar alterações</strong><br><button type="button" id="edSalvar">Salvar neste navegador</button><button type="button" id="edRecarregar">Recarregar página</button><p class="aviso">O salvamento local não publica as alterações para outros visitantes. Para publicar permanentemente, é necessário alterar os arquivos do site e enviá-los ao GitHub.</p></div>
+<div class="secao">
+<strong>🎨 Cores</strong>
+
+<div class="linha">
+<label for="edCorTexto">Cor do texto:</label>
+<input type="color" id="edCorTexto" value="#55351f">
+<button type="button" id="edAplicarCorTexto">Aplicar</button>
+</div>
+
+<div class="linha">
+<label for="edCorFundo">Cor de fundo:</label>
+<input type="color" id="edCorFundo" value="#f5d77e">
+<button type="button" id="edAplicarCorFundo">Aplicar</button>
+</div>
+
+<label for="edCorPrincipal">Cor principal do site:</label>
+<input type="color" id="edCorPrincipal" value="#55351f">
+<button type="button" id="edAplicarCorPrincipal">Alterar cor principal</button>
+</div>
+
+<div class="secao">
+<strong>🖼️ Imagens</strong>
+<label for="edImagem">Escolher imagem:</label>
+<input type="file" id="edImagem" accept="image/*">
+<button type="button" id="edAdicionarImagem">Adicionar imagem</button>
+<button type="button" id="edSubstituirImagem">Substituir imagem selecionada</button>
+<button type="button" id="edSelecionarImagem">Selecionar imagem ou banner</button>
+</div>
+
+<div class="secao">
+<strong>↔️ Tamanho e posição</strong><br>
+<button type="button" id="edDiminuir">− Diminuir</button>
+<button type="button" id="edAumentar">+ Aumentar</button>
+<button type="button" id="edMover">Mover elemento</button>
+<p class="aviso">Para mover, clique em “Mover elemento” e arraste o elemento selecionado.</p>
+</div>
+
+<div class="secao">
+<strong>◻️ Formas</strong><br>
+<button type="button" id="edRetangulo">Retângulo</button>
+<button type="button" id="edCirculo">Círculo</button>
+<button type="button" id="edLinha">Linha</button>
+</div>
+
+<div class="secao">
+<strong>↩️ Ações</strong><br>
+<button type="button" id="edDesfazer">Desfazer última ação</button>
+<button type="button" id="edExcluir">Excluir selecionado</button>
+<button type="button" id="edCancelar">Cancelar seleção</button>
+</div>
+
+<div class="secao">
+<strong>💾 Salvar alterações</strong><br>
+<button type="button" id="edSalvar">Salvar neste navegador</button>
+<button type="button" id="edRecarregar">Recarregar página</button>
+<p class="aviso">
+O salvamento local não publica as alterações para outros visitantes.
+Para publicar permanentemente, é necessário alterar os arquivos do site
+e enviá-los ao GitHub.
+</p>
+</div>
 </div>
 
 <script>
@@ -460,13 +553,24 @@
   const painel = document.getElementById("editorPainel");
   const botaoEditor = document.getElementById("editorBtn");
   const status = document.getElementById("edStatus");
-  let selecionado = null, modoSelecao = "", movendo = false, arraste = null, imagemData = null, edicaoTextosAtiva = false;
+
+  let selecionado = null;
+  let modoSelecao = "";
+  let movendo = false;
+  let arraste = null;
+  let imagemData = null;
+  let edicaoTextosAtiva = false;
+
   const historico = [];
 
   function elementoDoEditor(el) {
-    return !el || el === document.body || el === document.documentElement ||
-      !!el.closest("#editorPainel") || !!el.closest("#editorBtn") ||
-      !!el.closest("script") || !!el.closest("style");
+    return !el ||
+      el === document.body ||
+      el === document.documentElement ||
+      !!el.closest("#editorPainel") ||
+      !!el.closest("#editorBtn") ||
+      !!el.closest("script") ||
+      !!el.closest("style");
   }
 
   function atualizarStatus(mensagem) {
@@ -475,6 +579,7 @@
 
   function salvarHistorico(el) {
     if (!el || !el.isConnected) return;
+
     historico.push({
       elemento: el,
       html: el.innerHTML,
@@ -483,6 +588,7 @@
       pai: el.parentElement,
       proximo: el.nextSibling
     });
+
     if (historico.length > 30) historico.shift();
   }
 
@@ -496,14 +602,22 @@
 
   function selecionarElemento(el) {
     if (elementoDoEditor(el)) return;
-    if (selecionado) selecionado.classList.remove("alvoEditor");
+
+    if (selecionado) {
+      selecionado.classList.remove("alvoEditor");
+    }
+
     selecionado = el;
     selecionado.classList.add("alvoEditor");
+
     atualizarStatus("Selecionado: <" + el.tagName.toLowerCase() + ">");
+
     const tamanho = parseFloat(getComputedStyle(el).fontSize);
+
     if (Number.isFinite(tamanho)) {
       document.getElementById("edTamanhoFonte").value = Math.round(tamanho);
     }
+
     selecionarModoFinalizado();
   }
 
@@ -513,24 +627,35 @@
   }
 
   function limparSelecao() {
-    if (selecionado) selecionado.classList.remove("alvoEditor");
+    if (selecionado) {
+      selecionado.classList.remove("alvoEditor");
+    }
+
     selecionado = null;
     modoSelecao = "";
     movendo = false;
     arraste = null;
+
     atualizarStatus("Nenhum elemento selecionado.");
   }
 
   function criarElemento(tag, texto, estilos) {
     const el = document.createElement(tag);
+
     if (texto) el.textContent = texto;
-    Object.assign(el.style, { boxSizing: "border-box", ...estilos });
+
+    Object.assign(el.style, {
+      boxSizing: "border-box",
+      ...estilos
+    });
+
     el.dataset.editorCriado = "true";
     return el;
   }
 
   botaoEditor.addEventListener("click", function () {
-    painel.style.display = painel.style.display === "block" ? "none" : "block";
+    painel.style.display =
+      painel.style.display === "block" ? "none" : "block";
   });
 
   document.getElementById("edSelecionar").addEventListener("click", function () {
@@ -555,8 +680,10 @@
 
   document.addEventListener("click", function (evento) {
     if (!modoSelecao || elementoDoEditor(evento.target)) return;
+
     evento.preventDefault();
     evento.stopPropagation();
+
     selecionarElemento(evento.target);
     painel.style.display = "block";
   }, true);
@@ -566,22 +693,36 @@
 
   document.getElementById("edEditarTexto").addEventListener("click", function () {
     if (!precisaSelecionar()) return;
+
     salvarHistorico(selecionado);
-    const novoTexto = prompt("Digite o novo texto:", selecionado.innerText || "");
-    if (novoTexto !== null) selecionado.textContent = novoTexto;
+
+    const textoAtual = selecionado.innerText || "";
+    const novoTexto = prompt("Digite o novo texto:", textoAtual);
+
+    if (novoTexto !== null) {
+      selecionado.textContent = novoTexto;
+    }
   });
 
   document.getElementById("edAlternarEdicao").addEventListener("click", function () {
     edicaoTextosAtiva = !edicaoTextosAtiva;
-    document.querySelectorAll("h1,h2,h3,h4,h5,p,a,li,span,small,b,strong,blockquote").forEach(function (el) {
-      if (!elementoDoEditor(el)) el.contentEditable = edicaoTextosAtiva ? "true" : "false";
-    });
-    this.textContent = edicaoTextosAtiva ? "Finalizar edição de textos" : "Ativar edição de textos";
+
+    document.querySelectorAll("h1,h2,h3,h4,h5,p,a,li,span,small,b,strong,blockquote")
+      .forEach(function (el) {
+        if (elementoDoEditor(el)) return;
+        el.contentEditable = edicaoTextosAtiva ? "true" : "false";
+      });
+
+    this.textContent = edicaoTextosAtiva
+      ? "Finalizar edição de textos"
+      : "Ativar edição de textos";
   });
 
   document.getElementById("edAdicionarTexto").addEventListener("click", function () {
     const texto = prompt("Digite o texto que deseja adicionar:");
+
     if (texto === null || !texto.trim()) return;
+
     const el = criarElemento("p", texto, {
       fontFamily: "Arial, sans-serif",
       fontSize: "20px",
@@ -589,6 +730,7 @@
       padding: "8px",
       margin: "8px 0"
     });
+
     document.querySelector("main").appendChild(el);
     selecionarElemento(el);
   });
@@ -601,25 +743,32 @@
 
   document.getElementById("edAplicarTamanhoFonte").addEventListener("click", function () {
     if (!precisaSelecionar()) return;
+
     const tamanho = Number(document.getElementById("edTamanhoFonte").value);
+
     if (!Number.isFinite(tamanho) || tamanho < 6 || tamanho > 150) {
       alert("Escolha um tamanho entre 6 e 150.");
       return;
     }
+
     salvarHistorico(selecionado);
     selecionado.style.fontSize = tamanho + "px";
   });
 
   document.getElementById("edNegrito").addEventListener("click", function () {
     if (!precisaSelecionar()) return;
+
     salvarHistorico(selecionado);
-    selecionado.style.fontWeight = getComputedStyle(selecionado).fontWeight === "700" ? "400" : "700";
+    selecionado.style.fontWeight =
+      getComputedStyle(selecionado).fontWeight === "700" ? "400" : "700";
   });
 
   document.getElementById("edItalico").addEventListener("click", function () {
     if (!precisaSelecionar()) return;
+
     salvarHistorico(selecionado);
-    selecionado.style.fontStyle = getComputedStyle(selecionado).fontStyle === "italic" ? "normal" : "italic";
+    selecionado.style.fontStyle =
+      getComputedStyle(selecionado).fontStyle === "italic" ? "normal" : "italic";
   });
 
   document.getElementById("edAplicarCorTexto").addEventListener("click", function () {
@@ -636,8 +785,10 @@
 
   document.getElementById("edAplicarCorPrincipal").addEventListener("click", function () {
     const cor = document.getElementById("edCorPrincipal").value;
+
     document.documentElement.style.setProperty("--cor-principal", cor);
     document.body.style.setProperty("--cor-principal", cor);
+
     document.querySelectorAll("header, footer, nav").forEach(function (el) {
       salvarHistorico(el);
       el.style.backgroundColor = cor;
@@ -646,22 +797,30 @@
 
   document.getElementById("edImagem").addEventListener("change", function () {
     const arquivo = this.files && this.files[0];
+
     if (!arquivo) {
       imagemData = null;
       return;
     }
+
     if (!arquivo.type.startsWith("image/")) {
       alert("Escolha um arquivo de imagem.");
       this.value = "";
       return;
     }
+
     if (arquivo.size > 5 * 1024 * 1024) {
       alert("Escolha uma imagem menor que 5 MB.");
       this.value = "";
       return;
     }
+
     const leitor = new FileReader();
-    leitor.onload = function () { imagemData = leitor.result; };
+
+    leitor.onload = function () {
+      imagemData = leitor.result;
+    };
+
     leitor.readAsDataURL(arquivo);
   });
 
@@ -670,6 +829,7 @@
       alert("Escolha uma imagem primeiro.");
       return;
     }
+
     const img = criarElemento("img", "", {
       display: "block",
       maxWidth: "100%",
@@ -677,6 +837,7 @@
       height: "auto",
       margin: "10px 0"
     });
+
     img.src = imagemData;
     document.querySelector("main").appendChild(img);
     selecionarElemento(img);
@@ -684,13 +845,17 @@
 
   document.getElementById("edSubstituirImagem").addEventListener("click", function () {
     if (!precisaSelecionar()) return;
+
     if (!imagemData) {
       alert("Escolha uma imagem primeiro.");
       return;
     }
+
     salvarHistorico(selecionado);
-    if (selecionado.tagName === "IMG") selecionado.src = imagemData;
-    else {
+
+    if (selecionado.tagName === "IMG") {
+      selecionado.src = imagemData;
+    } else {
       selecionado.style.backgroundImage = "url('" + imagemData + "')";
       selecionado.style.backgroundSize = "cover";
       selecionado.style.backgroundPosition = "center";
@@ -699,11 +864,15 @@
 
   function redimensionar(fator) {
     if (!precisaSelecionar()) return;
+
     salvarHistorico(selecionado);
-    const r = selecionado.getBoundingClientRect();
-    const largura = parseFloat(selecionado.style.width) || r.width;
-    const altura = parseFloat(selecionado.style.height) || r.height;
+
+    const retangulo = selecionado.getBoundingClientRect();
+    const largura = parseFloat(selecionado.style.width) || retangulo.width;
+    const altura = parseFloat(selecionado.style.height) || retangulo.height;
+
     selecionado.style.width = Math.max(10, largura * fator) + "px";
+
     if (selecionado.tagName !== "IMG") {
       selecionado.style.height = Math.max(10, altura * fator) + "px";
     }
@@ -719,6 +888,7 @@
 
   document.getElementById("edMover").addEventListener("click", function () {
     if (!precisaSelecionar()) return;
+
     movendo = true;
     modoSelecao = "";
     atualizarStatus("Arraste o elemento selecionado para movê-lo.");
@@ -727,25 +897,34 @@
   document.addEventListener("mousedown", function (evento) {
     if (!movendo || !selecionado || elementoDoEditor(evento.target)) return;
     if (evento.target !== selecionado && !selecionado.contains(evento.target)) return;
+
     evento.preventDefault();
     salvarHistorico(selecionado);
-    const r = selecionado.getBoundingClientRect();
+
+    const retangulo = selecionado.getBoundingClientRect();
+
     selecionado.style.position = "fixed";
-    selecionado.style.left = r.left + "px";
-    selecionado.style.top = r.top + "px";
+    selecionado.style.left = retangulo.left + "px";
+    selecionado.style.top = retangulo.top + "px";
     selecionado.style.margin = "0";
     selecionado.style.zIndex = "9990";
+
     arraste = {
       x: evento.clientX,
       y: evento.clientY,
-      left: r.left,
-      top: r.top
+      esquerda: retangulo.left,
+      topo: retangulo.top
     };
   });
-    document.addEventListener("mousemove", function (evento) {
+
+  document.addEventListener("mousemove", function (evento) {
     if (!arraste || !selecionado) return;
-    selecionado.style.left = (arraste.esquerda + evento.clientX - arraste.x) + "px";
-    selecionado.style.top = (arraste.topo + evento.clientY - arraste.y) + "px";
+
+    selecionado.style.left =
+      (arraste.esquerda + evento.clientX - arraste.x) + "px";
+
+    selecionado.style.top =
+      (arraste.topo + evento.clientY - arraste.y) + "px";
   });
 
   document.addEventListener("mouseup", function () {
@@ -758,6 +937,7 @@
 
   function adicionarForma(tipo) {
     let el;
+
     if (tipo === "retangulo") {
       el = criarElemento("div", "", {
         width: "180px",
@@ -799,10 +979,13 @@
   });
 
   document.getElementById("edExcluir").addEventListener("click", function () {
-    if (!precisaSelecionar() || !confirm("Deseja excluir o elemento selecionado?")) return;
+    if (!precisaSelecionar()) return;
+    if (!confirm("Deseja excluir o elemento selecionado?")) return;
+
     salvarHistorico(selecionado);
     selecionado.remove();
     selecionado = null;
+
     atualizarStatus("Elemento removido.");
   });
 
@@ -901,9 +1084,15 @@
 
     try {
       localStorage.setItem("edicoesSiteDados", JSON.stringify(dados));
-      alert("Alterações guardadas neste navegador. Isso não publica as mudanças para outras pessoas.");
+      alert(
+        "Alterações guardadas neste navegador. " +
+        "Isso não publica as mudanças para outras pessoas."
+      );
     } catch (erro) {
-      alert("Não foi possível guardar todas as alterações. Imagens grandes podem ultrapassar o limite do navegador.");
+      alert(
+        "Não foi possível guardar todas as alterações. " +
+        "Imagens grandes podem ultrapassar o limite do navegador."
+      );
     }
   });
 
@@ -916,68 +1105,7 @@
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<script>
-/* ROTAÇÃO AUTOMÁTICA DAS 3 IMAGENS PRINCIPAIS */
-(function () {
-  const slider = document.querySelector(".hero-slider");
-  if (!slider) return;
-
-  const slides = Array.from(slider.querySelectorAll(".hero-slide"));
-  const pontos = Array.from(slider.querySelectorAll(".slider-ponto"));
-  const anterior = slider.querySelector(".slider-anterior");
-  const proxima = slider.querySelector(".slider-proxima");
-
-  let atual = 0;
-  let temporizador;
-
-  function mostrarImagem(indice) {
-    atual = (indice + slides.length) % slides.length;
-
-    slides.forEach((slide, i) => {
-      slide.classList.toggle("ativo", i === atual);
-    });
-
-    pontos.forEach((ponto, i) => {
-      ponto.classList.toggle("ativo", i === atual);
-      ponto.setAttribute("aria-current", i === atual ? "true" : "false");
-    });
-  }
-
-  function iniciarRotacao() {
-    clearInterval(temporizador);
-    temporizador = setInterval(function () {
-      mostrarImagem(atual + 1);
-    }, 5000);
-  }
-
-  anterior.addEventListener("click", function () {
-    mostrarImagem(atual - 1);
-    iniciarRotacao();
-  });
-
-  proxima.addEventListener("click", function () {
-    mostrarImagem(atual + 1);
-    iniciarRotacao();
-  });
-
-  pontos.forEach(function (ponto, indice) {
-    ponto.addEventListener("click", function () {
-      mostrarImagem(indice);
-      iniciarRotacao();
-    });
-  });
-
-  slider.addEventListener("mouseenter", function () {
-    clearInterval(temporizador);
-  });
-
-  slider.addEventListener("mouseleave", iniciarRotacao);
-
-  mostrarImagem(0);
-  iniciarRotacao();
-})();
-</script>
+<script src="editor.js"></script>
 
 </body>
 </html>
