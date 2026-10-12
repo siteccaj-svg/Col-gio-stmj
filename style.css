@@ -1192,3 +1192,85 @@ body.inner .top .brand small {
     font-size: 12px;
   }
 }
+
+
+/* SEÇÃO EXTRA: PILARES DA EDUCAÇÃO */
+.pilares {
+  padding: 76px 7% 82px;
+  background: #f3ead8;
+}
+.pilares-cabecalho {
+  max-width: 720px;
+  margin: 0 auto 34px;
+  text-align: center;
+}
+.pilares-cabecalho .eyebrow {
+  color: #9b7124;
+}
+.pilares-cabecalho h2 {
+  margin: 0 0 16px;
+  color: #432718;
+  font: 500 clamp(30px, 3.5vw, 42px)/1.15 'Playfair Display', serif;
+}
+.pilares-cabecalho h2 em {
+  color: #a9772c;
+  font-style: normal;
+}
+.pilares-cabecalho > p:last-child {
+  margin: 0 auto;
+  max-width: 570px;
+  color: #715842;
+  font-size: 14px;
+  line-height: 1.8;
+}
+.pilares-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+  max-width: 1120px;
+  margin: 0 auto;
+}
+.pilar {
+  padding: 30px 26px 32px;
+  background: #fffaf0;
+  border: 1px solid #e2cfad;
+  border-radius: 7px;
+  box-shadow: 0 8px 22px rgba(75, 41, 24, .05);
+}
+.pilar-icone {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  margin-bottom: 19px;
+  border: 1px solid #d5b66e;
+  border-radius: 50%;
+  color: #9b7124;
+  font-size: 21px;
+}
+.pilar h3 {
+  margin: 0 0 12px;
+  color: #4b2918;
+  font: 500 22px/1.25 'Playfair Display', serif;
+}
+.pilar p {
+  margin: 0;
+  color: #79634c;
+  font-size: 13px;
+  line-height: 1.8;
+}
+@media (max-width: 760px) {
+  .pilares {
+    padding: 54px 6% 58px;
+  }
+  .pilares-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+  .pilar {
+    padding: 24px 22px;
+  }
+  .pilares-cabecalho h2 {
+    font-size: 32px;
+  }
+}
