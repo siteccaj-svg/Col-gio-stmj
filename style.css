@@ -1113,3 +1113,21 @@ body.home .top nav a:hover {
   outline: none !important;
   box-shadow: none !important;
 }
+
+
+/* AJUSTE FINO DO TEXTO PRINCIPAL NO CELULAR */
+@media (max-width: 760px) {
+  body.home .hero h1 {
+    font-size: clamp(38px, 8.3vw, 48px) !important;
+    margin-bottom: 12px;
+  }
+
+  body.home .hero-copy > p:not(.eyebrow) {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
+  body.home .actions {
+    margin-top: 16px;
+  }
+}
