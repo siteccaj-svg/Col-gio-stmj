@@ -7,41 +7,6 @@
 <link rel="stylesheet" href="style.css">
 
 <style>
-/* IMAGENS ROTATÓRIAS DA PÁGINA INICIAL */
-.hero-art .hero-slide {
-  position: absolute;
-  inset: 0;
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
-  opacity: 0;
-  transition: opacity 1s ease-in-out;
-  z-index: 1;
-}
-
-.hero-art .hero-slide.active {
-  opacity: 1;
-}
-
-.hero-art .hero-slide.logo-slide {
-  object-fit: contain;
-  padding: 35px;
-  background: #321d12;
-}
-
-@media (max-width: 760px) {
-  body.home .hero-art {
-    position: relative;
-    overflow: hidden;
-  }
-
-  body.home .hero-art .hero-slide.logo-slide {
-    padding: 24px;
-  }
-}
-
 /* MAPA E LOCALIZAÇÃO */
 .localizacao {
   max-width: 1100px;
@@ -330,10 +295,7 @@
 <a class="btn outline" href="pagina.html?secao=colegio">Conheça o Colégio</a>
 </div>
 </div>
-<div class="hero-art" aria-label="Imagens do Colégio Santa Teresinha">
-<img class="hero-slide active" src="hero-referencia.jpg" alt="Alunos do colégio em sala de aula">
-<img class="hero-slide logo-slide" src="logo-colegio.jpg" alt="Brasão do Colégio Santa Teresinha">
-</div>
+<div class="hero-art" role="img" aria-label="Alunos do colégio em sala de aula"></div>
 </section>
 
 <div class="quicklinks">
@@ -1139,20 +1101,6 @@ e enviá-los ao GitHub.
       location.reload();
     }
   });
-})();
-</script>
-
-<script>
-/* Alterna automaticamente entre a foto dos alunos e o brasão */
-(function () {
-  const slides = document.querySelectorAll(".hero-art .hero-slide");
-  if (slides.length < 2) return;
-  let atual = 0;
-  window.setInterval(function () {
-    slides[atual].classList.remove("active");
-    atual = (atual + 1) % slides.length;
-    slides[atual].classList.add("active");
-  }, 5000);
 })();
 </script>
 
