@@ -28,3 +28,13 @@ Ainda não há registros nesta página. As alterações futuras devem ser docume
 - **Verificações realizadas:** Conferidos os arquivos e âncoras antes da alteração; a implementação foi inserida nas áreas previstas e foi adicionada regra para preferência por movimento reduzido.
 - **Limitações ou testes não realizados:** Não foi possível executar teste visual no navegador nem confirmar a renderização ao vivo nesta operação.
 - **Commit do GitHub:** index.html: d550bc6474286735650610f94e05f6876cbfc6f0; style.css: 81d01f6df8c8a3ab1f81f4da33172bef7b22ed66
+
+
+## Reversão: destaques ao rolar a página
+
+- **Data:** 2026-10-12
+- **Pedido autorizado:** Remover a seção de oito caixas informativas adicionada anteriormente, pois o usuário decidiu fazê-la manualmente.
+- **Arquivos alterados:** `index.html`, `style.css`, este histórico.
+- **Mudanças exatas:** Removida somente a seção `destaques-revelados`, o script que animava as caixas e o bloco CSS correspondente. Restaurada a referência de cache de `style.css` para `v=20261012-2`. Nenhuma outra seção, menu ou arquivo do site foi intencionalmente alterado.
+- **Verificações realizadas:** Confirmado que os marcadores específicos existiam antes da remoção e que os limites da seção e do script foram encontrados.
+- **Limitações ou testes não realizados:** Não foi executado teste visual no navegador.
