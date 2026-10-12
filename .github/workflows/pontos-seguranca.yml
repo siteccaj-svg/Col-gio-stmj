@@ -1,0 +1,33 @@
+name: Pontos de segurança do site
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: pontos-seguranca
+  cancel-in-progress: false
+
+jobs:
+  criar-ponto:
+    name: Guardar versão recuperável
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar histórico completo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Criar ponto de segurança
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          TAG="seguro-$(date -u +%Y%m%d-%H%M%S)-${GITHUB_SHA:0:7}-run${GITHUB_RUN_ID}"
+          git tag -a "$TAG" "$GITHUB_SHA" -m "Ponto de segurança automático"
+          git push origin "$TAG"
+          echo "Ponto de segurança criado: $TAG"
+          echo "Commit guardado: $GITHUB_SHA"
