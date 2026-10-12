@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Colégio Santa Teresinha do Menino Jesus</title>
-<link rel="stylesheet" href="style.css?v=20261012-2">
+<link rel="stylesheet" href="style.css?v=20261012-3">
 
 <style>
 /* MAPA E LOCALIZAÇÃO */
@@ -323,6 +323,41 @@
 </blockquote>
 </section>
 
+
+
+<section class="destaques-revelados" aria-labelledby="destaques-revelados-titulo">
+  <div class="destaques-revelados-cabecalho">
+    <p class="eyebrow">NOSSA COMUNIDADE</p>
+    <h2 id="destaques-revelados-titulo">Uma formação que vai <em>além da sala de aula</em></h2>
+    <p>Conheça alguns dos valores e experiências que fazem parte da caminhada educativa.</p>
+  </div>
+  <div class="destaques-revelados-lista">
+    <article class="destaque-revelado lado-esquerdo">
+      <span class="destaque-revelado-numero">01</span><div><p class="destaque-revelado-etiqueta">APRENDIZAGEM</p><h3>Curiosidade que transforma</h3><p>Estimular perguntas, descobertas e o gosto pelo conhecimento ajuda cada aluno a desenvolver suas capacidades.</p></div>
+    </article>
+    <article class="destaque-revelado lado-direito">
+      <span class="destaque-revelado-numero">02</span><div><p class="destaque-revelado-etiqueta">FÉ E VALORES</p><h3>Aprender a fazer o bem</h3><p>A inspiração cristã convida à prática da solidariedade, da responsabilidade e do cuidado com o próximo.</p></div>
+    </article>
+    <article class="destaque-revelado lado-esquerdo">
+      <span class="destaque-revelado-numero">03</span><div><p class="destaque-revelado-etiqueta">VIDA ESCOLAR</p><h3>Descobrir novos talentos</h3><p>As experiências escolares podem abrir caminhos para reconhecer interesses, habilidades e novas possibilidades.</p></div>
+    </article>
+    <article class="destaque-revelado lado-direito">
+      <span class="destaque-revelado-numero">04</span><div><p class="destaque-revelado-etiqueta">CONVIVÊNCIA</p><h3>Respeito em cada encontro</h3><p>O dia a dia na escola é uma oportunidade de praticar a escuta, a gentileza e a cooperação.</p></div>
+    </article>
+    <article class="destaque-revelado lado-esquerdo">
+      <span class="destaque-revelado-numero">05</span><div><p class="destaque-revelado-etiqueta">DESENVOLVIMENTO</p><h3>Autonomia para crescer</h3><p>Com orientação e incentivo, os alunos podem fortalecer a confiança, a organização e os hábitos de estudo.</p></div>
+    </article>
+    <article class="destaque-revelado lado-direito">
+      <span class="destaque-revelado-numero">06</span><div><p class="destaque-revelado-etiqueta">PARCERIA</p><h3>Família e escola juntas</h3><p>O diálogo entre a família e a equipe escolar contribui para acompanhar a aprendizagem e o desenvolvimento.</p></div>
+    </article>
+    <article class="destaque-revelado lado-esquerdo">
+      <span class="destaque-revelado-numero">07</span><div><p class="destaque-revelado-etiqueta">FORMAÇÃO INTEGRAL</p><h3>Conhecimento com propósito</h3><p>Formação acadêmica e valores humanos caminham juntos na preparação para os desafios da vida.</p></div>
+    </article>
+    <article class="destaque-revelado lado-direito">
+      <span class="destaque-revelado-numero">08</span><div><p class="destaque-revelado-etiqueta">COMUNIDADE</p><h3>Pequenas atitudes, grandes gestos</h3><p>Respeito, generosidade e compromisso ajudam a construir uma comunidade escolar acolhedora.</p></div>
+    </article>
+  </div>
+</section>
 
 <section class="pilares">
   <div class="pilares-cabecalho">
@@ -1251,5 +1286,25 @@ e enviá-los ao GitHub.
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="editor.js"></script>
 
+
+<script>
+(function () {
+  const itens = document.querySelectorAll(".destaque-revelado");
+  if (!itens.length) return;
+  if (!("IntersectionObserver" in window)) {
+    itens.forEach(item => item.classList.add("visivel"));
+    return;
+  }
+  const observador = new IntersectionObserver((entradas, observadorAtual) => {
+    entradas.forEach(entrada => {
+      if (entrada.isIntersecting) {
+        entrada.target.classList.add("visivel");
+        observadorAtual.unobserve(entrada.target);
+      }
+    });
+  }, { threshold: 0.16 });
+  itens.forEach(item => observador.observe(item));
+})();
+</script>
 </body>
 </html>
