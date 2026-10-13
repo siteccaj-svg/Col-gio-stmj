@@ -1404,3 +1404,251 @@ body.inner .inner-hero {
     padding-bottom: 22px;
   }
 }
+
+
+/* ACESSO AO CALENDÁRIO ESCOLAR NA PARTE FINAL DA PÁGINA INICIAL */
+.calendario-acesso {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 22px;
+  margin: 34px 0 0;
+  padding: 25px 28px;
+  border: 1px solid #dfc89f;
+  border-radius: 10px;
+  background: linear-gradient(110deg, #fffaf0, #f4e8d2);
+}
+.calendario-acesso-icone {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  color: #8a6128;
+  border: 1px solid #d8b977;
+  background: #fffdf8;
+  font-size: 30px;
+}
+.calendario-acesso-texto .eyebrow {
+  margin: 0 0 5px;
+  color: #98702d;
+  font-size: 10px;
+  letter-spacing: 1.7px;
+  font-weight: 700;
+}
+.calendario-acesso-texto h3 {
+  margin: 0 0 7px;
+  color: #4b2918;
+  font: 500 25px/1.2 'Playfair Display', Georgia, serif;
+}
+.calendario-acesso-texto h3 em { color: #a77a35; font-style: normal; }
+.calendario-acesso-texto p:last-child {
+  margin: 0;
+  color: #715842;
+  font-size: 13px;
+  line-height: 1.7;
+}
+.calendario-acesso-botao {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 46px;
+  padding: 12px 18px;
+  border-radius: 5px;
+  background: #4b2918;
+  color: #fff5df;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 700;
+  transition: background .2s ease, transform .2s ease;
+}
+.calendario-acesso-botao:hover {
+  background: #694329;
+  transform: translateY(-2px);
+}
+
+/* PÁGINA DO CALENDÁRIO ESCOLAR */
+.calendario-pagina {
+  max-width: 1160px;
+  margin: 0 auto;
+  padding: 54px 24px 76px;
+}
+.calendario-intro {
+  max-width: 760px;
+  margin: 0 auto 32px;
+  text-align: center;
+}
+.calendario-intro .eyebrow { color: #98702d; }
+.calendario-intro h1 {
+  margin: 8px 0 14px;
+  color: #4b2918;
+  font: 500 clamp(34px, 4vw, 48px)/1.12 'Playfair Display', Georgia, serif;
+}
+.calendario-intro h1 em { color: #a77a35; font-style: normal; }
+.calendario-intro p {
+  color: #715842;
+  font-size: 14px;
+  line-height: 1.8;
+}
+.calendario-aviso {
+  margin: 0 auto 30px;
+  padding: 17px 20px;
+  max-width: 920px;
+  border-left: 4px solid #c79c54;
+  border-radius: 5px;
+  background: #f6efdf;
+  color: #5b402d;
+  font-size: 13px;
+  line-height: 1.75;
+}
+.calendario-controles {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  flex-wrap: wrap;
+  max-width: 1040px;
+  margin: 0 auto 22px;
+}
+.calendario-controles label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #4b2918;
+  font-size: 14px;
+  font-weight: 700;
+}
+.calendario-controles select {
+  min-height: 44px;
+  padding: 8px 35px 8px 12px;
+  border: 1px solid #d8c29d;
+  border-radius: 5px;
+  color: #4b2918;
+  background: #fffdf8;
+  font: inherit;
+}
+.calendario-pdf {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 10px 16px;
+  border: 1px solid #d8c29d;
+  border-radius: 5px;
+  color: #6e6253;
+  background: #eee7db;
+  font-size: 12px;
+  font-weight: 700;
+  text-align: center;
+  cursor: not-allowed;
+}
+.calendario-meses {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  max-width: 1040px;
+  margin: 0 auto;
+}
+.calendario-mes {
+  padding: 17px 15px 15px;
+  border: 1px solid #e4d5bc;
+  border-radius: 7px;
+  background: #fffdf8;
+}
+.calendario-mes h2 {
+  margin: 0 0 13px;
+  color: #4b2918;
+  font: 500 20px 'Playfair Display', Georgia, serif;
+  text-align: center;
+}
+.calendario-dias, .calendario-datas {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 4px;
+  text-align: center;
+}
+.calendario-dias {
+  margin-bottom: 6px;
+  color: #92764e;
+  font-size: 10px;
+  font-weight: 700;
+}
+.calendario-data {
+  display: grid;
+  place-items: center;
+  min-height: 29px;
+  border-radius: 4px;
+  color: #4f4033;
+  font-size: 12px;
+}
+.calendario-data.vazio { visibility: hidden; }
+.calendario-eventos {
+  max-width: 1040px;
+  margin: 34px auto 0;
+}
+.calendario-eventos h2 {
+  margin: 0 0 14px;
+  color: #4b2918;
+  font: 500 28px 'Playfair Display', Georgia, serif;
+}
+.calendario-eventos-intro {
+  color: #715842;
+  font-size: 13px;
+  line-height: 1.8;
+}
+.calendario-eventos-lista {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 18px;
+}
+.calendario-evento-mes {
+  padding: 15px 16px;
+  border: 1px solid #e4d5bc;
+  border-radius: 6px;
+  background: #fffaf0;
+}
+.calendario-evento-mes h3 {
+  margin: 0 0 6px;
+  color: #68452c;
+  font: 500 17px 'Playfair Display', Georgia, serif;
+}
+.calendario-evento-mes p {
+  margin: 0;
+  color: #79634c;
+  font-size: 12px;
+  line-height: 1.7;
+}
+.calendario-voltar {
+  display: inline-flex;
+  margin-top: 30px;
+  color: #714b2b;
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+}
+.calendario-voltar:hover { text-decoration: underline; }
+
+@media (max-width: 760px) {
+  .calendario-acesso {
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 14px;
+    padding: 20px 17px;
+  }
+  .calendario-acesso-icone { width: 46px; height: 46px; font-size: 25px; }
+  .calendario-acesso-texto h3 { font-size: 22px; }
+  .calendario-acesso-botao { grid-column: 1 / -1; width: 100%; }
+  .calendario-pagina { padding: 38px 16px 55px; }
+  .calendario-meses { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .calendario-mes { padding: 14px 9px; }
+  .calendario-mes h2 { font-size: 17px; }
+  .calendario-data { min-height: 27px; font-size: 11px; }
+  .calendario-eventos-lista { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 420px) {
+  .calendario-meses, .calendario-eventos-lista { grid-template-columns: 1fr; }
+  .calendario-controles { align-items: stretch; }
+  .calendario-controles label { justify-content: space-between; }
+  .calendario-controles select { max-width: 150px; }
+  .calendario-pdf { width: 100%; }
+}
