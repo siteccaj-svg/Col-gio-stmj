@@ -1297,5 +1297,40 @@ e enviá-los ao GitHub.
 
   
 
+```html
+<!-- PASSO 3 — ANIMAÇÃO DAS CAIXAS INFORMATIVAS -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const caixas = document.querySelectorAll(
+    ".destaques-informativos .destaque"
+  );
+
+  if (!caixas.length) return;
+
+  if (!("IntersectionObserver" in window)) {
+    caixas.forEach(function (caixa) {
+      caixa.classList.add("visivel");
+    });
+    return;
+  }
+
+  const observador = new IntersectionObserver(function (entradas) {
+    entradas.forEach(function (entrada) {
+      if (entrada.isIntersecting) {
+        entrada.target.classList.add("visivel");
+        observador.unobserve(entrada.target);
+      }
+    });
+  }, {
+    threshold: 0.15
+  });
+
+  caixas.forEach(function (caixa, indice) {
+    caixa.style.transitionDelay = (indice % 2) * 150 + "ms";
+    observador.observe(caixa);
+  });
+});
+</script>
+
 </body>
 </html>
