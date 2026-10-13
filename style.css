@@ -1652,28 +1652,3 @@ body.inner .inner-hero {
   .calendario-controles select { max-width: 150px; }
   .calendario-pdf { width: 100%; }
 }
-```css
-/* AUMENTAR A LARGURA DO CONTEÚDO DO SITE */
-main {
-  width: 100%;
-  max-width: 1500px;
-  margin-left: auto;
-  margin-right: auto;
-  box-sizing: border-box;
-}
-
-/* APROVEITAR MELHOR A TELA EM COMPUTADORES */
-@media (min-width: 1200px) {
-  main {
-    padding-left: 40px;
-    padding-right: 40px;
-  }
-}
-
-/* ADAPTAÇÃO PARA CELULARES */
-@media (max-width: 600px) {
-  main {
-    padding-left: 16px;
-    padding-right: 16px;
-  }
-}
