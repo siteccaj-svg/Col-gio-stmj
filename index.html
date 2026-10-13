@@ -556,6 +556,41 @@ Ver rota no Google Maps →
 
 </main>
 
+
+<!-- PASSO 1: GALERIA DE FOTOS -->
+<section class="recurso-escolar recurso-galeria" id="galeria-colegio"><div class="recurso-escolar__container">
+<header class="recurso-escolar__header"><span class="recurso-escolar__eyebrow">NOSSO DIA A DIA</span><h2>Conheça o nosso colégio</h2><p>Um espaço para compartilhar a estrutura, os projetos e os momentos da comunidade escolar.</p></header>
+<div class="galeria-escolar__grid"><article class="galeria-escolar__item"><span aria-hidden="true">▧</span><h3>Nossa estrutura</h3><p>Fotografias oficiais serão adicionadas aqui.</p></article><article class="galeria-escolar__item"><span aria-hidden="true">✦</span><h3>Aprendizagem</h3><p>Registros autorizados de atividades pedagógicas.</p></article><article class="galeria-escolar__item"><span aria-hidden="true">◎</span><h3>Vida escolar</h3><p>Eventos e momentos da nossa comunidade.</p></article></div>
+<p class="recurso-escolar__note">As imagens serão publicadas após serem adicionadas à pasta <code>assets/imagens/galeria/</code> e conferidas pela escola.</p></div></section>
+
+<!-- PASSO 2: DEPOIMENTOS -->
+<section class="recurso-escolar recurso-depoimentos" id="depoimentos-comunidade"><div class="recurso-escolar__container">
+<header class="recurso-escolar__header"><span class="recurso-escolar__eyebrow">ESCOLA E FAMÍLIA</span><h2>Uma comunidade que cresce unida</h2><p>A parceria entre a escola e as famílias faz parte da formação dos nossos alunos.</p></header>
+<div class="depoimento-escolar__placeholder"><span aria-hidden="true">“</span><p>Este espaço será atualizado com depoimentos reais, publicados com autorização dos participantes.</p><small>Depoimentos em preparação</small></div></div></section>
+
+<!-- PASSO 3: CALENDÁRIO ESCOLAR -->
+<section class="recurso-escolar recurso-calendario" id="calendario-escolar"><div class="recurso-escolar__container">
+<header class="recurso-escolar__header"><span class="recurso-escolar__eyebrow">PROGRAME-SE</span><h2>Calendário escolar</h2><p>Consulte aqui as datas importantes da comunidade escolar.</p></header>
+<div class="calendario-escolar__aviso"><span aria-hidden="true">▦</span><div><h3>Calendário oficial em preparação</h3><p>As datas serão inseridas após confirmação pelo colégio. Até lá, acompanhe os comunicados oficiais da escola.</p></div></div></div></section>
+
+<!-- PASSO 4: DOCUMENTOS ESCOLARES -->
+<section class="recurso-escolar recurso-documentos" id="documentos-escolares"><div class="recurso-escolar__container">
+<header class="recurso-escolar__header"><span class="recurso-escolar__eyebrow">ÁREA DA FAMÍLIA</span><h2>Documentos escolares</h2><p>Um espaço para reunir listas, comunicados e orientações oficiais.</p></header>
+<div class="documentos-escolares__grid"><article class="documento-escolar"><span aria-hidden="true">▤</span><h3>Listas de materiais</h3><p>As listas oficiais serão disponibilizadas quando forem fornecidas pela escola.</p><span class="documento-escolar__status">Em preparação</span></article><article class="documento-escolar"><span aria-hidden="true">✉</span><h3>Comunicados</h3><p>Os comunicados oficiais serão reunidos neste espaço.</p><span class="documento-escolar__status">Em preparação</span></article><article class="documento-escolar"><span aria-hidden="true">▧</span><h3>Orientações escolares</h3><p>Documentos e orientações institucionais serão publicados aqui.</p><span class="documento-escolar__status">Em preparação</span></article></div>
+<p class="recurso-escolar__note">Nenhum PDF fictício foi criado. Adicione apenas documentos oficiais autorizados à pasta <code>documentos/</code>.</p></div></section>
+
+<!-- PASSO 5: FORMULÁRIO DE ATENDIMENTO -->
+<section class="recurso-escolar recurso-atendimento" id="atendimento-online"><div class="recurso-escolar__container recurso-escolar__form-layout">
+<header class="recurso-escolar__header recurso-escolar__header--left"><span class="recurso-escolar__eyebrow">FALE CONOSCO</span><h2>Como podemos ajudar?</h2><p>Preencha a mensagem e continue pelo WhatsApp para revisar e encaminhar o contato ao colégio.</p><p class="recurso-escolar__note">O site não armazena os dados deste formulário. Você poderá revisar a mensagem antes de enviá-la pelo WhatsApp.</p></header>
+<form class="form-escolar" id="formAtendimentoEscolar"><div class="form-escolar__campo"><label for="atendimento-nome">Nome</label><input id="atendimento-nome" name="nome" autocomplete="name" maxlength="100" required></div><div class="form-escolar__campo"><label for="atendimento-email">E-mail (opcional)</label><input id="atendimento-email" name="email" type="email" autocomplete="email" maxlength="150"></div><div class="form-escolar__campo"><label for="atendimento-assunto">Assunto</label><select id="atendimento-assunto" name="assunto" required><option value="">Selecione um assunto</option><option>Matrículas</option><option>Etapas de ensino</option><option>Atendimento escolar</option><option>Informações gerais</option><option>Outro assunto</option></select></div><div class="form-escolar__campo"><label for="atendimento-mensagem">Mensagem</label><textarea id="atendimento-mensagem" name="mensagem" rows="5" maxlength="2000" required></textarea></div><button class="form-escolar__botao" type="submit">Continuar pelo WhatsApp</button><p class="form-escolar__status" id="atendimento-status" role="status" aria-live="polite"></p></form>
+</div></section>
+
+<!-- PASSO 6: SOLICITAÇÃO DE VISITA -->
+<section class="recurso-escolar recurso-visita" id="solicitar-visita"><div class="recurso-escolar__container recurso-escolar__form-layout">
+<header class="recurso-escolar__header recurso-escolar__header--left"><span class="recurso-escolar__eyebrow">VENHA NOS CONHECER</span><h2>Solicite uma visita</h2><p>Informe a data e o período desejados para preparar uma solicitação à equipe do colégio.</p><p class="recurso-escolar__note">A solicitação não confirma a visita automaticamente. A equipe deverá confirmar a disponibilidade.</p></header>
+<form class="form-escolar" id="formVisitaEscolar"><div class="form-escolar__campo"><label for="visita-nome">Nome</label><input id="visita-nome" name="nome" autocomplete="name" maxlength="100" required></div><div class="form-escolar__campo"><label for="visita-telefone">Telefone para contato</label><input id="visita-telefone" name="telefone" type="tel" autocomplete="tel" maxlength="30" required></div><div class="form-escolar__campo"><label for="visita-data">Data desejada</label><input id="visita-data" name="data" type="date" required></div><div class="form-escolar__campo"><label for="visita-periodo">Período preferido</label><select id="visita-periodo" name="periodo" required><option value="">Selecione</option><option>Manhã</option><option>Tarde</option></select></div><div class="form-escolar__campo"><label for="visita-etapa">Etapa de interesse</label><select id="visita-etapa" name="etapa" required><option value="">Selecione</option><option>Educação Infantil</option><option>Ensino Fundamental</option><option>Ensino Médio</option><option>Informações gerais</option></select></div><button class="form-escolar__botao" type="submit">Preparar solicitação</button><p class="form-escolar__status" id="visita-status" role="status" aria-live="polite"></p></form>
+</div></section>
+
 <footer>
 <a class="brand" href="index.html">
 <img class="school-logo" src="logo-colegio.jpg" alt="Brasão do Colégio Santa Teresinha">
@@ -1257,5 +1292,6 @@ e enviá-los ao GitHub.
 
 
 
+<script src="recursos-escolares.js"></script>
 </body>
 </html>
