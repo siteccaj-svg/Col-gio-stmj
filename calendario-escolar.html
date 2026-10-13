@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Consulte o calendário escolar do Colégio Santa Teresinha do Menino Jesus.">
+<title>Calendário Escolar | Colégio Santa Teresinha</title>
+<link rel="stylesheet" href="style.css?v=20261013-calendario">
+</head>
+<body class="inner">
+<header class="top">
+  <a class="brand" href="index.html">
+    <img class="school-logo" src="logo-colegio.jpg" alt="Brasão do Colégio Santa Teresinha">
+    <span><b>Colégio Santa Teresinha<br>do Menino Jesus</b><small>Educação Clássica e Católica</small></span>
+  </a>
+  <nav aria-label="Navegação principal">
+    <a href="index.html">Página inicial</a>
+    <a href="index.html#localizacao">Localização</a>
+    <a href="pagina.html?secao=contato">Fale Conosco</a>
+  </nav>
+</header>
+
+<main class="calendario-pagina">
+  <section class="calendario-intro">
+    <p class="eyebrow">PLANEJAMENTO ESCOLAR</p>
+    <h1>Calendário <em>escolar</em></h1>
+    <p>Acompanhe os meses do ano e consulte aqui as datas importantes da comunidade escolar.</p>
+  </section>
+
+  <div class="calendario-aviso" role="status">
+    <strong>Importante:</strong> as datas de início e término das aulas, feriados escolares, recessos, reuniões e eventos dependem da divulgação oficial do colégio. Esta página ainda não contém datas escolares confirmadas.
+  </div>
+
+  <div class="calendario-controles">
+    <label for="anoCalendario">Ano:
+      <select id="anoCalendario">
+        <option value="2026" selected>2026</option>
+        <option value="2027">2027</option>
+      </select>
+    </label>
+    <button class="calendario-pdf" type="button" disabled aria-disabled="true" title="O arquivo oficial ainda não foi fornecido">PDF oficial ainda não disponível</button>
+  </div>
+
+  <section aria-label="Calendário mensal">
+    <div class="calendario-meses" id="calendarioMeses"></div>
+  </section>
+
+  <section class="calendario-eventos" aria-labelledby="tituloEventos">
+    <h2 id="tituloEventos">Datas e eventos escolares</h2>
+    <p class="calendario-eventos-intro">Os eventos serão organizados por mês assim que a escola confirmar as datas oficiais. Por enquanto, não há eventos cadastrados nesta página.</p>
+    <div class="calendario-eventos-lista" id="calendarioEventos"></div>
+  </section>
+
+  <a class="calendario-voltar" href="index.html">← Voltar para a página inicial</a>
+</main>
+
+<footer>
+  <a class="brand" href="index.html">
+    <img class="school-logo" src="logo-colegio.jpg" alt="Brasão do Colégio Santa Teresinha">
+    <span><b>Colégio Santa Teresinha<br>do Menino Jesus</b><small>Educação Clássica e Católica</small></span>
+  </a>
+  <p>Ipatinga · MG<br>Telefone: (31) 3825-0451<br>© Colégio Santa Teresinha do Menino Jesus</p>
+  <div class="foot-links">
+    <a href="index.html">Início</a>
+    <a href="index.html#localizacao">Localização</a>
+    <a href="pagina.html?secao=contato">Contato</a>
+  </div>
+</footer>
+
+<script>
+(function () {
+  const mesesEl = document.getElementById('calendarioMeses');
+  const eventosEl = document.getElementById('calendarioEventos');
+  const anoEl = document.getElementById('anoCalendario');
+  const nomesMeses = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+  const diasSemana = ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'];
+
+  function renderizarCalendario() {
+    const ano = Number(anoEl.value);
+    mesesEl.replaceChildren();
+    eventosEl.replaceChildren();
+
+    nomesMeses.forEach(function (nome, mes) {
+      const card = document.createElement('article');
+      card.className = 'calendario-mes';
+
+      const titulo = document.createElement('h2');
+      titulo.textContent = nome;
+      card.appendChild(titulo);
+
+      const dias = document.createElement('div');
+      dias.className = 'calendario-dias';
+      diasSemana.forEach(function (dia) {
+        const celula = document.createElement('span');
+        celula.textContent = dia;
+        dias.appendChild(celula);
+      });
+      card.appendChild(dias);
+
+      const datas = document.createElement('div');
+      datas.className = 'calendario-datas';
+      const primeiroDia = new Date(Date.UTC(ano, mes, 1)).getUTCDay();
+      const totalDias = new Date(Date.UTC(ano, mes + 1, 0)).getUTCDate();
+
+      for (let i = 0; i < primeiroDia; i++) {
+        const vazio = document.createElement('span');
+        vazio.className = 'calendario-data vazio';
+        vazio.setAttribute('aria-hidden', 'true');
+        vazio.textContent = '0';
+        datas.appendChild(vazio);
+      }
+      for (let dia = 1; dia <= totalDias; dia++) {
+        const celula = document.createElement('span');
+        celula.className = 'calendario-data';
+        celula.textContent = String(dia);
+        celula.setAttribute('aria-label', dia + ' de ' + nome + ' de ' + ano);
+        datas.appendChild(celula);
+      }
+      card.appendChild(datas);
+      mesesEl.appendChild(card);
+
+      const eventoCard = document.createElement('article');
+      eventoCard.className = 'calendario-evento-mes';
+      const eventoTitulo = document.createElement('h3');
+      eventoTitulo.textContent = nome;
+      const eventoTexto = document.createElement('p');
+      eventoTexto.textContent = 'Datas escolares oficiais aguardando confirmação.';
+      eventoCard.append(eventoTitulo, eventoTexto);
+      eventosEl.appendChild(eventoCard);
+    });
+  }
+
+  anoEl.addEventListener('change', renderizarCalendario);
+  renderizarCalendario();
+})();
+</script>
+<script src="editor.js"></script>
+</body>
+</html>
