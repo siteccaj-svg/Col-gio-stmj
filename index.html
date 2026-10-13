@@ -1327,5 +1327,47 @@ e enviá-los ao GitHub.
 <script src="editor.js"></script>
 
 
+
+  <!-- PASSO 3 — ANIMAÇÃO DAS CAIXAS INFORMATIVAS -->
+  <script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const caixas = document.querySelectorAll("body.home .destaque");
+    if (!caixas.length) return;
+
+    if (!("IntersectionObserver" in window)) {
+      caixas.forEach(function (caixa) {
+        caixa.style.opacity = "1";
+        caixa.style.transform = "translateY(0)";
+      });
+      return;
+    }
+
+    caixas.forEach(function (caixa, indice) {
+      caixa.style.opacity = "0";
+      caixa.style.transform = "translateY(24px)";
+      caixa.style.transition =
+        "opacity 0.7s ease, transform 0.7s ease";
+      caixa.style.transitionDelay = (indice % 2) * 0.12 + "s";
+    });
+
+    const observador = new IntersectionObserver(
+      function (entradas, observador) {
+        entradas.forEach(function (entrada) {
+          if (entrada.isIntersecting) {
+            entrada.target.style.opacity = "1";
+            entrada.target.style.transform = "translateY(0)";
+            observador.unobserve(entrada.target);
+          }
+        });
+      },
+      { threshold: 0.15 }
+    );
+
+    caixas.forEach(function (caixa) {
+      observador.observe(caixa);
+    });
+  });
+  </script>
+
 </body>
 </html>
