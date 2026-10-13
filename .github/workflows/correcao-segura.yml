@@ -1,0 +1,54 @@
+name: Correção segura sob demanda
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: correcao-segura-site
+  cancel-in-progress: false
+
+jobs:
+  corrigir:
+    name: Aplicar correções limitadas e preparar revisão
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar repositório
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Preparar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Aplicar somente reparos reconhecidos
+        run: node operacao-do-site/corrigir-seguro.mjs
+
+      - name: Verificar o resultado
+        run: node operacao-do-site/verificar-site.mjs
+        env:
+          SITE_URL: https://siteccaj-svg.github.io/Col-gio-stmj/
+
+      - name: Criar branch e Pull Request se houver mudanças
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BASE_SHA: ${{ github.sha }}
+        run: |
+          if git diff --quiet; then
+            echo "Nenhuma correção necessária."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          BRANCH="correcao-segura/site-$GITHUB_RUN_ID"
+          git checkout -b "$BRANCH"
+          git add index.html style.css
+          git commit -m "Restaurar blocos conhecidos do site"
+          git push origin "$BRANCH"
+          gh pr create             --repo "$GITHUB_REPOSITORY"             --base main             --head "$BRANCH"             --title "Correção segura dos blocos do site"             --body "Pull Request criado pela rotina de correção segura. Foram restaurados apenas blocos conhecidos ausentes. Revise o diff e os resultados das verificações antes de mesclar. Nenhuma alteração é publicada diretamente na main."
