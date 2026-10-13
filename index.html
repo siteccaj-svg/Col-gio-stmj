@@ -323,82 +323,6 @@
 </blockquote>
 </section>
 
-<section class="destaques-revelados">
-  <div class="destaques-cabecalho">
-    <p class="eyebrow">NOSSA COMUNIDADE</p>
-    <h2>Uma formação que vai <em>além da sala de aula</em></h2>
-    <p>Conheça os valores e as experiências da nossa comunidade escolar.</p>
-  </div>
-
-  <div class="destaques-lista">
-
-    <article class="destaque lado-esquerdo">
-      <span class="destaque-numero">01</span>
-      <div>
-        <h3>Curiosidade que transforma</h3>
-        <p>Estimular perguntas e descobertas ajuda cada aluno a desenvolver suas capacidades.</p>
-      </div>
-    </article>
-
-    <article class="destaque lado-direito">
-      <span class="destaque-numero">02</span>
-      <div>
-        <h3>Aprender a fazer o bem</h3>
-        <p>A fé cristã inspira a solidariedade, a responsabilidade e o cuidado com o próximo.</p>
-      </div>
-    </article>
-
-    <article class="destaque lado-esquerdo">
-      <span class="destaque-numero">03</span>
-      <div>
-        <h3>Descobrir novos talentos</h3>
-        <p>As experiências escolares ajudam os alunos a reconhecer interesses e habilidades.</p>
-      </div>
-    </article>
-
-    <article class="destaque lado-direito">
-      <span class="destaque-numero">04</span>
-      <div>
-        <h3>Respeito em cada encontro</h3>
-        <p>A convivência escolar incentiva a gentileza, a escuta e a cooperação.</p>
-      </div>
-    </article>
-
-    <article class="destaque lado-esquerdo">
-      <span class="destaque-numero">05</span>
-      <div>
-        <h3>Autonomia para crescer</h3>
-        <p>Orientação e incentivo ajudam a desenvolver confiança e hábitos de estudo.</p>
-      </div>
-    </article>
-
-    <article class="destaque lado-direito">
-      <span class="destaque-numero">06</span>
-      <div>
-        <h3>Família e escola juntas</h3>
-        <p>O diálogo entre família e escola contribui para o desenvolvimento dos alunos.</p>
-      </div>
-    </article>
-
-    <article class="destaque lado-esquerdo">
-      <span class="destaque-numero">07</span>
-      <div>
-        <h3>Conhecimento com propósito</h3>
-        <p>A formação acadêmica caminha junto com os valores humanos e cristãos.</p>
-      </div>
-    </article>
-
-    <article class="destaque lado-direito">
-      <span class="destaque-numero">08</span>
-      <div>
-        <h3>Uma comunidade acolhedora</h3>
-        <p>Respeito, generosidade e compromisso ajudam a construir uma boa convivência.</p>
-      </div>
-    </article>
-
-  </div>
-</section>
-
 <section class="pilares">
   <div class="pilares-cabecalho">
     <p class="eyebrow">NOSSA IDENTIDADE</p>
@@ -1328,46 +1252,7 @@ e enviá-los ao GitHub.
 
 
 
-  <!-- PASSO 3 — ANIMAÇÃO DAS CAIXAS INFORMATIVAS -->
-  <script>
-  document.addEventListener("DOMContentLoaded", function () {
-    const caixas = document.querySelectorAll("body.home .destaque");
-    if (!caixas.length) return;
-
-    if (!("IntersectionObserver" in window)) {
-      caixas.forEach(function (caixa) {
-        caixa.style.opacity = "1";
-        caixa.style.transform = "translateY(0)";
-      });
-      return;
-    }
-
-    caixas.forEach(function (caixa, indice) {
-      caixa.style.opacity = "0";
-      caixa.style.transform = "translateY(24px)";
-      caixa.style.transition =
-        "opacity 0.7s ease, transform 0.7s ease";
-      caixa.style.transitionDelay = (indice % 2) * 0.12 + "s";
-    });
-
-    const observador = new IntersectionObserver(
-      function (entradas, observador) {
-        entradas.forEach(function (entrada) {
-          if (entrada.isIntersecting) {
-            entrada.target.style.opacity = "1";
-            entrada.target.style.transform = "translateY(0)";
-            observador.unobserve(entrada.target);
-          }
-        });
-      },
-      { threshold: 0.15 }
-    );
-
-    caixas.forEach(function (caixa) {
-      observador.observe(caixa);
-    });
-  });
-  </script>
+  
 
 </body>
 </html>
