@@ -556,6 +556,113 @@ Ver rota no Google Maps →
 
 </main>
 
+
+<!-- RECURSO 1: GALERIA DE FOTOS -->
+<section class="recurso-section recurso-galeria" id="recursos-galeria">
+  <div class="recurso-container">
+    <div class="recurso-heading">
+      <span class="recurso-kicker">NOSSO DIA A DIA</span>
+      <h2>Conheça um pouco do nosso colégio</h2>
+      <p>Espaços e momentos que fazem parte da nossa comunidade escolar.</p>
+    </div>
+    <div class="galeria-grid" id="galeria-grid">
+      <div class="galeria-vazia"><span aria-hidden="true">✦</span><h3>Nossa estrutura</h3><p>As fotos oficiais do colégio serão adicionadas aqui.</p></div>
+      <div class="galeria-vazia"><span aria-hidden="true">✦</span><h3>Aprendizagem</h3><p>Registros de atividades pedagógicas serão adicionados aqui.</p></div>
+      <div class="galeria-vazia"><span aria-hidden="true">✦</span><h3>Vida escolar</h3><p>Momentos e eventos escolares serão adicionados aqui.</p></div>
+    </div>
+    <p class="recurso-nota">As imagens serão exibidas quando as fotografias autorizadas forem adicionadas à pasta <code>assets/imagens/galeria/</code>.</p>
+  </div>
+</section>
+
+<!-- RECURSO 2: DEPOIMENTOS -->
+<section class="recurso-section recurso-depoimentos" id="depoimentos">
+  <div class="recurso-container">
+    <div class="recurso-heading">
+      <span class="recurso-kicker">ESCOLA E FAMÍLIA</span>
+      <h2>Uma comunidade que cresce unida</h2>
+      <p>A parceria com as famílias é parte importante da formação dos nossos alunos.</p>
+    </div>
+    <div class="depoimento-pendente">
+      <span aria-hidden="true">“</span>
+      <p>Em breve, este espaço apresentará depoimentos reais de famílias e alunos, publicados com autorização.</p>
+      <small>Colégio Santa Teresinha do Menino Jesus</small>
+    </div>
+  </div>
+</section>
+
+<!-- RECURSO 3: CALENDÁRIO ESCOLAR -->
+<section class="recurso-section recurso-calendario" id="calendario-escolar">
+  <div class="recurso-container">
+    <div class="recurso-heading">
+      <span class="recurso-kicker">PROGRAME-SE</span>
+      <h2>Calendário escolar</h2>
+      <p>Consulte as datas importantes da comunidade escolar.</p>
+    </div>
+    <div class="calendario-aviso">
+      <span aria-hidden="true">▦</span>
+      <div><h3>Calendário oficial em preparação</h3><p>As datas serão publicadas após confirmação pela escola. Consulte os comunicados oficiais para informações atualizadas.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- RECURSO 4: DOCUMENTOS ESCOLARES -->
+<section class="recurso-section recurso-documentos" id="documentos-escolares">
+  <div class="recurso-container">
+    <div class="recurso-heading">
+      <span class="recurso-kicker">ÁREA DA FAMÍLIA</span>
+      <h2>Documentos escolares</h2>
+      <p>Um espaço para reunir arquivos e orientações importantes.</p>
+    </div>
+    <div class="documentos-grid">
+      <article class="documento-item"><span aria-hidden="true">▤</span><div><h3>Listas de materiais</h3><p>Os arquivos oficiais serão disponibilizados pela escola quando estiverem prontos.</p></div><span class="documento-em-breve">Em breve</span></article>
+      <article class="documento-item"><span aria-hidden="true">✉</span><div><h3>Comunicados</h3><p>Comunicados institucionais serão reunidos neste espaço.</p></div><span class="documento-em-breve">Em breve</span></article>
+      <article class="documento-item"><span aria-hidden="true">▧</span><div><h3>Orientações escolares</h3><p>Documentos e orientações oficiais serão publicados aqui.</p></div><span class="documento-em-breve">Em breve</span></article>
+    </div>
+    <p class="recurso-nota">Nenhum arquivo fictício foi criado. Os links serão ativados quando os PDFs oficiais forem adicionados à pasta <code>documentos/</code>.</p>
+  </div>
+</section>
+
+<!-- RECURSO 5: FORMULÁRIO DE ATENDIMENTO -->
+<section class="recurso-section recurso-atendimento" id="form-atendimento-st">
+  <div class="recurso-container recurso-container-form">
+    <div class="recurso-heading recurso-heading-left">
+      <span class="recurso-kicker">FALE CONOSCO</span>
+      <h2>Como podemos ajudar?</h2>
+      <p>Preencha os dados e confira a mensagem antes de encaminhá-la pelo WhatsApp do colégio.</p>
+      <p class="recurso-nota">O site não armazena os dados deste formulário. Ao continuar, o WhatsApp será aberto para que você revise e envie a mensagem.</p>
+    </div>
+    <form class="recurso-form" id="formAtendimentoReal">
+      <div class="recurso-campo"><label for="atendimento-nome-st">Nome</label><input id="atendimento-nome-st" name="nome" type="text" autocomplete="name" maxlength="100" required></div>
+      <div class="recurso-campo"><label for="atendimento-email-st">E-mail (opcional)</label><input id="atendimento-email-st" name="email" type="email" autocomplete="email" maxlength="150"></div>
+      <div class="recurso-campo"><label for="atendimento-assunto-st">Assunto</label><select id="atendimento-assunto-st" name="assunto" required><option value="">Selecione</option><option>Matrículas</option><option>Etapas de ensino</option><option>Atendimento escolar</option><option>Informações gerais</option><option>Outro assunto</option></select></div>
+      <div class="recurso-campo"><label for="atendimento-mensagem-st">Mensagem</label><textarea id="atendimento-mensagem-st" name="mensagem" rows="5" maxlength="2000" required></textarea></div>
+      <button class="recurso-botao" type="submit">Continuar pelo WhatsApp</button>
+      <p class="recurso-form-status" id="atendimento-status-st" role="status" aria-live="polite"></p>
+    </form>
+  </div>
+</section>
+
+<!-- RECURSO 6: SOLICITAÇÃO DE VISITA -->
+<section class="recurso-section recurso-visita" id="agendar-visita-st">
+  <div class="recurso-container recurso-container-form">
+    <div class="recurso-heading recurso-heading-left">
+      <span class="recurso-kicker">VENHA NOS CONHECER</span>
+      <h2>Solicite uma visita</h2>
+      <p>Conte-nos qual data e período seriam melhores para você. A equipe precisará confirmar a disponibilidade.</p>
+      <p class="recurso-nota">O envio não confirma a visita automaticamente. O site não armazena os dados; a mensagem será preparada no WhatsApp para você revisar e enviar.</p>
+    </div>
+    <form class="recurso-form" id="formVisitaReal">
+      <div class="recurso-campo"><label for="visita-nome-st">Nome</label><input id="visita-nome-st" name="nome" type="text" autocomplete="name" maxlength="100" required></div>
+      <div class="recurso-campo"><label for="visita-telefone-st">Telefone de contato</label><input id="visita-telefone-st" name="telefone" type="tel" autocomplete="tel" maxlength="30" required></div>
+      <div class="recurso-campo"><label for="visita-data-st">Data desejada</label><input id="visita-data-st" name="data" type="date" required></div>
+      <div class="recurso-campo"><label for="visita-periodo-st">Período preferido</label><select id="visita-periodo-st" name="periodo" required><option value="">Selecione</option><option>Manhã</option><option>Tarde</option></select></div>
+      <div class="recurso-campo"><label for="visita-etapa-st">Etapa de interesse</label><select id="visita-etapa-st" name="etapa" required><option value="">Selecione</option><option>Educação Infantil</option><option>Ensino Fundamental</option><option>Ensino Médio</option><option>Informações gerais</option></select></div>
+      <button class="recurso-botao" type="submit">Preparar solicitação</button>
+      <p class="recurso-form-status" id="visita-status-st" role="status" aria-live="polite"></p>
+    </form>
+  </div>
+</section>
+
 <footer>
 <a class="brand" href="index.html">
 <img class="school-logo" src="logo-colegio.jpg" alt="Brasão do Colégio Santa Teresinha">
@@ -1257,5 +1364,6 @@ e enviá-los ao GitHub.
 
 
 
+<script src="recursos-escolares.js"></script>
 </body>
 </html>
