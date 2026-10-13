@@ -259,20 +259,6 @@
   outline-offset: 3px !important;
   cursor: crosshair !important;
 }
-/* TESTE TEMPORÁRIO: cartões extras da seção em destaque */
-#destaques-escola .card-extra[hidden] {
-  display: none !important;
-}
-
-#destaques-escola #verTodasDestaques {
-  cursor: pointer;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  #destaques-escola .cards {
-    scroll-behavior: auto;
-  }
-}
 </style>
 </head>
 
@@ -469,16 +455,16 @@
 <p>Para informações específicas sobre atividades, eventos, vagas e procedimentos, entre em contato com o colégio pelos canais apresentados neste site.</p>
 </section>
 
-<section class="featured" id="destaques-escola">
+<section class="featured">
 <div class="section-heading">
 <div>
 <p class="eyebrow">EM DESTAQUE</p>
 <h2>Uma escola para crescer</h2>
 </div>
-<a href="#mais-destaques" id="verTodasDestaques" aria-expanded="false" aria-controls="mais-destaques">Ver todas →</a>
+<a href="pagina.html?secao=noticias">Ver todas →</a>
 </div>
 
-<div class="cards" id="lista-destaques">
+<div class="cards">
 <a class="card" href="pagina.html?secao=colegio">
 <div class="card-img classroom"></div>
 <b>Estrutura</b>
@@ -501,30 +487,6 @@
 <div class="card-img chapel"></div>
 <b>Vida escolar</b>
 <p>Mais que aulas, experiências para a vida.</p>
-</a>
-
-<a class="card card-extra" href="pagina.html?secao=proposta" id="mais-destaques" hidden>
-<div class="card-img study"></div>
-<b>Formação cristã</b>
-<p>Valores que inspiram o respeito e o cuidado com o próximo.</p>
-</a>
-
-<a class="card card-extra" href="pagina.html?secao=ensino" hidden>
-<div class="card-img classroom"></div>
-<b>Etapas de ensino</b>
-<p>Descubra os caminhos de aprendizagem de cada fase escolar.</p>
-</a>
-
-<a class="card card-extra" href="pagina.html?secao=contato" hidden>
-<div class="card-img events"></div>
-<b>Família e escola</b>
-<p>Uma parceria importante para acompanhar cada aluno.</p>
-</a>
-
-<a class="card card-extra" href="pagina.html?secao=matriculas" hidden>
-<div class="card-img chapel"></div>
-<b>Matrículas</b>
-<p>Entre em contato para receber orientações sobre o processo.</p>
 </a>
 </div>
 </section>
@@ -1294,44 +1256,6 @@ e enviá-los ao GitHub.
   
 
 
-<script>
-/* TESTE TEMPORÁRIO: mostrar/ocultar cartões extras em "Uma escola para crescer" */
-(function () {
-  const secao = document.getElementById("destaques-escola");
-  const botao = document.getElementById("verTodasDestaques");
-  const extras = secao ? secao.querySelectorAll(".card-extra") : [];
-  if (!secao || !botao || !extras.length) return;
-
-  botao.addEventListener("click", function (evento) {
-    evento.preventDefault();
-    const abrir = botao.getAttribute("aria-expanded") !== "true";
-
-    extras.forEach(function (cartao) {
-      cartao.hidden = !abrir;
-    });
-
-    botao.setAttribute("aria-expanded", String(abrir));
-    botao.textContent = abrir ? "Ver menos ↑" : "Ver todas →";
-
-    if (abrir) {
-      const primeiroExtra = secao.querySelector(".card-extra:not([hidden])");
-      if (primeiroExtra) {
-        window.setTimeout(function () {
-          primeiroExtra.scrollIntoView({
-            behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
-            block: "center"
-          });
-        }, 50);
-      }
-    } else {
-      secao.scrollIntoView({
-        behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
-        block: "start"
-      });
-    }
-  });
-})();
-</script>
 
 </body>
 </html>
