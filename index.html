@@ -661,6 +661,59 @@ Telefone: (31) 3825-0451<br>
 </div>
 </footer>
 
+
+<!-- BRASÃO AMPLIADO AO CLICAR -->
+<div id="brasaoModal" class="brasao-modal" role="dialog" aria-modal="true" aria-label="Brasão do Colégio" hidden>
+  <button class="brasao-fechar" type="button" aria-label="Fechar brasão ampliado">×</button>
+  <img src="assets/logo-colegio.jpg" alt="Brasão do Colégio Santa Teresinha do Menino Jesus ampliado">
+  <p>Colégio Santa Teresinha do Menino Jesus</p>
+</div>
+<style>
+.brasao-modal[hidden] { display: none !important; }
+.brasao-modal {
+  position: fixed; inset: 0; z-index: 1000000;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 24px; box-sizing: border-box; background: rgba(20, 12, 7, .92);
+}
+.brasao-modal img {
+  display: block; width: min( min(78vw, 560px), 78vh); height: auto;
+  max-width: 100%; max-height: 78vh; object-fit: contain;
+  background: #fff; border-radius: 3px;
+}
+.brasao-modal p { color: #fff7e8; text-align: center; margin: 14px 0 0; }
+.brasao-fechar {
+  position: absolute; top: 14px; right: 20px; border: 1px solid #d7b84e;
+  border-radius: 50%; width: 46px; height: 46px; font-size: 32px;
+  line-height: 1; color: #fff; background: #321b10; cursor: pointer;
+}
+.school-logo { cursor: zoom-in; }
+</style>
+<script>
+(function () {
+  const modal = document.getElementById('brasaoModal');
+  const fechar = modal.querySelector('.brasao-fechar');
+  document.querySelectorAll('.school-logo').forEach(function (logo) {
+    logo.addEventListener('click', function (event) {
+      event.preventDefault();
+      event.stopPropagation();
+      modal.hidden = false;
+      fechar.focus();
+    });
+  });
+  function fecharModal() {
+    modal.hidden = true;
+  }
+  fechar.addEventListener('click', fecharModal);
+  modal.addEventListener('click', function (event) {
+    if (event.target === modal) fecharModal();
+  });
+  document.addEventListener('keydown', function (event) {
+    if (event.key === 'Escape' && !modal.hidden) fecharModal();
+  });
+})();
+</script>
+
+
 <!-- BOTÃO DO EDITOR -->
 <button id="editorBtn" type="button">🎨 Editar site</button>
 
