@@ -486,9 +486,9 @@ body.home .top {
 
 body.home .brand {
   gap: 12px;
-  min-width: 0;
+  min-width: 270px;
   color: #fff7e8;
-  font-size: 13px;
+  font-size: 15px;
 }
 
 body.home .brand small {
@@ -721,9 +721,9 @@ body.home footer {
 }
 
 body.home .school-logo {
-  width: 42px;
-  height: 42px;
-  flex: 0 0 42px;
+  width: 48px;
+  height: 48px;
+  flex: 0 0 48px;
   object-fit: contain !important;
   object-position: center;
   border-radius: 50%;
