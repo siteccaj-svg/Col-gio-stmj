@@ -11,9 +11,16 @@
   const SUPABASE_URL = "https://qmqmnbdwrbilrzmqghfk.supabase.co";
   const SUPABASE_KEY = "sb_publishable_zr1KBIxXRPeMZXiOF81Zaw_Jcj_IS0V";
 
-  const PAGE_ID = location.pathname.endsWith("pagina.html")
-    ? "pagina-" + (new URLSearchParams(location.search).get("secao") || "colegio")
-    : "home";
+  // Cada página física possui um registro próprio no Supabase.
+  // A página inicial mantém o ID "home" para preservar o conteúdo já salvo.
+  // As páginas geradas por pagina.html usam um ID separado por seção.
+  const arquivoAtual = (location.pathname.split("/").pop() || "index.html").toLowerCase();
+  const secaoPagina = new URLSearchParams(location.search).get("secao");
+  const PAGE_ID = arquivoAtual === "pagina.html"
+    ? "pagina-" + (secaoPagina || "colegio")
+    : arquivoAtual === "" || arquivoAtual === "index.html"
+      ? "home"
+      : arquivoAtual.replace(/\.html?$/i, "").replace(/[^a-z0-9_-]/g, "-");
 
   const $ = (seletor, raiz = document) => raiz.querySelector(seletor);
 
