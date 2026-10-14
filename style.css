@@ -477,18 +477,19 @@ footer > a:last-child {
 
 /* CORES DA PÁGINA INICIAL */
 body.home .top {
-  height: 90px;
+  min-height: 104px;
+  height: auto;
   background: #321b10;
   border-bottom: 2px solid #d7b84e;
-  padding: 0 3.5%;
-  gap: 16px;
+  padding: 16px 4%;
+  gap: 28px;
 }
 
 body.home .brand {
-  gap: 12px;
-  min-width: 270px;
+  gap: 14px;
+  min-width: 300px;
   color: #fff7e8;
-  font-size: 15px;
+  font-size: 17px;
 }
 
 body.home .brand small {
@@ -509,11 +510,12 @@ body.home .top nav a:hover {
 }
 
 body.home nav {
-  gap: clamp(8px, 1.35vw, 20px);
+  gap: clamp(12px, 1.5vw, 24px);
 }
 
 body.home nav a {
-  font-size: 10px;
+  font-size: 12px;
+  line-height: 1.4;
 }
 
 body.home .hero {
@@ -726,6 +728,7 @@ body.home .school-logo {
   flex: 0 0 48px;
   object-fit: contain !important;
   object-position: center;
+  image-rendering: auto;
   border-radius: 50%;
   border: 2px solid #e4c65d;
 }
