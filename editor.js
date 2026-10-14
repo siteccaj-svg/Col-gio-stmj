@@ -113,7 +113,11 @@
           ""
         ).trim().toLowerCase();
 
+        // O editor antigo salva apenas no localStorage e pode dar a
+        // impressão de que publicou as mudanças. O salvamento oficial
+        // agora é feito pelo botão "Salvar na nuvem" integrado abaixo.
         if (
+          elemento.id === "edSalvar" ||
           texto.includes("salvar neste navegador") ||
           texto.includes("salvar no navegador") ||
           texto.includes("salvar localmente")
