@@ -1502,8 +1502,11 @@
       const link = document.createElement("a");
 
       link.href = endereco;
-      link.download =
-        PAGE_ID === "home" ? "index.html" : "pagina.html";
+      link.download = PAGE_ID === "home"
+        ? "index.html"
+        : PAGE_ID.startsWith("pagina-")
+          ? "pagina.html"
+          : PAGE_ID + ".html";
 
       document.body.appendChild(link);
       link.click();
