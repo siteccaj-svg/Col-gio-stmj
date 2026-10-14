@@ -39,6 +39,7 @@
   let estadoSalvo = "";
   let timerHistorico = null;
   let arquivoImagemEscolhido = null;
+  const mainOriginalHTML = document.querySelector("main")?.innerHTML || "";
 
   function aviso(texto) {
     const elemento = $("#editorUniversalStatus");
@@ -1352,7 +1353,39 @@
       "Link adicionado. Salve na nuvem para publicar."
     );
   }
-     async function carregar() {
+   
+  function mesclarNavegacaoAtual(mainCarregado) {
+    const mainOriginal = document.createElement("main");
+    // O HTML original fica disponível no documento antes da substituição;
+    // por isso usamos uma cópia mantida na inicialização da página.
+    if (!mainOriginalHTML) return;
+
+    mainOriginal.innerHTML = mainOriginalHTML;
+    const originalConteudo = mainOriginal.querySelector(".inner-content");
+    const conteudoCarregado = mainCarregado.querySelector(".inner-content");
+    if (!originalConteudo || !conteudoCarregado) return;
+
+    const hrefsExistentes = new Set(
+      Array.from(conteudoCarregado.querySelectorAll("a[href]"))
+        .map(a => a.getAttribute("href"))
+    );
+
+    originalConteudo.querySelectorAll(":scope > a[href]").forEach(link => {
+      const href = link.getAttribute("href");
+      if (!href || hrefsExistentes.has(href)) return;
+      conteudoCarregado.appendChild(link.cloneNode(true));
+      hrefsExistentes.add(href);
+    });
+
+    originalConteudo.querySelectorAll(":scope > a.inner-panel[href]").forEach(card => {
+      const href = card.getAttribute("href");
+      if (!href || hrefsExistentes.has(href)) return;
+      conteudoCarregado.appendChild(card.cloneNode(true));
+      hrefsExistentes.add(href);
+    });
+  }
+
+  async function carregar() {
     try {
       await prepararSupabase();
 
@@ -1378,6 +1411,13 @@
 
           if (elemento && typeof html === "string") {
             elemento.innerHTML = html;
+
+            // Registros antigos da nuvem podem não conter os links adicionados
+            // posteriormente no HTML do repositório. Reincorpora os links e
+            // cards da seção principal sem apagar os textos já editados na nuvem.
+            if (nome === "main") {
+              mesclarNavegacaoAtual(elemento);
+            }
           }
         }
 
