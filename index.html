@@ -259,6 +259,65 @@
   outline-offset: 3px !important;
   cursor: crosshair !important;
 }
+/* MENU EXPANSÍVEL DE LOCALIZAÇÃO */
+.menu-informacoes {
+  margin: 25px 0;
+  border: 1px solid #c79c54;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #fffdf7;
+}
+
+.menu-informacoes summary {
+  padding: 20px;
+  color: #4b2918;
+  font-weight: bold;
+  font-size: 16px;
+  cursor: pointer;
+  list-style: none;
+}
+
+.menu-informacoes summary::-webkit-details-marker {
+  display: none;
+}
+
+.menu-informacoes summary::after {
+  content: "+";
+  float: right;
+  color: #a77a35;
+  font-size: 22px;
+}
+
+.menu-informacoes[open] summary::after {
+  content: "−";
+}
+
+.menu-informacoes summary:hover {
+  background: #f6efdf;
+}
+
+.menu-informacoes .localizacao-mapa {
+  margin: 0 18px;
+}
+
+.menu-informacoes .localizacao-rodape {
+  padding: 0 18px 20px;
+}
+
+@media (max-width: 600px) {
+  .menu-informacoes summary {
+    padding: 17px;
+    font-size: 14px;
+  }
+
+  .menu-informacoes .localizacao-mapa {
+    margin: 0 10px;
+  }
+
+  .menu-informacoes .localizacao-rodape {
+    padding: 0 10px 15px;
+  }
+}
 </style>
 </head>
 
