@@ -77,5 +77,5 @@ const key=new URLSearchParams(location.search).get("secao")||"colegio";
 const d=conteudos[key]||conteudos.colegio;
 document.title=d.titulo+" | Colégio Santa Teresinha";
 const blocos=d.blocos.map(([titulo,texto])=>`<div class="inner-panel"><h3>${titulo}</h3><p>${texto}</p></div>`).join("");
-document.getElementById("conteudo").innerHTML=`<section class="inner-hero inner-hero-foto inner-hero-${key}"><div class="inner-hero-copy"><p class="eyebrow">COLÉGIO SANTA TERESINHA DO MENINO JESUS</p><h1>${d.titulo}</h1><p>${d.resumo}</p><a class="btn dark" href="index.html">← Página inicial</a></div></section><section class="inner-content"><p class="eyebrow">${d.titulo.toUpperCase()}</p><h2>${d.chamada}</h2><p>${d.introducao}</p>${blocos}<a class="btn dark" href="pagina.html?secao=contato">Fale conosco →</a></section>`;
+document.getElementById("conteudo").innerHTML=`<section class="inner-hero"><p class="eyebrow">COLÉGIO SANTA TERESINHA DO MENINO JESUS</p><h1>${d.chamada}</h1><p>${d.resumo}</p><a class="btn dark" href="index.html">← Página inicial</a><div class="inner-symbol">✝</div></section><section class="inner-content"><p class="eyebrow">${d.titulo.toUpperCase()}</p><h2>${d.titulo}</h2><p>${d.introducao}</p>${blocos}<a class="btn dark" href="pagina.html?secao=contato">Fale conosco →</a></section>`;
 window.scrollTo(0,0);
