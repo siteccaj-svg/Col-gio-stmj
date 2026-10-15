@@ -1357,11 +1357,11 @@
   function corrigirDestinosDeNavegacao() {
     const normalizar = (valor) => String(valor || "")
       .normalize("NFD")
-      .replace(/[\\u0300-\\u036f]/g, "")
+      .replace(/[\u0300-\u036f]/g, "")
       .toLowerCase()
       .replace(/[←→]/g, " ")
-      .replace(/[^\\p{L}\\p{N}\\s-]/gu, " ")
-      .replace(/\\s+/g, " ")
+      .replace(/[^\p{L}\p{N}\s-]/gu, " ")
+      .replace(/\s+/g, " ")
       .trim();
 
     const destinos = {
@@ -1401,7 +1401,7 @@
       const hrefAtual = link.getAttribute("href") || "";
       let destino = null;
 
-      if (/pagina\\.html(?:\\?|$)/i.test(hrefAtual)) {
+      if (/pagina\.html(?:\?|$)/i.test(hrefAtual)) {
         try {
           const url = new URL(hrefAtual, window.location.href);
           const secao = (url.searchParams.get("secao") || "colegio").toLowerCase();
