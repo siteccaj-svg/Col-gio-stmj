@@ -1352,7 +1352,85 @@
       "Link adicionado. Salve na nuvem para publicar."
     );
   }
-     async function carregar() {
+     // Corrige destinos conhecidos mesmo quando o editor carrega conteúdo antigo do Supabase.
+  // O menu superior continua compartilhado; os botões de conteúdo usam suas páginas próprias.
+  function corrigirDestinosDeNavegacao() {
+    const normalizar = (valor) => String(valor || "")
+      .normalize("NFD")
+      .replace(/[\\u0300-\\u036f]/g, "")
+      .toLowerCase()
+      .replace(/[←→]/g, " ")
+      .replace(/[^\\p{L}\\p{N}\\s-]/gu, " ")
+      .replace(/\\s+/g, " ")
+      .trim();
+
+    const destinos = {
+      "o colegio": "colegio.html",
+      "etapas": "ensino.html",
+      "etapas de ensino": "ensino.html",
+      "proposta": "proposta.html",
+      "proposta pedagogica": "proposta.html",
+      "noticias": "noticias.html",
+      "matriculas": "matriculas.html",
+      "matriculas abertas": "matriculas.html",
+      "fale conosco": "contato.html",
+      "educacao infantil": "educacao-infantil.html",
+      "ensino fundamental": "ensino-fundamental.html",
+      "ensino medio": "ensino-medio.html",
+      "formacao integral": "formacao-integral.html",
+      "nossa historia": "comunidade-escolar.html",
+      "comunidade escolar": "comunidade-escolar.html",
+      "ver todas": "todas-noticias.html",
+      "ver todas as noticias": "todas-noticias.html",
+      "estrutura": "estrutura.html",
+      "projetos": "projetos.html",
+      "eventos": "eventos.html",
+      "vida escolar": "vida-escolar.html"
+    };
+
+    const destinosLegados = {
+      colegio: "colegio.html",
+      ensino: "ensino.html",
+      proposta: "proposta.html",
+      noticias: "noticias.html",
+      matriculas: "matriculas.html",
+      contato: "contato.html"
+    };
+
+    document.querySelectorAll("a[href]").forEach((link) => {
+      const hrefAtual = link.getAttribute("href") || "";
+      let destino = null;
+
+      if (/pagina\\.html(?:\\?|$)/i.test(hrefAtual)) {
+        try {
+          const url = new URL(hrefAtual, window.location.href);
+          const secao = (url.searchParams.get("secao") || "colegio").toLowerCase();
+          destino = destinosLegados[secao] || null;
+        } catch (_) {}
+      }
+
+      const copia = link.cloneNode(true);
+      copia.querySelectorAll("img, svg, span, p, small, .card-img").forEach((elemento) => elemento.remove());
+      const texto = normalizar(copia.textContent || link.textContent);
+      const secao = link.closest("section");
+      const identificadorSecao = normalizar(secao?.querySelector(".eyebrow")?.textContent || "");
+
+      if (!destino && texto === "conheca o colegio") {
+        if (link.closest(".hero")) {
+          destino = "historia.html";
+        } else if (link.closest(".intro") || identificadorSecao === "nossa historia") {
+          destino = "comunidade-escolar.html";
+        } else {
+          destino = "historia.html";
+        }
+      }
+
+      if (!destino) destino = destinos[texto] || null;
+      if (destino && hrefAtual !== destino) link.setAttribute("href", destino);
+    });
+  }
+
+  async function carregar() {
     try {
       await prepararSupabase();
 
@@ -1398,6 +1476,8 @@
         }
       }
 
+      corrigirDestinosDeNavegacao();
+
       estadoSalvo = capturarEstado();
       historico = [estadoSalvo];
       indiceHistorico = 0;
@@ -1410,6 +1490,8 @@
 
     } catch (erro) {
       console.error("Erro ao carregar o editor:", erro);
+
+      corrigirDestinosDeNavegacao();
 
       estadoSalvo = capturarEstado();
       historico = [estadoSalvo];
