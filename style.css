@@ -1409,6 +1409,20 @@ body.inner .inner-hero {
 }
 
 
+/* CORREÇÃO FIRME DA FAIXA SUPERIOR DAS SUBPÁGINAS */
+body.inner main .inner-hero {
+  min-height: 0 !important;
+  padding-top: 24px !important;
+  padding-bottom: 24px !important;
+}
+@media (max-width: 760px) {
+  body.inner main .inner-hero {
+    min-height: 0 !important;
+    padding-top: 22px !important;
+    padding-bottom: 22px !important;
+  }
+}
+
 /* ACESSO AO CALENDÁRIO ESCOLAR NA PARTE FINAL DA PÁGINA INICIAL */
 .calendario-acesso {
   display: grid;
