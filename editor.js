@@ -1388,7 +1388,10 @@
     // quando o editor carrega uma versão antiga do HTML a partir da nuvem.
     document.querySelectorAll("a").forEach(link => {
       const texto = normalizar(link.innerText || link.textContent);
-      if (destinos[texto]) link.setAttribute("href", destinos[texto]);
+      const item = Object.entries(destinos).find(([rotulo]) =>
+        texto === rotulo || texto.startsWith(rotulo + " ")
+      );
+      if (item) link.setAttribute("href", item[1]);
     });
 
     // Dois botões têm o mesmo rótulo, mas destinos diferentes.
