@@ -1352,6 +1352,92 @@
       "Link adicionado. Salve na nuvem para publicar."
     );
   }
+  // Corrige links antigos carregados do conteúdo salvo na nuvem,
+  // sem apagar os textos ou as demais alterações da página.
+  function corrigirLinksAntigos() {
+    const normalizar = texto => (texto || "")
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase()
+      .replace(/\s+/g, " ")
+      .trim();
+
+    const destinosMenu = {
+      "o colegio": "colegio.html",
+      "etapas de ensino": "ensino.html",
+      "proposta pedagogica": "proposta.html",
+      "noticias": "noticias.html",
+      "matriculas": "matriculas.html",
+      "fale conosco": "contato.html"
+    };
+    document.querySelectorAll("header.top nav a").forEach(link => {
+      const texto = normalizar(link.innerText || link.textContent);
+      if (destinosMenu[texto]) link.setAttribute("href", destinosMenu[texto]);
+    });
+
+    const destinoPorSecao = {
+      colegio: "colegio.html",
+      ensino: "ensino.html",
+      proposta: "proposta.html",
+      noticias: "noticias.html",
+      matriculas: "matriculas.html",
+      contato: "contato.html"
+    };
+    document.querySelectorAll("a[href*='pagina.html?secao=']").forEach(link => {
+      try {
+        const url = new URL(link.getAttribute("href"), location.href);
+        const secao = (url.searchParams.get("secao") || "colegio").toLowerCase();
+        if (destinoPorSecao[secao]) link.setAttribute("href", destinoPorSecao[secao]);
+      } catch (_) {}
+    });
+
+    const definir = (seletor, destino) => {
+      document.querySelectorAll(seletor).forEach(link => link.setAttribute("href", destino));
+    };
+    definir(".hero .actions a.outline", "historia.html");
+    definir(".intro a.btn", "comunidade-escolar.html");
+    definir(".section-heading > a", "todas-noticias.html");
+    definir(".gold-band a.btn", "matriculas.html");
+
+    const destinosEtapas = {
+      "educacao infantil": "educacao-infantil.html",
+      "ensino fundamental": "ensino-fundamental.html",
+      "ensino medio": "ensino-medio.html",
+      "formacao integral": "formacao-integral.html"
+    };
+    document.querySelectorAll(".quicklinks a").forEach(link => {
+      const texto = normalizar(link.innerText || link.textContent);
+      if (destinosEtapas[texto]) link.setAttribute("href", destinosEtapas[texto]);
+    });
+
+    const destinosCards = {
+      "estrutura": "estrutura.html",
+      "projetos": "projetos.html",
+      "eventos": "eventos.html",
+      "vida escolar": "vida-escolar.html"
+    };
+    document.querySelectorAll("main .card").forEach(link => {
+      const titulo = link.querySelector("b, h3, h2");
+      const texto = normalizar(titulo ? titulo.textContent : link.textContent);
+      for (const [rotulo, destino] of Object.entries(destinosCards)) {
+        if (texto.includes(rotulo)) {
+          link.setAttribute("href", destino);
+          break;
+        }
+      }
+    });
+
+    document.querySelectorAll("main a").forEach(link => {
+      const texto = normalizar(link.innerText || link.textContent);
+      if (texto.includes("fale conosco")) link.setAttribute("href", "contato.html");
+      if (texto.includes("pagina inicial")) link.setAttribute("href", "index.html");
+      if ((texto === "matriculas" || texto.startsWith("matriculas ")) &&
+          !link.closest("header.top nav")) {
+        link.setAttribute("href", "matriculas.html");
+      }
+    });
+  }
+
      async function carregar() {
     try {
       await prepararSupabase();
@@ -1398,6 +1484,8 @@
         }
       }
 
+      corrigirLinksAntigos();
+
       estadoSalvo = capturarEstado();
       historico = [estadoSalvo];
       indiceHistorico = 0;
@@ -1410,6 +1498,8 @@
 
     } catch (erro) {
       console.error("Erro ao carregar o editor:", erro);
+
+      corrigirLinksAntigos();
 
       estadoSalvo = capturarEstado();
       historico = [estadoSalvo];
@@ -1457,6 +1547,8 @@
       if (error) {
         throw error;
       }
+
+      corrigirLinksAntigos();
 
       estadoSalvo = capturarEstado();
       historico = [estadoSalvo];
