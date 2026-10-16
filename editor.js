@@ -1402,6 +1402,35 @@
       link.setAttribute("href", "comunidade-escolar.html")
     );
 
+    // Na página "Etapas de Ensino", cada etapa precisa abrir sua própria página.
+    if ((location.pathname.split("/").pop() || "").toLowerCase() === "ensino.html") {
+      const paginasEtapas = {
+        "educacao infantil": "educacao-infantil.html",
+        "ensino fundamental": "ensino-fundamental.html",
+        "ensino medio": "ensino-medio.html"
+      };
+
+      document.querySelectorAll("main .inner-panel").forEach(painel => {
+        const titulo = normalizar(painel.querySelector("h3")?.textContent);
+        const destino = paginasEtapas[titulo];
+        if (!destino) return;
+
+        if (painel.tagName.toLowerCase() !== "a") {
+          const link = document.createElement("a");
+          link.className = painel.className + " etapa-link";
+          link.href = destino;
+          link.innerHTML = painel.innerHTML;
+          link.style.display = "block";
+          link.style.color = "inherit";
+          link.style.textDecoration = "none";
+          link.setAttribute("aria-label", "Conheça " + titulo);
+          painel.replaceWith(link);
+        } else {
+          painel.href = destino;
+        }
+      });
+    }
+
     // Corrige links antigos que ainda apontam para a página compartilhada.
     const destinoPorSecao = {
       colegio: "colegio.html",
