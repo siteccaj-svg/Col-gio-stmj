@@ -1357,24 +1357,49 @@
   function corrigirLinksAntigos() {
     const normalizar = texto => (texto || "")
       .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/[\\u0300-\\u036f]/g, "")
       .toLowerCase()
-      .replace(/\s+/g, " ")
+      .replace(/[→←]/g, "")
+      .replace(/\\s+/g, " ")
       .trim();
 
-    const destinosMenu = {
+    const destinos = {
       "o colegio": "colegio.html",
       "etapas de ensino": "ensino.html",
       "proposta pedagogica": "proposta.html",
       "noticias": "noticias.html",
       "matriculas": "matriculas.html",
-      "fale conosco": "contato.html"
+      "matriculas abertas": "matriculas.html",
+      "fale conosco": "contato.html",
+      "educacao infantil": "educacao-infantil.html",
+      "ensino fundamental": "ensino-fundamental.html",
+      "ensino medio": "ensino-medio.html",
+      "formacao integral": "formacao-integral.html",
+      "ver todas": "todas-noticias.html",
+      "ver todas as noticias": "todas-noticias.html",
+      "estrutura": "estrutura.html",
+      "projetos": "projetos.html",
+      "eventos": "eventos.html",
+      "vida escolar": "vida-escolar.html",
+      "vida escolar mais que aulas experiencias para a vida": "vida-escolar.html"
     };
-    document.querySelectorAll("header.top nav a").forEach(link => {
+
+    // Corrige o menu compartilhado e links de todas as áreas, mesmo
+    // quando o editor carrega uma versão antiga do HTML a partir da nuvem.
+    document.querySelectorAll("a").forEach(link => {
       const texto = normalizar(link.innerText || link.textContent);
-      if (destinosMenu[texto]) link.setAttribute("href", destinosMenu[texto]);
+      if (destinos[texto]) link.setAttribute("href", destinos[texto]);
     });
 
+    // Dois botões têm o mesmo rótulo, mas destinos diferentes.
+    document.querySelectorAll(".hero .actions a.outline").forEach(link =>
+      link.setAttribute("href", "historia.html")
+    );
+    document.querySelectorAll(".intro a.btn").forEach(link =>
+      link.setAttribute("href", "comunidade-escolar.html")
+    );
+
+    // Corrige links antigos que ainda apontam para a página compartilhada.
     const destinoPorSecao = {
       colegio: "colegio.html",
       ensino: "ensino.html",
@@ -1391,51 +1416,12 @@
       } catch (_) {}
     });
 
-    const definir = (seletor, destino) => {
-      document.querySelectorAll(seletor).forEach(link => link.setAttribute("href", destino));
-    };
-    definir(".hero .actions a.outline", "historia.html");
-    definir(".intro a.btn", "comunidade-escolar.html");
-    definir(".section-heading > a", "todas-noticias.html");
-    definir(".gold-band a.btn", "matriculas.html");
-
-    const destinosEtapas = {
-      "educacao infantil": "educacao-infantil.html",
-      "ensino fundamental": "ensino-fundamental.html",
-      "ensino medio": "ensino-medio.html",
-      "formacao integral": "formacao-integral.html"
-    };
-    document.querySelectorAll(".quicklinks a").forEach(link => {
-      const texto = normalizar(link.innerText || link.textContent);
-      if (destinosEtapas[texto]) link.setAttribute("href", destinosEtapas[texto]);
-    });
-
-    const destinosCards = {
-      "estrutura": "estrutura.html",
-      "projetos": "projetos.html",
-      "eventos": "eventos.html",
-      "vida escolar": "vida-escolar.html"
-    };
-    document.querySelectorAll("main .card").forEach(link => {
-      const titulo = link.querySelector("b, h3, h2");
-      const texto = normalizar(titulo ? titulo.textContent : link.textContent);
-      for (const [rotulo, destino] of Object.entries(destinosCards)) {
-        if (texto.includes(rotulo)) {
-          link.setAttribute("href", destino);
-          break;
-        }
-      }
-    });
-
-    document.querySelectorAll("main a").forEach(link => {
-      const texto = normalizar(link.innerText || link.textContent);
-      if (texto.includes("fale conosco")) link.setAttribute("href", "contato.html");
-      if (texto.includes("pagina inicial")) link.setAttribute("href", "index.html");
-      if ((texto === "matriculas" || texto.startsWith("matriculas ")) &&
-          !link.closest("header.top nav")) {
-        link.setAttribute("href", "matriculas.html");
-      }
-    });
+    document.querySelectorAll(".section-heading > a").forEach(link =>
+      link.setAttribute("href", "todas-noticias.html")
+    );
+    document.querySelectorAll(".gold-band a.btn").forEach(link =>
+      link.setAttribute("href", "matriculas.html")
+    );
   }
 
      async function carregar() {
