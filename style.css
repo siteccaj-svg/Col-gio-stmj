@@ -1423,6 +1423,33 @@ body.inner main .inner-hero {
   }
 }
 
+/* IDENTIDADE VISUAL PRÓPRIA PARA CADA SUBPÁGINA */
+body.inner[class*="page-"] main .inner-hero { border-bottom: 4px solid var(--gold); }
+body.inner.page-colegio main .inner-hero { background: linear-gradient(110deg,#f4e8d2,#fffaf0 72%,#e6d2ad); }
+body.inner.page-ensino main .inner-hero { background: linear-gradient(110deg,#e9eee2,#fbfaf3 72%,#d9e1c9); }
+body.inner.page-proposta main .inner-hero { background: linear-gradient(110deg,#eee5d8,#fbf8f1 72%,#dfc7a4); }
+body.inner.page-noticias main .inner-hero { background: linear-gradient(110deg,#e8edf0,#fbf8f1 72%,#cfdde2); }
+body.inner.page-matriculas main .inner-hero { background: linear-gradient(110deg,#f5e6c8,#fffaf0 72%,#e8c987); }
+body.inner.page-contato main .inner-hero { background: linear-gradient(110deg,#e7ece5,#fbf8f1 72%,#c9d8c7); }
+body.inner.page-historia main .inner-hero { background: linear-gradient(110deg,#f0e2d3,#fbf8f1 72%,#d9b99b); }
+body.inner.page-comunidade main .inner-hero { background: linear-gradient(110deg,#eee7df,#fbf8f1 72%,#ddcbb8); }
+body.inner.page-infantil main .inner-hero { background: linear-gradient(110deg,#f4eadc,#fffaf2 72%,#e9d5b8); }
+body.inner.page-fundamental main .inner-hero { background: linear-gradient(110deg,#e8ecdf,#fbf8f1 72%,#d1d9bb); }
+body.inner.page-medio main .inner-hero { background: linear-gradient(110deg,#e3e9ed,#fbf8f1 72%,#c8d4dd); }
+body.inner.page-integral main .inner-hero { background: linear-gradient(110deg,#eee4d0,#fbf8f1 72%,#d8c49b); }
+body.inner.page-estrutura main .inner-hero { background: linear-gradient(110deg,#e8e4dc,#fbf8f1 72%,#d3c9b8); }
+body.inner.page-projetos main .inner-hero { background: linear-gradient(110deg,#e4ece8,#fbf8f1 72%,#c7dcd2); }
+body.inner.page-eventos main .inner-hero { background: linear-gradient(110deg,#f1e5e2,#fbf8f1 72%,#e0c4be); }
+body.inner.page-vida-escolar main .inner-hero { background: linear-gradient(110deg,#ece7d9,#fbf8f1 72%,#d9cfad); }
+body.inner.page-todas-noticias main .inner-hero { background: linear-gradient(110deg,#e6eaf0,#fbf8f1 72%,#c9d2e0); }
+body.inner[class*="page-"] main .inner-content > h2 { display:inline-block; padding-bottom:10px; border-bottom:2px solid var(--gold); }
+body.inner[class*="page-"] main .inner-panel { border-left-width:5px; border-radius:0 10px 10px 0; }
+body.inner.page-noticias main .inner-panel, body.inner.page-todas-noticias main .inner-panel { border-left-color:#8498ad; }
+body.inner.page-ensino main .inner-panel, body.inner.page-fundamental main .inner-panel { border-left-color:#8c9d70; }
+body.inner.page-contato main .inner-panel { border-left-color:#8da28a; }
+body.inner.page-eventos main .inner-panel { border-left-color:#b88c82; }
+body.inner.page-projetos main .inner-panel { border-left-color:#7da391; }
+
 /* ACESSO AO CALENDÁRIO ESCOLAR NA PARTE FINAL DA PÁGINA INICIAL */
 .calendario-acesso {
   display: grid;
